@@ -2,7 +2,6 @@ require "/MainCharacter/vector"
 
 local world
 local player
-local ground
 local height
 local width
 
@@ -15,11 +14,6 @@ function CreatePlayer()
   height = love.graphics.getHeight()
   width = love.graphics.getWidth()
 
-  ground = {}
-  ground.body = love.physics.newBody(world, 400, 575,"static")
-  ground.shape = love.physics.newRectangleShape(800, 50)
-  ground.fixture = love.physics.newFixture(ground.body, ground.shape, 1)
-
   player = {}
   player.body = love.physics.newBody(world, 400, 100,"dynamic")
   player.shape = love.physics.newRectangleShape(30, 60)
@@ -28,7 +22,6 @@ function CreatePlayer()
   player.fixture:setFriction(1)
   player.body:setFixedRotation(true)
   player.position = vector.new(player.body:getPosition())
-
 end
 
 function UpdatePlayer(dt)
@@ -60,8 +53,4 @@ end
 function DrawPlayer()
   love.graphics.setColor(1,1,1)
   love.graphics.polygon("fill", player.body:getWorldPoints(player.shape:getPoints()))
-  
-  love.graphics.setColor(0,1,0)
-  love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))
-  
 end
