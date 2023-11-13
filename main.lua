@@ -5,6 +5,18 @@ require "/Valkyries/valkyries"
 require "/InGameMenu/inGameMenu"
 require "/MainMenu/mainMenu"
 
+local world
+
+function love.load()
+  world = love.physics.newWorld(0, 0, true)
+  --Call "load" function of every script
+end
+
 function love.update()
-    print("hello")
+    world:update()
+    --Call update function of every script
+end
+
+function love.draw()
+    --Call draw function of every script
 end
