@@ -4,12 +4,10 @@ require "vector"
 local world
 local enemy
 local enemyRange
-local ground
 local ex
 local variavel
 local lastPposition
 local time = 0
-local playerPosition
 
 function LoadValquiria()
 
