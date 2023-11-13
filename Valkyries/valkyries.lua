@@ -30,11 +30,10 @@ function LoadValquiria()
   enemyRange = {}
   enemyRange.body = love.physics.newBody(world, enemy.body:getX(), enemy.body:getY(),"dynamic")
   enemyRange.shape = love.physics.newCircleShape(300)
-  
+  enemyRange.range = enemy.shape:getRadius()
 end
 
 function UpdateValquiria(dt, playerPosition)
-    
 
   world:update(dt)
   enemy.position = vector.new(enemy.body:getPosition())
@@ -74,10 +73,10 @@ function UpdateValquiria(dt, playerPosition)
 
   elseif enemy.playerInSight == true  then
     --check again if player in sight
-    if enemy.range > 300 then
-      enemy.isChasing = false
-    else
+    if enemy.range < enemyRange.range and enemy.range > (enemyRange.range - 100) then
       enemy.isChasing = true
+    elseif enemy.range > enemyRange.range then
+      enemy.isChasing = false
     end
 
     if enemy.isChasing == false then
