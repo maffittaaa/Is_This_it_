@@ -14,12 +14,12 @@ function love.load()
 end
 
 function love.update(dt)
-    world:update(dt)
-    UpdatePlayer(dt)
-    --Call update function of every script
+  world:update(dt)
+  UpdatePlayer(dt)
+  --Call update function of every script
 end
 
 function love.draw()
-    --Call draw function of every script
-    DrawPlayer()
+  --Call draw function of every script
+  DrawPlayer()
 end
