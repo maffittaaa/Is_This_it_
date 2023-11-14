@@ -2,7 +2,8 @@ require "vector"
 
 local world
 local enemy
-local enemyRange
+local meleeRange
+local rangedAttack
 local ex
 local variavel
 local lastPposition
@@ -26,10 +27,15 @@ function LoadValquiria()
   enemy.body:setFixedRotation(true)
   enemy.position = vector.new(enemy.body:getPosition())
 
-  enemyRange = {}
-  enemyRange.body = love.physics.newBody(world, enemy.body:getX(), enemy.body:getY(),"dynamic")
-  enemyRange.shape = love.physics.newCircleShape(300)
-  enemyRange.range = enemyRange.shape:getRadius()
+  meleeRange = {}
+  meleeRange.body = love.physics.newBody(world, enemy.body:getX(), enemy.body:getY(),"dynamic")
+  meleeRange.shape = love.physics.newCircleShape(300)
+  meleeRange.range = meleeRange.shape:getRadius()
+
+  rangedAttack = {}
+  rangedAttack.body = love.physics.newBody(world, enemy.body:getX(), enemy.body:getY(),"dynamic")
+  rangedAttack.shape = love.physics.newCircleShape(300)
+  rangedAttack.range = rangedAttack.shape:getRadius()
 end
 
 function UpdateValquiria(dt, playerPosition)
@@ -37,14 +43,14 @@ function UpdateValquiria(dt, playerPosition)
   world:update(dt)
   enemy.position = vector.new(enemy.body:getPosition())
 
-  enemyRange.body:setPosition(enemy.body:getX(), enemy.body:getY())
+  meleeRange.body:setPosition(enemy.body:getX(), enemy.body:getY())
 
   enemy.range = vector.magnitude(vector.sub(enemy.position, playerPosition))
 
   if enemy.patroling == true then
     --Check if Player in sight
 
-    if enemy.range > enemyRange.range then
+    if enemy.range > meleeRange.range then
       enemy.isChasing = false
     else
       enemy.isChasing = false
@@ -70,16 +76,16 @@ function UpdateValquiria(dt, playerPosition)
     if 95 < enemy.body:getY() and enemy.body:getY() < 105 then
       enemy.body:setPosition(enemy.position.x, 100)
     elseif enemy.body:getY() > 100 then
-      enemy.body:setLinearVelocity(0, -150)
+      enemy.body:setLinearVelocity(0, -100)
     elseif enemy.body:getY() < 100 then
-      enemy.body:setLinearVelocity(0, 150)
+      enemy.body:setLinearVelocity(0, 100)
     end
 
     enemy.body:setPosition(ex, enemy.body:getY())
 
   elseif enemy.playerInSight == true  then
 
-    if enemy.range > enemyRange.range then
+    if enemy.range > meleeRange.range then
       enemy.isChasing = false
     else
       enemy.isChasing = true
@@ -102,7 +108,7 @@ function UpdateValquiria(dt, playerPosition)
       elseif lastPos > 1 then
         local playerDiretion = vector.sub(lastPposition, vector.new(enemy.body:getPosition()))
         playerDiretion = vector.normalize(playerDiretion)
-        local force = vector.mult(playerDiretion, 150)
+        local force = vector.mult(playerDiretion, 100)
         enemy.body:setLinearVelocity(force.x, force.y)
       end
       
@@ -112,7 +118,7 @@ function UpdateValquiria(dt, playerPosition)
       lastPposition = playerPosition
       local playerDiretion = vector.sub(playerPosition, vector.new(enemy.body:getPosition()))
       playerDiretion = vector.normalize(playerDiretion)
-      local force = vector.mult(playerDiretion, 150)
+      local force = vector.mult(playerDiretion, 100)
       enemy.body:setLinearVelocity(force.x, force.y)
     end
   end
@@ -123,7 +129,7 @@ function DrawValquiria()
   love.graphics.setColor(1,1,1)
   love.graphics.polygon("fill", enemy.body:getWorldPoints(enemy.shape:getPoints()))
   
-  love.graphics.circle("line", enemyRange.body:getX(), enemyRange.body:getY(), enemyRange.shape:getRadius())
+  love.graphics.circle("line", meleeRange.body:getX(), meleeRange.body:getY(), meleeRange.shape:getRadius())
   
   if enemy.isChasing == false and lastPposition ~= nil and enemy.patroling == false then
     love.graphics.line(enemy.body:getX(), enemy.body:getY(), lastPposition.x, lastPposition.y)
