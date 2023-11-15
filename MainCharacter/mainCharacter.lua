@@ -1,4 +1,4 @@
-require "/MainCharacter/vector"
+require "/vector"
 
 local world
 local player
@@ -53,4 +53,8 @@ end
 function DrawPlayer()
   love.graphics.setColor(1,1,1)
   love.graphics.polygon("fill", player.body:getWorldPoints(player.shape:getPoints()))
+end
+
+function PlayerPosition()
+  return player.position
 end
