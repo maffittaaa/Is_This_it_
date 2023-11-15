@@ -35,18 +35,25 @@ function UpdateCompanion(dt, playerPosition)
       return
     end
 
-    local playerDiretion = vector.sub(book.position, vector.new(companion.body:getPosition()))
+    local playerDiretion = vector.sub(book.position, companion.position)
     playerDiretion = vector.normalize(playerDiretion)
     local force = vector.mult(playerDiretion, 200)
     companion.body:setLinearVelocity(force.x, force.y)
     print("a mafalda cheira mal")
+    
   elseif gotBook == true then
-    local playerDiretion = vector.sub(inicialPlayerPosition.position, vector.new(companion.body:getPosition()))
+  --Se o player já tiver pegado no livro, então a luz vai para a porta e espera pelo player
+    local doorDistance = vector.magnitude(vector.sub(inicialPlayerPosition, companion.position))
+    if doorDistance < 1 then
+      companion.body:setLinearVelocity(0, 0)
+      return
+    end
+
+    local playerDiretion = vector.sub(inicialPlayerPosition, companion.position)
     playerDiretion = vector.normalize(playerDiretion)
     local force = vector.mult(playerDiretion, 200)
     companion.body:setLinearVelocity(force.x, force.y)
   end
-  --Se o player já tiver pegado no livro, então a luz vai para a porta e espera pelo player
 end
 
 function DrawCompanion()
