@@ -27,7 +27,7 @@ function LoadValquiria(world)
 
   meleeRange = {}
   meleeRange.body = love.physics.newBody(GetWorld(), enemy.body:getX(), enemy.body:getY(),"dynamic")
-  meleeRange.shape = love.physics.newCircleShape(300)
+  meleeRange.shape = love.physics.newCircleShape(150)
   meleeRange.fixture = love.physics.newFixture(meleeRange.body, meleeRange.shape, 2)
   meleeRange.range = meleeRange.shape:getRadius()
   meleeRange.fixture:setSensor(true)
@@ -35,7 +35,7 @@ function LoadValquiria(world)
 
   rangedAttack = {}
   rangedAttack.body = love.physics.newBody(GetWorld(), enemy.body:getX(), enemy.body:getY(),"dynamic")
-  rangedAttack.shape = love.physics.newCircleShape(150)
+  rangedAttack.shape = love.physics.newCircleShape(300)
   rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
   rangedAttack.range = rangedAttack.shape:getRadius()
   rangedAttack.fixture:setSensor(true)
@@ -69,16 +69,32 @@ function UpdateValquiria(dt, playerPosition)
     if 95 < enemy.body:getY() and enemy.body:getY() < 105 then
       enemy.body:setPosition(enemy.position.x, 100)
     elseif enemy.body:getY() > 100 then
-      enemy.body:setLinearVelocity(0, -100)
+      enemy.body:setLinearVelocity(0, -200)
     elseif enemy.body:getY() < 100 then
-      enemy.body:setLinearVelocity(0, 100)
+      enemy.body:setLinearVelocity(0, 200)
     end
 
     enemy.body:setPosition(ex, enemy.body:getY())
 
   elseif enemy.playerInSight == true  then
 
-    if enemy.isRanging == false then
+    if enemy.isRanging == true then
+      --stop velocity, while in rangedAttack
+
+      time = 0
+      lastPposition = playerPosition
+
+      if enemy.isMeleeing == true then
+        local playerDiretion = vector.sub(playerPosition, vector.new(enemy.body:getPosition()))
+        playerDiretion = vector.normalize(playerDiretion)
+        local force = vector.mult(playerDiretion, 200)
+        enemy.body:setLinearVelocity(force.x, force.y)
+        return
+      end
+      enemy.body:setLinearVelocity(0, 0)
+      --if not meleeAttacking, do rangedAttack
+
+    elseif enemy.isRanging == false then
       --go to last location of player
       local lastPos = vector.magnitude(vector.sub(enemy.position, lastPposition))
 
@@ -95,18 +111,9 @@ function UpdateValquiria(dt, playerPosition)
       elseif lastPos > 1 then
         local playerDiretion = vector.sub(lastPposition, vector.new(enemy.body:getPosition()))
         playerDiretion = vector.normalize(playerDiretion)
-        local force = vector.mult(playerDiretion, 100)
+        local force = vector.mult(playerDiretion, 200)
         enemy.body:setLinearVelocity(force.x, force.y)
       end
-      
-    elseif enemy.isRanging == true then
-      --Follow player
-      time = 0
-      lastPposition = playerPosition
-      local playerDiretion = vector.sub(playerPosition, vector.new(enemy.body:getPosition()))
-      playerDiretion = vector.normalize(playerDiretion)
-      local force = vector.mult(playerDiretion, 100)
-      enemy.body:setLinearVelocity(force.x, force.y)
     end
   end
 end

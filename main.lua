@@ -20,33 +20,52 @@ function BeginContact(fixtureA, fixtureB)
   print(fixtureA:getUserData(), fixtureB:getUserData())
 
   if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
-    enemy.playerInSight = true
-    enemy.patroling = false
     enemy.isRanging = true
-    print("es burra mafalda")
+    enemy.isMeleeing = true
+    print("startMelee")
   elseif fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
     enemy.playerInSight = true
     enemy.isRanging = true
     enemy.patroling = false
-    print("es burra mafalda")
+    print("StartRanged")
   end
 
   if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
-    enemy.playerInSight = true
-    enemy.patroling = false
     enemy.isRanging = true
-    print("es burra mafalda")
+    enemy.isMeleeing = true
+    print("starMelee")
   elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
     enemy.playerInSight = true
-    enemy.patroling = true
+    enemy.patroling = false
     enemy.isRanging = false
-    print("es burra mafalda")
+    print("StartRanged")
   end
 end
 
 function EndContact(fixtureA, fixtureB)   
+  
   if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
+    enemy.isMeleeing = false
+    enemy.isRanging = true
+    print("EndMelee")
+  end
+
+  if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
     enemy.isRanging = false
+    enemy.isMeleeing = false
+    print("EndRanged")
+  end
+
+  if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+    enemy.isMeleeing = false
+    enemy.isRanging = true
+    print("EndMelee")
+  end
+
+  if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+    enemy.isRanging = false
+    enemy.isMeleeing = false
+    print("EndRanged")
   end
 end
 
