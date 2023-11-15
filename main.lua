@@ -19,7 +19,7 @@ function love.load()
 
   --Call "load" function of every script
   CreatePlayer(world)
-  LoadCompanion(world)
+  LoadCompanion(world, PlayerPosition())
 end
 
 function love.update(dt)
