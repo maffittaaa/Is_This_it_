@@ -5,17 +5,9 @@ local player
 local height
 local width
 
-function CreatePlayer()
-  love.physics.setMeter(35)
-  -- 9.81 * love.physics.getMeter()
-  world = love.physics.newWorld(0, 0, true)
-
-  love.window.setMode(1920, 1080)
-  height = love.graphics.getHeight()
-  width = love.graphics.getWidth()
-
+function CreatePlayer(world)
   player = {}
-  player.body = love.physics.newBody(world, 400, 100,"dynamic")
+  player.body = love.physics.newBody(world, 1800, 900,"dynamic")
   player.shape = love.physics.newRectangleShape(30, 60)
   player.fixture = love.physics.newFixture(player.body, player.shape, 1)
   player.maxvelocity = 200
@@ -25,8 +17,6 @@ function CreatePlayer()
 end
 
 function UpdatePlayer(dt)
-  
-  world:update(dt)
   player.position = vector.new(player.body:getPosition())
 
   local playerVelocity = vector.new(0, 0)
