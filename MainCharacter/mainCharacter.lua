@@ -1,14 +1,12 @@
 require "vector"
 
-local world
-local player
+player = {}
 local height
 local width
 
-function CreatePlayer()
+function CreatePlayer(world)
   love.physics.setMeter(35)
   -- 9.81 * love.physics.getMeter()
-  world = GetWorld()
 
   player = {}
   player.body = love.physics.newBody(world, 400, 100,"dynamic")
@@ -18,11 +16,11 @@ function CreatePlayer()
   player.fixture:setFriction(1)
   player.body:setFixedRotation(true)
   player.position = vector.new(player.body:getPosition())
+  player.fixture:setUserData("player")
 end
 
 function UpdatePlayer(dt)
   
-  world:update(dt)
   player.position = vector.new(player.body:getPosition())
 
   local playerVelocity = vector.new(0, 0)
