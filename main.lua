@@ -9,10 +9,11 @@ require "/MainMenu/mainMenu"
 local world
 local height
 local width
+local fixtureData
 
 function love.load()
   world = love.physics.newWorld(0, 0, true)
-  world:setCallBacks(BeginContact, EndContact, nil, nil)
+  world:setCallbacks(BeginContact, EndContact, nil, nil)
 
   love.window.setMode(1920, 1080)
   height = love.graphics.getHeight()
@@ -24,19 +25,23 @@ function love.load()
 end
 
 function BeginContact(fixtureA, fixtureB)
-  if fixtureA:getUserData() == "wall" and fixtureB:getUserData() == "Companion" then
+  if fixtureA:getUserData().name == "wall" and fixtureB:getUserData().name == "companion" then
     print("hit wall")
   end
 
-  if fixtureA:getUserData() == "obstacles" and fixtureB:getUserData() == "Companion" then
+  if fixtureA:getUserData().name == "obstacles" and fixtureB:getUserData().name == "companion" then
+    FixtureHitted(fixtureB)
+    hitted_obstacles = true
     print("hit obstacles")
   end
 
-  if fixtureA:getUserData() == "Companion" and fixtureB:getUserData() == "wall" then
+  if fixtureA:getUserData().name == "companion" and fixtureB:getUserData().name == "wall" then
     print("hit wall")
   end
 
-  if fixtureA:getUserData() == "Companion" and fixtureB:getUserData() == "obstacles" then
+  if fixtureA:getUserData().name == "companion" and fixtureB:getUserData().name == "obstacles" then
+    fixtureData = fixtureB:getUserData()
+    hitted_obstacles = true
     print("hit obstacles")
   end
 end
@@ -45,10 +50,15 @@ function EndContact(fixtureA, fixtureB)
   
 end
 
+function FixtureHitted(fixture)
+  fixtureData = fixture
+  return fixtureData
+end
+
 function love.update(dt)
   world:update(dt)
   UpdatePlayer(dt)
-  UpdateCompanion(dt, PlayerPosition())
+  UpdateCompanion(dt, PlayerPosition(), fixtureData)
   --Call update function of every script
 end
 

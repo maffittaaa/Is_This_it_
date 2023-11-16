@@ -9,6 +9,7 @@ local wall3 = {}
 local obstacle1 = {}
 local gotBook
 local inicialPlayerPosition
+hitted_obstacles = false
 
 function LoadCompanion(world, playerPosition)
   inicialPlayerPosition = playerPosition
@@ -17,7 +18,8 @@ function LoadCompanion(world, playerPosition)
   companion.shape = love.physics.newCircleShape(30)
   companion.fixture = love.physics.newFixture(companion.body, companion.shape, 1)
   companion.position = vector.new(companion.body:getPosition())
-  companion.fixture:setUserData("wall")
+  companion.name = "companion"
+  companion.fixture:setUserData(companion)
 
   book.body = love.physics.newBody(world, 1800, 540,"dynamic")
   book.shape = love.physics.newRectangleShape(30, 30)
@@ -27,34 +29,39 @@ function LoadCompanion(world, playerPosition)
   wall.body = love.physics.newBody(world, 960, 15,"static")
   wall.shape = love.physics.newRectangleShape(1920, 30)
   wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
-  wall.fixture:setUserData("wall")
+  wall.name = "wall"
+  wall.fixture:setUserData(wall)
   
   wall1 = {}
   wall1.body = love.physics.newBody(world, 960, 1065,"static")
   wall1.shape = love.physics.newRectangleShape(1920, 30)
   wall1.fixture = love.physics.newFixture(wall1.body, wall1.shape, 1)
-  wall1.fixture:setUserData("wall")
+  wall1.name = "wall"
+  wall1.fixture:setUserData(wall1)
 
   wall2 = {}
   wall2.body = love.physics.newBody(world, 15, 540,"static")
   wall2.shape = love.physics.newRectangleShape(30, 1080)
   wall2.fixture = love.physics.newFixture(wall2.body, wall2.shape, 1)
-  wall2.fixture:setUserData("wall")
+  wall2.name = "wall"
+  wall2.fixture:setUserData(wall2)
 
   wall3 = {}
   wall3.body = love.physics.newBody(world, 1905, 540,"static")
   wall3.shape = love.physics.newRectangleShape(30, 1080)
   wall3.fixture = love.physics.newFixture(wall3.body, wall3.shape, 1)
-  wall3.fixture:setUserData("wall")
+  wall3.name = "wall"
+  wall3.fixture:setUserData(wall3)
 
   obstacle1 = {}
   obstacle1.body = love.physics.newBody(world, 960, 750,"static")
   obstacle1.shape = love.physics.newRectangleShape(30, 1080)
   obstacle1.fixture = love.physics.newFixture(obstacle1.body, obstacle1.shape, 1)
-  obstacle1.fixture:setUserData("obstacles")
+  obstacle1.name = "obstacles"
+  obstacle1.fixture:setUserData(obstacle1)
 end
 
-function UpdateCompanion(dt, playerPosition)
+function UpdateCompanion(dt, playerPosition, fixtureHitted)
   -- O companion vai para a posição do livro, se o player ainda não tiver ido lá
   companion.position = vector.new(companion.body:getPosition())
   book.position = vector.new(book.body:getPosition())
@@ -63,7 +70,11 @@ function UpdateCompanion(dt, playerPosition)
   playerDiretion = vector.normalize(playerDiretion)
   local force = vector.mult(playerDiretion, 200)
 
+  if hitted_obstacles == true then
+    local shape = obstacle1.body:getShape().x
+    
 
+  end
   companion.body:setLinearVelocity(force.x, force.y)
   
 

@@ -1,6 +1,5 @@
 require "vector"
 
-local world
 local player
 local height
 local width
