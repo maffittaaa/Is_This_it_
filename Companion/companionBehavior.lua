@@ -22,38 +22,40 @@ function UpdateCompanion(dt, playerPosition)
   companion.position = vector.new(companion.body:getPosition())
   book.position = vector.new(book.body:getPosition())
 
-  if gotBook == false then
-    --luz muda-se para a posição do livro
-    local bookdistance = vector.magnitude(vector.sub(book.position, companion.position))
-    local playerdistance = vector.magnitude(vector.sub(playerPosition, companion.position))
+  
 
-    if bookdistance < 2 then
-      companion.body:setLinearVelocity(0, 0)
-      if playerdistance < 40 then
-        gotBook = true
-      end
-      return
-    end
+  -- if gotBook == false then
+  --   --luz muda-se para a posição do livro
+  --   local bookdistance = vector.magnitude(vector.sub(book.position, companion.position))
+  --   local playerdistance = vector.magnitude(vector.sub(playerPosition, companion.position))
 
-    local playerDiretion = vector.sub(book.position, companion.position)
-    playerDiretion = vector.normalize(playerDiretion)
-    local force = vector.mult(playerDiretion, 200)
-    companion.body:setLinearVelocity(force.x, force.y)
-    print("a mafalda cheira mal")
+  --   if bookdistance < 2 then
+  --     companion.body:setLinearVelocity(0, 0)
+  --     if playerdistance < 40 then
+  --       gotBook = true
+  --     end
+  --     return
+  --   end
+
+  --   local playerDiretion = vector.sub(book.position, companion.position)
+  --   playerDiretion = vector.normalize(playerDiretion)
+  --   local force = vector.mult(playerDiretion, 200)
+  --   companion.body:setLinearVelocity(force.x, force.y)
+  --   print("a mafalda cheira mal")
     
-  elseif gotBook == true then
-  --Se o player já tiver pegado no livro, então a luz vai para a porta e espera pelo player
-    local doorDistance = vector.magnitude(vector.sub(inicialPlayerPosition, companion.position))
-    if doorDistance < 1 then
-      companion.body:setLinearVelocity(0, 0)
-      return
-    end
+  -- elseif gotBook == true then
+  -- --Se o player já tiver pegado no livro, então a luz vai para a porta e espera pelo player
+  --   local doorDistance = vector.magnitude(vector.sub(inicialPlayerPosition, companion.position))
+  --   if doorDistance < 1 then
+  --     companion.body:setLinearVelocity(0, 0)
+  --     return
+  --   end
 
-    local playerDiretion = vector.sub(inicialPlayerPosition, companion.position)
-    playerDiretion = vector.normalize(playerDiretion)
-    local force = vector.mult(playerDiretion, 200)
-    companion.body:setLinearVelocity(force.x, force.y)
-  end
+  --   local playerDiretion = vector.sub(inicialPlayerPosition, companion.position)
+  --   playerDiretion = vector.normalize(playerDiretion)
+  --   local force = vector.mult(playerDiretion, 200)
+  --   companion.body:setLinearVelocity(force.x, force.y)
+  -- end
 end
 
 function DrawCompanion()
