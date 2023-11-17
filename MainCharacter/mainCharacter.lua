@@ -1,4 +1,4 @@
-require "/MainCharacter/vector"
+require "vector"
 
 local world
 local player

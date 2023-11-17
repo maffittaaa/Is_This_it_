@@ -1,29 +1,30 @@
 local button_height = 48
 local buttons = {}
 local font
-function newButton(text,fn)
-   
+
+function NewButton(text,fn)   
    font = love.graphics.newFont(24)
     return {text = text, fn = fn, now = false, last = false
     }
 end
 
-function love.load()
+function LoadMainMenu()
     love.graphics.setBackgroundColor(0.1,0.1,0.3)
-    table.insert(buttons,newButton("Start Game", 
+    table.insert(buttons,NewButton("Start Game", 
         function()
             print "The game is starting..."
         end))
-        table.insert(buttons,newButton("Exit", 
+        table.insert(buttons,NewButton("Exit",
             function()
                 love.event.quit(0)
             end))
 end
 
-function love.update(dt)
+function UpdateMainMenu()
+    
 end
 
-function love.draw()
+function DrawMainMenu()
     local ww = love.graphics.getWidth()
     local wh = love.graphics.getHeight() 
 
