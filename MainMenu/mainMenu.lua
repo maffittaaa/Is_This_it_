@@ -10,14 +10,15 @@ end
 
 function LoadMainMenu()
     love.graphics.setBackgroundColor(0.1,0.1,0.3)
+
     table.insert(buttons,NewButton("Start Game", 
+    function()
+        print "The game is starting..."
+    end))
+    table.insert(buttons,NewButton("Exit",
         function()
-            print "The game is starting..."
+            love.event.quit(0)
         end))
-        table.insert(buttons,NewButton("Exit",
-            function()
-                love.event.quit(0)
-            end))
 end
 
 function UpdateMainMenu()
