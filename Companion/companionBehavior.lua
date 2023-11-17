@@ -61,7 +61,7 @@ function LoadCompanion(world, playerPosition)
   obstacle1.fixture:setUserData(obstacle1)
 end
 
-function UpdateCompanion(dt, playerPosition, fixtureHitted)
+function UpdateCompanion(dt, playerPosition)
   -- O companion vai para a posição do livro, se o player ainda não tiver ido lá
   companion.position = vector.new(companion.body:getPosition())
   book.position = vector.new(book.body:getPosition())
@@ -69,13 +69,21 @@ function UpdateCompanion(dt, playerPosition, fixtureHitted)
   local playerDiretion = vector.sub(book.position, companion.position)
   playerDiretion = vector.normalize(playerDiretion)
   local force = vector.mult(playerDiretion, 200)
+  local variable = 1
 
   if hitted_obstacles == true then
-    local shape = obstacle1.body:getShape().x
-    
+    if fixtureData.name == "obstacles" then
 
+      -- shape_point1 = vector.new(fixtureData.shape:getPoints()[1])
+      -- shape_point2 = vector.new(fixtureData.shape:getPoints()[2])
+      -- shape_point3 = vector.new(fixtureData.shape:getPoints()[3])
+      -- shape_point4 = vector.new(fixtureData.shape:getPoints()[4])
+
+      print(fixtureData.body:getWorldPoints(fixtureData.shape:getPoints()))
+    end
   end
-  companion.body:setLinearVelocity(force.x, force.y)
+
+  companion.body:setLinearVelocity(force.x * variable, force.y * variable)
   
 
   -- if gotBook == false then
@@ -118,6 +126,7 @@ function DrawCompanion()
   love.graphics.polygon("line", wall1.body:getWorldPoints(wall1.shape:getPoints()))
   love.graphics.polygon("line", wall2.body:getWorldPoints(wall2.shape:getPoints()))
   love.graphics.polygon("line", wall3.body:getWorldPoints(wall3.shape:getPoints()))
+
   love.graphics.polygon("line", obstacle1.body:getWorldPoints(obstacle1.shape:getPoints()))
   if gotBook == false then
     love.graphics.polygon("line", book.body:getWorldPoints(book.shape:getPoints()))

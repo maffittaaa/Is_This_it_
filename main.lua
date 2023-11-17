@@ -9,7 +9,8 @@ require "/MainMenu/mainMenu"
 local world
 local height
 local width
-local fixtureData
+fixtureData = {}
+hitted_obstacles = nil
 
 function love.load()
   world = love.physics.newWorld(0, 0, true)
@@ -30,7 +31,7 @@ function BeginContact(fixtureA, fixtureB)
   end
 
   if fixtureA:getUserData().name == "obstacles" and fixtureB:getUserData().name == "companion" then
-    FixtureHitted(fixtureB)
+    fixtureData = fixtureA:getUserData()
     hitted_obstacles = true
     print("hit obstacles")
   end
@@ -40,7 +41,6 @@ function BeginContact(fixtureA, fixtureB)
   end
 
   if fixtureA:getUserData().name == "companion" and fixtureB:getUserData().name == "obstacles" then
-    fixtureData = fixtureB:getUserData()
     hitted_obstacles = true
     print("hit obstacles")
   end
@@ -50,15 +50,10 @@ function EndContact(fixtureA, fixtureB)
   
 end
 
-function FixtureHitted(fixture)
-  fixtureData = fixture
-  return fixtureData
-end
-
 function love.update(dt)
   world:update(dt)
   UpdatePlayer(dt)
-  UpdateCompanion(dt, PlayerPosition(), fixtureData)
+  UpdateCompanion(dt, PlayerPosition())
   --Call update function of every script
 end
 
