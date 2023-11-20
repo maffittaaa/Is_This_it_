@@ -23,6 +23,7 @@ function love.load()
   --Call "load" function of every script
   CreatePlayer(world)
   LoadCompanion(world, PlayerPosition())
+  --AiLoad()
 end
 
 function BeginContact(fixtureA, fixtureB)
@@ -61,4 +62,6 @@ function love.draw()
   --Call draw function of every script
   DrawPlayer()
   DrawCompanion()
+  --Aidraw()
 end
+

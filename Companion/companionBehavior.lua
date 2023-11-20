@@ -1,5 +1,6 @@
 require "vector"
 
+local world
 local companion = {}
 local book = {}
 local wall = {}
@@ -12,9 +13,10 @@ local inicialPlayerPosition
 hitted_obstacles = false
 
 function LoadCompanion(world, playerPosition)
+
   inicialPlayerPosition = playerPosition
   gotBook = false
-  companion.body = love.physics.newBody(world, 100, 540,"dynamic")
+  companion.body = love.physics.newBody(world, 100, 200,"dynamic")
   companion.shape = love.physics.newCircleShape(30)
   companion.fixture = love.physics.newFixture(companion.body, companion.shape, 1)
   companion.position = vector.new(companion.body:getPosition())
@@ -61,6 +63,12 @@ function LoadCompanion(world, playerPosition)
   obstacle1.fixture:setUserData(obstacle1)
 end
 
+function PrintTable( tbl )
+  for k, v in pairs( tbl ) do
+      print( k, v )
+  end
+end
+
 function UpdateCompanion(dt, playerPosition)
   -- O companion vai para a posição do livro, se o player ainda não tiver ido lá
   companion.position = vector.new(companion.body:getPosition())
@@ -68,7 +76,7 @@ function UpdateCompanion(dt, playerPosition)
 
   local playerDiretion = vector.sub(book.position, companion.position)
   playerDiretion = vector.normalize(playerDiretion)
-  local force = vector.mult(playerDiretion, 200)
+  local force = vector.mult(playerDiretion, 50)
   local variable = 1
 
   if hitted_obstacles == true then
@@ -84,6 +92,7 @@ function UpdateCompanion(dt, playerPosition)
   end
 
   companion.body:setLinearVelocity(force.x * variable, force.y * variable)
+  PrintTable(force)
   
 
   -- if gotBook == false then
