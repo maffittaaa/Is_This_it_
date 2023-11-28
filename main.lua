@@ -6,11 +6,13 @@ require "/InGameMenu/inGameMenu"
 require "/MainMenu/mainMenu"
 
 local world
+local sti = require "Mapa/sti"
+local gameMap = require "Mapa/mapaProjeto2D.lua"
 
 function love.load()
   world = love.physics.newWorld(0, 0, true)
-  sti = require "Mapa/sti"
-  gameMap = sti("Mapa/mapaProjeto2D.lua", {"box2d"})
+
+
   --Call "load" function of every script
   CreatePlayer()
 end
