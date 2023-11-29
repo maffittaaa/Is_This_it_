@@ -9,11 +9,21 @@ function LoadGaryAttack(world)
     sword.body:setActive(false)
     sword.fixture:setCategory(2)
     sword.fixture:setMask(2)
+    sword.timer = 10
 end
 
 function UpdateGaryAttack()
     sword.position = vector2.new(gary.body:getPosition())
     sword.body:setPosition(gary.position.x - 40, gary.position.y)
+
+    -- if sword.body:isActive() then
+    --     sword.timer = sword.timer - 1
+    --     if sword.timer <= 10 and sword.timer > 0 then
+    --         sword.body:setActive(true)
+    --     elseif sword.timer <= 0 then
+    --         sword.body:setActive(false)
+    --     end
+    -- end
 end
 
 function DrawGaryAttack()

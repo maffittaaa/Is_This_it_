@@ -1,12 +1,12 @@
 require "vector2"
 require "MainCharacter/gary"
-require "MainCharacter/ghost"
+require "Ghosts/ghost"
 require "MainCharacter/healthbar"
 require "MainCharacter/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 -- require "MainCharacter/valkyrie"
-Camera = require "MainCharacter/Camera"
+Camera = require "Camera/Camera"
 
 local world
 local ground
@@ -20,25 +20,11 @@ function love.keypressed(e)
         love.event.quit()
     end
     if e == 'e' then
+        print(sword.timer)
         if sword.body:isActive() then
             sword.body:setActive(false)
         else
             sword.body:setActive(true)
-        end
-    end
-    if e == "f" then
-        if collectible_key.counter == 0 then
-            success = love.window.showMessageBox(title, message)
-            collectible_key.counter = 1
-        end
-        if e == "f" then
-            if gary.health == 5 then
-                success = love.window.showMessageBox(title, message3, "error")
-                collectible_lifes.counter = collectible_lifes.counter
-            elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
-                success = love.window.showMessageBox(title, message2)
-                collectible_lifes.counter = collectible_lifes.counter + 1
-            end
         end
     end
 end
@@ -49,9 +35,11 @@ function love.load()
     world:setCallbacks(BeginContactPlayer, nil, nil, nil)
     -- world:setCallbacks(BeginContactValkyrie, EndContactValkyrie, nil, nil)
 
-  sti = require "Mapa/sti"
-  gameMap = sti("Mapa/map.lua")
-  --Call "load" function of every script
+    -- love.window.setMode(1920, 1080)
+
+    sti = require "Mapa/sti"
+    gameMap = sti("Mapa/map.lua")
+    --Call "load" function of every script
 
     LoadSprites()
     LoadGary(world)
@@ -62,7 +50,7 @@ function love.load()
 
     -- LoadValquiria(world)
 
-  camera = Camera()
+    camera = Camera()
 end
 
 function BeginContactPlayer(fixtureA, fixtureB)
@@ -83,6 +71,7 @@ function BeginContactPlayer(fixtureA, fixtureB)
         if fixtureA:getUserData() == "attack" and fixtureB:getUserData() == "melee weapon" then
             print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.health = ghost.health - 1
+            sword.timer = 0
             -- Testes
             if ghost.health <= 0 then
                 ghost.isChasing = false
@@ -95,12 +84,25 @@ function BeginContactPlayer(fixtureA, fixtureB)
             -- End testes
             print("Ghost health = " .. ghost.health)
         end
+        sword.timer = 10
     end
-    -- if fixtureA:getUserData() == "key" and fixtureB:getUserData() == "player" then
-        
-    -- end
+    if fixtureB:getUserData() == "key" and fixtureA:getUserData() == "player" then
+        if collectible_key.counter == 0 then
+            success = love.window.showMessageBox(title, message)
+            collectible_key.counter = 1
+        end
+    end
+    if fixtureB:getUserData() == "life" and fixtureA:getUserData() == "player" then
+        if gary.health == 5 then
+            success = love.window.showMessageBox(title, message3, "error")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
+            success = love.window.showMessageBox(title, message2)
+            collectible_lifes.counter = collectible_lifes.counter + 1
+            gary.health = gary.health + 1
+        end
+    end
 end
-
 
 -- function BeginContactValkyrie(fixtureA, fixtureB)
 --     print(fixtureA:getUserData(), fixtureB:getUserData())
@@ -116,17 +118,17 @@ end
 --         print("StartRanged")
 --     end
 
-  if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
-      valkyrie.isRanging = true
-      valkyrie.isMeleeing = true
-      print("starMelee")
-  elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
-      valkyrie.playerInSight = true
-      valkyrie.patroling = false
-      valkyrie.isRanging = false
-      print("StartRanged")
-  end
-end
+--   if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+--       valkyrie.isRanging = true
+--       valkyrie.isMeleeing = true
+--       print("starMelee")
+--   elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+--       valkyrie.playerInSight = true
+--       valkyrie.patroling = false
+--       valkyrie.isRanging = false
+--       print("StartRanged")
+--   end
+-- end
 
 -- function EndContactValkyrie(fixtureA, fixtureB)
 --     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
@@ -135,24 +137,24 @@ end
 --         print("EndMelee")
 --     end
 
-    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
-        valkyrie.isRanging = false
-        valkyrie.isMeleeing = false
-        print("EndRanged")
-    end
+--     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
+--         valkyrie.isRanging = false
+--         valkyrie.isMeleeing = false
+--         print("EndRanged")
+--     end
 
-    if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.isMeleeing = false
-        valkyrie.isRanging = true
-        print("EndMelee")
-    end
+--     if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+--         valkyrie.isMeleeing = false
+--         valkyrie.isRanging = true
+--         print("EndMelee")
+--     end
 
-    if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.isRanging = false
-        valkyrie.isMeleeing = false
-        print("EndRanged")
-    end
-end
+--     if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+--         valkyrie.isRanging = false
+--         valkyrie.isMeleeing = false
+--         print("EndRanged")
+--     end
+-- end
 
 function love.update(dt)
     world:update(dt)
@@ -165,38 +167,19 @@ function love.update(dt)
     UpdateGary(dt)
     UpdateGaryAttack()
     UpdateGhost(dt, world)
-    UpdateValquiria(dt, GetPlayerPosition())
+    -- UpdateValquiria(dt, GetPlayerPosition())
 end
 
 function love.draw()
-  --Call draw function of every script
-  camera:attach()
-
-  gameMap:drawLayer(gameMap.layers["Relva"])
-  gameMap:drawLayer(gameMap.layers["Rio"])
-  gameMap:drawLayer(gameMap.layers["Path"])
-  gameMap:drawLayer(gameMap.layers["BUshes"])
-  gameMap:drawLayer(gameMap.layers["Arvores"])
-
-  -- DrawPlayer()
-
-  -- if inventory.key == 0 then
-  --     love.graphics.draw(sprites.key, 500, 250)
-  -- end
-  -- love.graphics.draw(instance.img, 700, 450)
-  -- love.graphics.draw(instance.img, 400, 600)
-  -- love.graphics.draw(instance.img, 300, 200)
-  
-  --DrawLife()
-  DrawGary()
-  DrawGaryAttack()
-  DrawHealthBars()
-  DrawGhost()
-  DrawValquiria()
-  camera:detach()
+    --Call draw function of every script
     camera:attach()
-    love.graphics.draw(sprites.background, 0, 0)
-    
+
+    gameMap:drawLayer(gameMap.layers["Relva"])
+    gameMap:drawLayer(gameMap.layers["Rio"])
+    gameMap:drawLayer(gameMap.layers["Path"])
+    gameMap:drawLayer(gameMap.layers["BUshes"])
+    gameMap:drawLayer(gameMap.layers["Arvores"])
+
     DrawGary()
     DrawGaryAttack()
     DrawHealthBars()
