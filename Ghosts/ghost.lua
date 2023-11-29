@@ -1,6 +1,3 @@
-require "vector2"
-require "MainCharacter/gary"
-
 ghost = {}
 trigger = {}
 local ghostRange

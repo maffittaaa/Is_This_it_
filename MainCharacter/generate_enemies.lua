@@ -1,6 +1,3 @@
-require "MainCharacter/valkyrie"
-require "MainCharacter/ghost"
-
 enemies = {}
 enemies.types = {valkyrie, ghost}
 enemies.timer = 0

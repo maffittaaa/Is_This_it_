@@ -1,21 +1,17 @@
 require "vector2"
 
-require "/MainCharacter/mainCharacter"
-require "/Ghosts/ghosts"
+require "/Ghosts/ghost"
 require "/Death/death"
-require "/Valkyries/valkyries"
+require "/Valkyries/valkyrie"
+require "/MainCharacter/gary"
 require "/InGameMenu/inGameMenu"
 require "/MainMenu/mainMenu"
+require "/MainCharacter/healthbar"
+require "/MainCharacter/sprites"
+require "/MainCharacter/gary_sword"
+--require "MainCharacter/lives"
 
-require "MainCharacter/gary"
-require "MainCharacter/ghost"
-require "MainCharacter/healthbar"
-require "MainCharacter/sprites"
-require "MainCharacter/gary_sword"
-require "MainCharacter/lives"
--- require "valkyrie"
-
-Camera = require "MainCharacter/Camera"
+Camera = require "/Camera/Camera"
 
 local world
 local ground
@@ -41,8 +37,6 @@ function love.keypressed(e)
 end
 
 function love.load()
-
-  
   world = love.physics.newWorld(0, 0, true)
   world:setCallbacks(BeginContact, EndContact, nil, nil)
   love.window.setMode(1920, 1080)
@@ -52,10 +46,6 @@ function love.load()
   gameMap = sti("Mapa/map.lua")
   --Call "load" function of every script
 
-  love.physics.setMeter(30)
-  world = love.physics.newWorld(0, 0, true)
-
-  CreatePlayer(world)
   LoadSprites()
   LoadGary(world)
   LoadGaryAttack(world)
@@ -72,7 +62,7 @@ end
 
 function BeginContact(fixtureA, fixtureB)
   if ghost.isChasing == true and ghost.garyInSight == true then
-    if fixtureA:getUserData() == "gary" and fixtureB:getUserData() == "attack" and gary.health <= 5 and gary.health > 0 then
+    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "attack" and gary.health <= 5 and gary.health > 0 then
       print(fixtureA:getUserData(), fixtureB:getUserData())
       ghost.timer = 1 -- tempo de cooldown para perseguir outra vez
       gary.health = gary.health - 1
@@ -153,7 +143,6 @@ end
 
 function love.update(dt)
     world:update(dt)
-    UpdatePlayer(dt)
     camera:update(dt)
     camera:follow(gary.body:getX(), gary.body:getY())
     camera:setFollowLerp(0.2)
@@ -163,32 +152,34 @@ function love.update(dt)
     UpdateGary(dt)
     UpdateGaryAttack()
     UpdateGhost(dt, world)
-    -- UpdateValquiria(dt, GetPlayerPosition())
+    UpdateValquiria(dt, GetPlayerPosition())
 end
 
 function love.draw()
+
+  --Call draw function of every script
+  camera:attach()
+
   gameMap:drawLayer(gameMap.layers["Relva"])
   gameMap:drawLayer(gameMap.layers["Rio"])
+  gameMap:drawLayer(gameMap.layers["Path"])
   gameMap:drawLayer(gameMap.layers["BUshes"])
   gameMap:drawLayer(gameMap.layers["Arvores"])
-  gameMap:drawLayer(gameMap.layers["Path"])
-  --Call draw function of every script
-  DrawPlayer()
-  
-  camera:attach()
-  love.graphics.draw(sprites.background, 0, 0)
+
+  -- DrawPlayer()
+
   -- if inventory.key == 0 then
   --     love.graphics.draw(sprites.key, 500, 250)
   -- end
-  love.graphics.draw(instance.img, 700, 450)
-  love.graphics.draw(instance.img, 400, 600)
-  love.graphics.draw(instance.img, 300, 200)
+  -- love.graphics.draw(instance.img, 700, 450)
+  -- love.graphics.draw(instance.img, 400, 600)
+  -- love.graphics.draw(instance.img, 300, 200)
   
-  DrawLife()
+  --DrawLife()
   DrawGary()
   DrawGaryAttack()
   DrawHealthBars()
   DrawGhost()
-  -- DrawValquiria()
+  DrawValquiria()
   camera:detach()
 end

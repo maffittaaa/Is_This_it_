@@ -1,6 +1,3 @@
-require "vector2"
-require "MainCharacter/gary"
-
 valkyrie = {}
 local meleeRange
 local rangedAttack
@@ -63,7 +60,7 @@ function UpdateValquiria(dt, playerPosition)
     valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
 
     if 95 < valkyrie.body:getY() and valkyrie.body:getY() < 105 then
-      valkyrie.body:setPosition(valkyrie.position.x, 400)
+      valkyrie.body:setPosition(valkyrie.position.x, 100)
     elseif valkyrie.body:getY() > 100 then
       valkyrie.body:setLinearVelocity(0, -200)
     elseif valkyrie.body:getY() < 100 then

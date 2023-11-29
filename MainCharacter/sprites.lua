@@ -1,9 +1,6 @@
-require "vector2"
-
 sprites = {}
 
 function LoadSprites()
-    sprites.background = love.graphics.newImage("MainCharacter/background5.jpg")
     sprites.gary = love.graphics.newImage("MainCharacter/gary.png")
     sprites.sword = love.graphics.newImage("MainCharacter/sword.png")
     sprites.ghost = love.graphics.newImage("MainCharacter/ghost.png")

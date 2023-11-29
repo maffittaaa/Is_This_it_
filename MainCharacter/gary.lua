@@ -1,5 +1,3 @@
-require "vector2"
-require "MainCharacter/sprites"
 gary = {}
 local force = 500
 
@@ -23,18 +21,22 @@ end
 
 function UpdateGary(dt)
     gary.position = vector2.new(gary.body:getPosition())
-
+        
     local garyVelocity = vector2.new(0, 0)
-    if gary.health <= 0 then
-        return
-    end
+
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + 250
-    elseif love.keyboard.isDown("left") or love.keyboard.isDown("a") then
+    end
+
+    if love.keyboard.isDown("left") or love.keyboard.isDown("a")then
         garyVelocity.x = garyVelocity.x - 250
-    elseif love.keyboard.isDown("up") or love.keyboard.isDown("w") then
+    end
+
+    if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
         garyVelocity.y = garyVelocity.y - 250
-    elseif love.keyboard.isDown("down") or love.keyboard.isDown("s") then
+    end
+
+    if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
         garyVelocity.y = garyVelocity.y + 250
     end
 
@@ -49,8 +51,9 @@ function UpdateGary(dt)
     elseif gary.knockY < 0 then
         gary.knockY = gary.knockY + dt * force
     end
+
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
-    -- gary.body:setLinearVelocity(garyVelocity.x, garyVelocity.y)
+    --gary.body:setLinearVelocity(garyVelocity.x, garyVelocity.y)
 end
 
 function DrawGary()
