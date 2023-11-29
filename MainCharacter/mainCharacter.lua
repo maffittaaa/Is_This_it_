@@ -5,15 +5,9 @@ local player
 local height
 local width
 
-function CreatePlayer()
+function CreatePlayer(world)
   love.physics.setMeter(35)
   -- 9.81 * love.physics.getMeter()
-  world = love.physics.newWorld(0, 0, true)
-
-  love.window.setMode(1920, 1080)
-  height = love.graphics.getHeight()
-  width = love.graphics.getWidth()
-  love.window.setFullscreen(true)
 
   player = {}
   player.body = love.physics.newBody(world, 400, 100,"dynamic")
