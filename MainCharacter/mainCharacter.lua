@@ -13,6 +13,7 @@ function CreatePlayer()
   love.window.setMode(1920, 1080)
   height = love.graphics.getHeight()
   width = love.graphics.getWidth()
+  love.window.setFullscreen(true)
 
   player = {}
   player.body = love.physics.newBody(world, 400, 100,"dynamic")
