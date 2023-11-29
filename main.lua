@@ -5,12 +5,13 @@ require "MainCharacter/healthbar"
 require "MainCharacter/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
--- require "valkyrie"
+-- require "MainCharacter/valkyrie"
 Camera = require "MainCharacter/Camera"
 
 local world
 local ground
 local speed
+local success
 height = love.graphics.getHeight()
 width = love.graphics.getWidth()
 
@@ -25,34 +26,47 @@ function love.keypressed(e)
             sword.body:setActive(true)
         end
     end
-    -- if e == "f" then
-    --     instance.life
-    -- end
+    if e == "f" then
+        if collectible_key.counter == 0 then
+            success = love.window.showMessageBox(title, message)
+            collectible_key.counter = 1
+        end
+        if e == "f" then
+            if gary.health == 5 then
+                success = love.window.showMessageBox(title, message3, "error")
+                collectible_lifes.counter = collectible_lifes.counter
+            elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
+                success = love.window.showMessageBox(title, message2)
+                collectible_lifes.counter = collectible_lifes.counter + 1
+            end
+        end
+    end
 end
 
 function love.load()
     love.physics.setMeter(30)
     world = love.physics.newWorld(0, 0, true)
-    world:setCallbacks(BeginContact, nil, nil, nil)
+    world:setCallbacks(BeginContactPlayer, nil, nil, nil)
+    -- world:setCallbacks(BeginContactValkyrie, EndContactValkyrie, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
+    love.window.setFullscreen(true)
 
     LoadSprites()
     LoadGary(world)
     LoadGaryAttack(world)
     LoadGhost(world)
     LoadHealthBars()
-    -- life1 = CreateLife(700, 450)
-    -- life2 = CreateLife(400, 600)
-    -- life3 = CreateLife(300, 200)
+    LoadCollectibles(world)
+
     -- LoadValquiria(world)
 
     camera = Camera()
 end
 
-function BeginContact(fixtureA, fixtureB)
+function BeginContactPlayer(fixtureA, fixtureB)
     if ghost.isChasing == true and ghost.garyInSight == true then
-        if fixtureA:getUserData() == "gary" and fixtureB:getUserData() == "attack" and gary.health <= 5 and gary.health > 0 then
+        if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "attack" and gary.health <= 5 and gary.health > 0 then
             print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.timer = 1 -- tempo de cooldown para perseguir outra vez
             gary.health = gary.health - 1
@@ -81,10 +95,13 @@ function BeginContact(fixtureA, fixtureB)
             print("Ghost health = " .. ghost.health)
         end
     end
+    -- if fixtureA:getUserData() == "key" and fixtureB:getUserData() == "player" then
+        
+    -- end
 end
 
 
--- function BeginContact(fixtureA, fixtureB)
+-- function BeginContactValkyrie(fixtureA, fixtureB)
 --     print(fixtureA:getUserData(), fixtureB:getUserData())
 
 --     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
@@ -110,7 +127,7 @@ end
 --     end
 -- end
 
--- function EndContact(fixtureA, fixtureB)
+-- function EndContactValkyrie(fixtureA, fixtureB)
 --     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
 --         valkyrie.isMeleeing = false
 --         valkyrie.isRanging = true
@@ -154,18 +171,12 @@ end
 function love.draw()
     camera:attach()
     love.graphics.draw(sprites.background, 0, 0)
-    -- if inventory.key == 0 then
-    --     love.graphics.draw(sprites.key, 500, 250)
-    -- end
-    love.graphics.draw(instance.img, 700, 450)
-    love.graphics.draw(instance.img, 400, 600)
-    love.graphics.draw(instance.img, 300, 200)
     
-    DrawLife()
     DrawGary()
     DrawGaryAttack()
     DrawHealthBars()
     DrawGhost()
+    DrawCollectibles()
     -- DrawValquiria()
     camera:detach()
 end

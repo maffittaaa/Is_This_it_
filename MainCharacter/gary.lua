@@ -25,9 +25,6 @@ function UpdateGary(dt)
     gary.position = vector2.new(gary.body:getPosition())
 
     local garyVelocity = vector2.new(0, 0)
-    if gary.health <= 0 then
-        return
-    end
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + 250
     elseif love.keyboard.isDown("left") or love.keyboard.isDown("a") then

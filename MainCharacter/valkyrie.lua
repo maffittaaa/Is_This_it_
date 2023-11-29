@@ -10,7 +10,8 @@ local lastPposition
 local time = 0
 
 function LoadValquiria(world)
-  valkyriex_patrolling = 50
+  valkyriex_patrolling = 900
+  is_forward_backwards = 1
 
   valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, 100, "dynamic")
   valkyrie.shape = love.physics.newRectangleShape(30, 60)
@@ -63,7 +64,7 @@ function UpdateValquiria(dt, playerPosition)
     valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
 
     if 95 < valkyrie.body:getY() and valkyrie.body:getY() < 105 then
-      valkyrie.body:setPosition(valkyrie.position.x, 400)
+      valkyrie.body:setPosition(valkyrie.position.x, 100)
     elseif valkyrie.body:getY() > 100 then
       valkyrie.body:setLinearVelocity(0, -200)
     elseif valkyrie.body:getY() < 100 then
@@ -74,7 +75,6 @@ function UpdateValquiria(dt, playerPosition)
   elseif valkyrie.playerInSight == true then
     if valkyrie.isRanging == true then
       --stop velocity, while in rangedAttack
-
       time = 0
       lastPposition = playerPosition
 
