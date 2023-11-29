@@ -1,7 +1,3 @@
-require "vector2"
-require "MainCharacter/gary"
-require "MainCharacter/ghost"
-
 sword = {}
 
 function LoadGaryAttack(world)

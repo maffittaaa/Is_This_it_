@@ -49,8 +49,9 @@ function love.load()
     world:setCallbacks(BeginContactPlayer, nil, nil, nil)
     -- world:setCallbacks(BeginContactValkyrie, EndContactValkyrie, nil, nil)
 
-    love.window.setMode(1920, 1080)
-    love.window.setFullscreen(true)
+  sti = require "Mapa/sti"
+  gameMap = sti("Mapa/map.lua")
+  --Call "load" function of every script
 
     LoadSprites()
     LoadGary(world)
@@ -61,7 +62,7 @@ function love.load()
 
     -- LoadValquiria(world)
 
-    camera = Camera()
+  camera = Camera()
 end
 
 function BeginContactPlayer(fixtureA, fixtureB)
@@ -115,17 +116,17 @@ end
 --         print("StartRanged")
 --     end
 
---     if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
---         valkyrie.isRanging = true
---         valkyrie.isMeleeing = true
---         print("starMelee")
---     elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
---         valkyrie.playerInSight = true
---         valkyrie.patroling = false
---         valkyrie.isRanging = false
---         print("StartRanged")
---     end
--- end
+  if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+      valkyrie.isRanging = true
+      valkyrie.isMeleeing = true
+      print("starMelee")
+  elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+      valkyrie.playerInSight = true
+      valkyrie.patroling = false
+      valkyrie.isRanging = false
+      print("StartRanged")
+  end
+end
 
 -- function EndContactValkyrie(fixtureA, fixtureB)
 --     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
@@ -134,28 +135,27 @@ end
 --         print("EndMelee")
 --     end
 
---     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
---         valkyrie.isRanging = false
---         valkyrie.isMeleeing = false
---         print("EndRanged")
---     end
+    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
+        valkyrie.isRanging = false
+        valkyrie.isMeleeing = false
+        print("EndRanged")
+    end
 
---     if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
---         valkyrie.isMeleeing = false
---         valkyrie.isRanging = true
---         print("EndMelee")
---     end
+    if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+        valkyrie.isMeleeing = false
+        valkyrie.isRanging = true
+        print("EndMelee")
+    end
 
---     if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
---         valkyrie.isRanging = false
---         valkyrie.isMeleeing = false
---         print("EndRanged")
---     end
--- end
+    if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+        valkyrie.isRanging = false
+        valkyrie.isMeleeing = false
+        print("EndRanged")
+    end
+end
 
 function love.update(dt)
     world:update(dt)
-
     camera:update(dt)
     camera:follow(gary.body:getX(), gary.body:getY())
     camera:setFollowLerp(0.2)
@@ -165,10 +165,35 @@ function love.update(dt)
     UpdateGary(dt)
     UpdateGaryAttack()
     UpdateGhost(dt, world)
-    -- UpdateValquiria(dt, GetPlayerPosition())
+    UpdateValquiria(dt, GetPlayerPosition())
 end
 
 function love.draw()
+  --Call draw function of every script
+  camera:attach()
+
+  gameMap:drawLayer(gameMap.layers["Relva"])
+  gameMap:drawLayer(gameMap.layers["Rio"])
+  gameMap:drawLayer(gameMap.layers["Path"])
+  gameMap:drawLayer(gameMap.layers["BUshes"])
+  gameMap:drawLayer(gameMap.layers["Arvores"])
+
+  -- DrawPlayer()
+
+  -- if inventory.key == 0 then
+  --     love.graphics.draw(sprites.key, 500, 250)
+  -- end
+  -- love.graphics.draw(instance.img, 700, 450)
+  -- love.graphics.draw(instance.img, 400, 600)
+  -- love.graphics.draw(instance.img, 300, 200)
+  
+  --DrawLife()
+  DrawGary()
+  DrawGaryAttack()
+  DrawHealthBars()
+  DrawGhost()
+  DrawValquiria()
+  camera:detach()
     camera:attach()
     love.graphics.draw(sprites.background, 0, 0)
     
