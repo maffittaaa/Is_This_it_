@@ -16,12 +16,60 @@ return {
     {
       name = "BridgeFloor-export",
       firstgid = 1,
-      filename = "Assets/BridgeFloor-export.tsx"
+      class = "",
+      tilewidth = 32,
+      tileheight = 32,
+      spacing = 1,
+      margin = 0,
+      columns = 9,
+      image = "../../gameMap/Tiles/BridgeFloor-export.png",
+      imagewidth = 322,
+      imageheight = 164,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 32,
+        height = 32
+      },
+      properties = {},
+      wangsets = {},
+      tilecount = 45,
+      tiles = {}
     },
     {
       name = "Tree",
       firstgid = 46,
-      filename = "Assets/Tree.tsx"
+      class = "",
+      tilewidth = 64,
+      tileheight = 72,
+      spacing = 0,
+      margin = 0,
+      columns = 7,
+      image = "Assets/Tree.png",
+      imagewidth = 482,
+      imageheight = 508,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 64,
+        height = 72
+      },
+      properties = {},
+      wangsets = {},
+      tilecount = 49,
+      tiles = {}
     }
   },
   layers = {

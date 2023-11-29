@@ -6,13 +6,13 @@ require "/InGameMenu/inGameMenu"
 require "/MainMenu/mainMenu"
 
 local world
-local sti = require "Mapa/sti"
-local gameMap = require "Mapa/mapaProjeto2D.lua"
+
 
 function love.load()
   world = love.physics.newWorld(0, 0, true)
 
-
+  sti = require "Mapa/sti"
+  gameMap = sti("Mapa/map.lua")
   --Call "load" function of every script
   CreatePlayer()
 end
@@ -24,7 +24,11 @@ function love.update(dt)
 end
 
 function love.draw()
-  gameMap:draw()
+  gameMap:drawLayer(gameMap.layers["Relva"])
+  gameMap:drawLayer(gameMap.layers["Rio"])
+  gameMap:drawLayer(gameMap.layers["Path"])
+  gameMap:drawLayer(gameMap.layers["Arvores"])
+  gameMap:drawLayer(gameMap.layers["BUshes"])
   --Call draw function of every script
   DrawPlayer()
 end
