@@ -4,11 +4,11 @@ function PrintTable( tbl )
     end
 end
 
-require "MeuVector"
+require "loveExample/MeuVector"
 
-Vector = require ("vector")
-profile = require ("profile")
-Luafinding = require ("luafinding")
+Vector = require ("loveExample/vector")
+profile = require ("loveExample/profile")
+Luafinding = require ("loveExample/luafinding")
 
 -- local profile = require "profile"
 -- local Vector = require "vector"
@@ -32,6 +32,9 @@ local waitFor = 0
 local deltaTime = 0
 local variable = false
 local i = 1
+local ones = 0
+local zeros = 0
+
 
 local function updatePath()
     pathAstar = Luafinding( start, finish, map ):GetPath()
@@ -43,24 +46,19 @@ local profileFromProfiler = false
 local timesToRun = 100
 local seed = os.clock()
 
-
-
-
-
-function LoadMap(file)
+function LoadMap()
     -- reads the content of the file
+    local file = io.open("loveExample/map.txt")
 
     for x = 1, mapSize do
         for line in file:lines() do
             map[x] = {}
             for y = 1, #line, 1 do
-                map[x][y] = line:sub(y, y)
+                map[x][y] = line:sub(y,y)
                 if map[x][y] == "1" then
                     map[x][y] = false
-                    
                 elseif map[x][y] == "0" then
                     map[x][y] = true
-                    
                 end
             end
             x = x + 1
@@ -68,6 +66,7 @@ function LoadMap(file)
     end
 
     file:close()
+    print(ones, zeros)
     updatePath()
 end
 
@@ -81,8 +80,8 @@ function love.load() --AiLoad()
     companionPosition = start
     --LoadCompanion()
 
-    local mapaaa = love.filesystem.newFile("map.txt")
-    LoadMap(mapaaa)
+
+    LoadMap()
 
     if runPerformanceTest then
         if profileFromProfiler then profile.start() end

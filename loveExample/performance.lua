@@ -1,6 +1,6 @@
 
-local Vector = require( "vector" )
-local Luafinding = require( "luafinding" )
+local Vector = require( "loveExample/vector" )
+local Luafinding = require( "loveExample/luafinding" )
 
 local map = {}
 local mapSize = 100
