@@ -31,6 +31,7 @@ local companionPosition
 local waitFor = 0
 local deltaTime = 0
 local variable = false
+local i = 1
 
 local function updatePath()
     pathAstar = Luafinding( start, finish, map ):GetPath()
@@ -42,10 +43,12 @@ local profileFromProfiler = false
 local timesToRun = 100
 local seed = os.clock()
 
-function LoadMap(filename)
-    -- reads the content of the file
 
-    local file = io.open(filename)
+
+
+
+function LoadMap(file)
+    -- reads the content of the file
 
     for x = 1, mapSize do
         for line in file:lines() do
@@ -54,8 +57,10 @@ function LoadMap(filename)
                 map[x][y] = line:sub(y, y)
                 if map[x][y] == "1" then
                     map[x][y] = false
+                    
                 elseif map[x][y] == "0" then
                     map[x][y] = true
+                    
                 end
             end
             x = x + 1
@@ -66,6 +71,7 @@ function LoadMap(filename)
     updatePath()
 end
 
+
 function love.load() --AiLoad()
     -- world = love.physics.newWorld(0, 0, true)
 
@@ -75,7 +81,8 @@ function love.load() --AiLoad()
     companionPosition = start
     --LoadCompanion()
 
-    LoadMap("World1.txt")
+    local mapaaa = love.filesystem.newFile("map.txt")
+    LoadMap(mapaaa)
 
     if runPerformanceTest then
         if profileFromProfiler then profile.start() end
@@ -115,19 +122,16 @@ function love.draw() --Aidraw()
         for y = 1, mapSize do
             local fillStyle = "line"
 
-            if not map[x][y] then
+            if map[x][y] == false then
                 fillStyle = "fill"
                 love.graphics.setColor(1, 0, 0)
-
             else
                 love.graphics.setColor(1, 1, 1)
             end
 
             love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
         end  
-    end 
-
-
+    end
 
     if pathAstar then
         love.graphics.setColor( 0, 0.8, 0 )
@@ -145,50 +149,26 @@ end
 
 function love.update(dt)
     deltaTime = deltaTime + dt
+    local destino
+
+    if deltaTime > 1 and variable == true then
+        destino = Luafinding(start, finish, map ):GetPath()[i]
+        
+        companionPosition = destino * tileSize
+        deltaTime = 0
+        i = i + 1
+        if i >= #Luafinding(start, finish, map ):GetPath() then
+            i = 1
+            deltaTime = 0
+            variable = false
+        end
+    end
 end
 
 function CompanionPath()
     print("here")
-    local destiny
+    variable = true
     companionPosition = vectorMine.new(start.x, start.y)
-    for x, y in pairs(Luafinding( start, finish, map ):GetPath()) do
-        destiny = vectorMine.new(y.x, y.y)
-        print(start)
-
-        while deltaTime < 5 do
-            -- vec = {destiny.x - companionPosition.x, destiny.y - companionPosition.y}
-            local distanceToDestiny = vectorMine.magnitude(vectorMine.sub(destiny, companionPosition))
-
-            -- if distanceToDestiny < 2 then
-            --     print("here, primeira volta")
-            --     return waitFor == 0
-            -- end
-
-            local finishDiretion = vectorMine.sub(destiny, companionPosition)
-            finishDiretion = vectorMine.normalize(finishDiretion)
-            local force = vectorMine.mult(finishDiretion, 200)
-
-            --print(waitFor)
-
-            -- if then
-            --     --companionPosition = destiny
-                PrintTable(companionPosition)
-                PrintTable(destiny)
-            --     variable = true
-            --     deltaTime = 0
-            -- end
-
-            --UpdatePosition(force)
-            -- companion.body:setLinearVelocity(force.x, force.y)
-
-            --print("here finaly")
-            print(deltaTime)
-            return
-        end
-        companionPosition = destiny
-        print(x, y)
-    end
-    print("herePig")
 end
 
 function love.keypressed( key )
