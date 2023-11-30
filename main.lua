@@ -13,6 +13,8 @@ local ground
 local speed
 local success
 local wf
+local valkeries_quantity = 3
+local ghosts_quantity
 
 function love.keypressed(e)
     if e == 'escape' then
@@ -29,8 +31,6 @@ function love.keypressed(e)
 end
 
 function love.load()
-    wf = require "Mapa/windfield"
-    wf = wf.newWorld(0, 0)
     love.physics.setMeter(30)
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
@@ -50,7 +50,7 @@ function love.load()
     LoadGaryAttack(world)
     LoadGhost(world, 1000, 1000)
     LoadHealthBars()
-    LoadValquiria(world, 1000, 1000)
+    LoadValquiria(world, 1000, 2000, 1100, 1200, valkeries_quantity)
     LoadCollectibles(world)
 
 -- make a table where the colitions will be stored --
@@ -81,26 +81,29 @@ end
 
 function BeginContact(fixtureA, fixtureB)
 
-    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
-        valkyrie.isRanging = true
-        valkyrie.isMeleeing = true
-        print("startMelee")
-    elseif fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
-        valkyrie.playerInSight = true
-        valkyrie.isRanging = true
-        valkyrie.patroling = false
-        print("StartRanged")
-    end
+    for i = 1, valkeries_quantity, 1 do
+        
+        if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
+            valkyries[i].isRanging = true
+            valkyries[i].isMeleeing = true
+            print("startMelee")
+        elseif fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
+            valkyries[i].playerInSight = true
+            valkyries[i].isRanging = true
+            valkyries[i].patroling = false
+            print("StartRanged")
+        end
 
-    if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.isRanging = true
-        valkyrie.isMeleeing = true
-        print("starMelee")
-    elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.playerInSight = true
-        valkyrie.patroling = false
-        valkyrie.isRanging = false
-        print("StartRanged")
+        if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+            valkyries[i].isRanging = true
+            valkyries[i].isMeleeing = true
+            print("starMelee")
+        elseif fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+            valkyries[i].playerInSight = true
+            valkyries[i].patroling = false
+            valkyries[i].isRanging = false
+            print("StartRanged")
+        end
     end
 
     if ghost.isChasing == true and ghost.garyInSight == true then
@@ -154,28 +157,31 @@ function BeginContact(fixtureA, fixtureB)
 end
 
 function EndContact(fixtureA, fixtureB)
-    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
-        valkyrie.isMeleeing = false
-        valkyrie.isRanging = true
-        print("EndMelee")
-    end
+    for i = 1, valkeries_quantity, 1 do
+        
+        if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
+            valkyries[i].isMeleeing = false
+            valkyries[i].isRanging = true
+            print("EndMelee")
+        end
 
-    if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
-        valkyrie.isRanging = false
-        valkyrie.isMeleeing = false
-        print("EndRanged")
-    end
+        if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "RangedAttack" then
+            valkyries[i].isRanging = false
+            valkyries[i].isMeleeing = false
+            print("EndRanged")
+        end
 
-    if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.isMeleeing = false
-        valkyrie.isRanging = true
-        print("EndMelee")
-    end
+        if fixtureA:getUserData() == "MelleAttack" and fixtureB:getUserData() == "player" then
+            valkyries[i].isMeleeing = false
+            valkyries[i].isRanging = true
+            print("EndMelee")
+        end
 
-    if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
-        valkyrie.isRanging = false
-        valkyrie.isMeleeing = false
-        print("EndRanged")
+        if fixtureA:getUserData() == "RangedAttack" and fixtureB:getUserData() == "player" then
+            valkyries[i].isRanging = false
+            valkyries[i].isMeleeing = false
+            print("EndRanged")
+        end
     end
 end
 
@@ -191,14 +197,15 @@ function love.update(dt)
   UpdateGary(dt)
   UpdateGaryAttack()
   UpdateGhost(dt, world)
-  UpdateValquiria(dt, GetPlayerPosition())
-  wf:update(dt)
+  UpdateValquiria(dt, GetPlayerPosition(), 3)
 end
+
 function love.mousepressed(x, y, button)
     if button == 1 then
-        print(x, y)
+        print(gary.position.x, gary.position.y)
     end
 end
+
 function love.draw()
     --Call draw function of every script
     camera:attach()
@@ -214,7 +221,7 @@ function love.draw()
     DrawGaryAttack()
     DrawHealthBars()
     DrawGhost()
-    DrawValquiria()
+    DrawValquiria(valkeries_quantity)
     DrawCollectibles()
     camera:detach()
 end

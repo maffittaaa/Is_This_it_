@@ -1,127 +1,184 @@
-valkyrie = {}
-local meleeRange
-local rangedAttack
+valkyries = {}
 local valkyriex_patrolling
 local is_forward_backwards
 local lastPposition
 local time = 0
 
-function LoadValquiria(world, x, y)
-  valkyriex_patrolling = x
+function LoadValquiria(world, x, y, x2, x3, quantity)
+  for i = 1, quantity, 1 do
+    if i == 1 then
+      x = x
+    elseif i == 2 then
+      x = x2
+    elseif i == 3 then
+      x = x3
+    end
 
-  valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, y, "dynamic")
-  valkyrie.shape = love.physics.newRectangleShape(30, 60)
-  valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
-  valkyrie.maxvelocity = 200
-  valkyrie.isMeleeing = false
-  valkyrie.isRanging = false
-  valkyrie.patroling = true
-  valkyrie.playerInSight = false
-  valkyrie.fixture:setFriction(10)
-  valkyrie.body:setFixedRotation(true)
-  valkyrie.position = vector2.new(valkyrie.body:getPosition())
+    valkyriex_patrolling = x
 
-  meleeRange = {}
-  meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
-  meleeRange.shape = love.physics.newCircleShape(150)
-  meleeRange.fixture = love.physics.newFixture(meleeRange.body, meleeRange.shape, 2)
-  meleeRange.range = meleeRange.shape:getRadius()
-  meleeRange.fixture:setSensor(true)
-  meleeRange.fixture:setUserData("MelleAttack")
+    local valkyrie = {}
 
-  rangedAttack = {}
-  rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
-  rangedAttack.shape = love.physics.newCircleShape(300)
-  rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
-  rangedAttack.range = rangedAttack.shape:getRadius()
-  rangedAttack.fixture:setSensor(true)
-  rangedAttack.fixture:setUserData("RangedAttack")
+    valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, y, "dynamic")
+    valkyrie.shape = love.physics.newRectangleShape(30, 60)
+    valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
+    valkyrie.maxvelocity = 200
+    valkyrie.isMeleeing = false
+    valkyrie.isRanging = false
+    valkyrie.patroling = true
+    valkyrie.playerInSight = false
+    valkyrie.fixture:setFriction(10)
+    valkyrie.body:setFixedRotation(true)
+    valkyrie.position = vector2.new(valkyrie.body:getPosition())
+
+    
+    local meleeRange = {}
+    meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
+    meleeRange.shape = love.physics.newCircleShape(150)
+    meleeRange.fixture = love.physics.newFixture(meleeRange.body, meleeRange.shape, 2)
+    meleeRange.range = meleeRange.shape:getRadius()
+    meleeRange.fixture:setSensor(true)
+    meleeRange.fixture:setUserData("MelleAttack")
+
+    local rangedAttack = {}
+    rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
+    rangedAttack.shape = love.physics.newCircleShape(300)
+    rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
+    rangedAttack.range = rangedAttack.shape:getRadius()
+    rangedAttack.fixture:setSensor(true)
+    rangedAttack.fixture:setUserData("RangedAttack")
+
+    if i == 1  then
+      table.insert(valkyries, i, valkyrie)
+      table.insert(valkyries, i + 1, meleeRange)
+      table.insert(valkyries, i + 2, rangedAttack)
+    else
+      table.insert(valkyries, i * 2, valkyrie)
+      table.insert(valkyries, i * 2 + 1, meleeRange)
+      table.insert(valkyries, i * 2 + 2, rangedAttack)
+    end
+
+    for x, y in pairs(valkyries) do
+      print(x, y)
+    end
+    print("done")
+  end
 end
 
-function UpdateValquiria(dt, playerPosition)
-  valkyrie.position = vector2.new(valkyrie.body:getPosition())
+function UpdateValquiria(dt, playerPosition, quantity)
+  for i = 1, quantity, 1 do
 
-  meleeRange.body:setPosition(valkyrie.body:getX(), valkyrie.body:getY())
-  rangedAttack.body:setPosition(valkyrie.body:getX(), valkyrie.body:getY())
+    local iup
 
-  valkyrie.range = vector2.mag(vector2.sub(valkyrie.position, playerPosition))
-
-  if valkyrie.patroling == true then
-    --If not in Sight, Patrol
-    valkyriex_patrolling = valkyrie.body:getX()
-
-    if valkyriex_patrolling >= 1900 then
-      is_forward_backwards = -1
-    elseif valkyriex_patrolling <= 100 then
-      is_forward_backwards = 1
-    elseif valkyriex_patrolling > 100 and valkyriex_patrolling < 1900 then
-      is_forward_backwards = 1
+    if i == 1 then
+      iup = 1
+    else
+      iup = i * 2
     end
 
-    valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
+    valkyries[iup].position = vector2.new(valkyries[iup].body:getPosition())
 
-    if 95 < valkyrie.body:getY() and valkyrie.body:getY() < 105 then
-      valkyrie.body:setPosition(valkyrie.position.x, 100)
-    elseif valkyrie.body:getY() > 100 then
-      valkyrie.body:setLinearVelocity(0, -200)
-    elseif valkyrie.body:getY() < 100 then
-      valkyrie.body:setLinearVelocity(0, 200)
-    end
+    valkyries[iup + 1].body:setPosition(valkyries[iup].body:getX(), valkyries[iup].body:getY())
+    valkyries[iup + 2].body:setPosition(valkyries[iup].body:getX(), valkyries[iup].body:getY())
 
-    valkyrie.body:setPosition(valkyriex_patrolling, valkyrie.body:getY())
-  elseif valkyrie.playerInSight == true then
-    if valkyrie.isRanging == true then
-      --stop velocity, while in rangedAttack
-      time = 0
-      lastPposition = playerPosition
+    valkyries[iup].range = vector2.mag(vector2.sub(valkyries[iup].position, playerPosition))
 
-      if valkyrie.isMeleeing == true then
-        local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyrie.body:getPosition()))
-        playerDiretion = vector2.norm(playerDiretion)
-        local force = vector2.mult(playerDiretion, 200)
-        valkyrie.body:setLinearVelocity(force.x, force.y)
-        return
+    if valkyries[iup].patroling == true then
+      --If not in Sight, Patrol
+      valkyriex_patrolling = valkyries[iup].body:getX()
+
+      if valkyriex_patrolling >= 1900 then
+        is_forward_backwards = -1
+      elseif valkyriex_patrolling <= 100 then
+        is_forward_backwards = 1
+      elseif valkyriex_patrolling > 100 and valkyriex_patrolling < 1900 then
+        is_forward_backwards = 1
       end
-      valkyrie.body:setLinearVelocity(0, 0)
-      --if not meleeAttacking, do rangedAttack
-    elseif valkyrie.isRanging == false then
-      --go to last location of player
-      local lastPos = vector2.mag(vector2.sub(valkyrie.position, lastPposition))
 
-      if lastPos < 1 then
-        time = time + dt
-        valkyrie.body:setLinearVelocity(0, 0)
-        if time > 2 then
-          valkyrie.patroling = true
-          valkyrie.playerInSight = false
-          time = 0
+      valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
+
+      if 95 < valkyries[iup].body:getY() and valkyries[iup].body:getY() < 105 then
+        valkyries[iup].body:setPosition(valkyries[iup].position.x, 100)
+      elseif valkyries[iup].body:getY() > 100 then
+        valkyries[iup].body:setLinearVelocity(0, -200)
+      elseif valkyries[iup].body:getY() < 100 then
+        valkyries[iup].body:setLinearVelocity(0, 200)
+      end
+
+      valkyries[iup].body:setPosition(valkyriex_patrolling, valkyries[iup].body:getY())
+    elseif valkyries[iup].playerInSight == true then
+      if valkyries[iup].isRanging == true then
+        --stop velocity, while in rangedAttack
+        time = 0
+        lastPposition = playerPosition
+
+        if valkyries[iup].isMeleeing == true then
+          local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[iup].body:getPosition()))
+          playerDiretion = vector2.norm(playerDiretion)
+          local force = vector2.mult(playerDiretion, 200)
+          valkyries[iup].body:setLinearVelocity(force.x, force.y)
           return
         end
-        return
-      elseif lastPos > 1 then
-        local playerDiretion = vector2.sub(lastPposition, vector2.new(valkyrie.body:getPosition()))
-        playerDiretion = vector2.norm(playerDiretion)
-        local force = vector2.mult(playerDiretion, 200)
-        valkyrie.body:setLinearVelocity(force.x, force.y)
+        valkyries[iup].body:setLinearVelocity(0, 0)
+        --if not meleeAttacking, do rangedAttack
+      elseif valkyries[iup].isRanging == false then
+        --go to last location of player
+        local lastPos = vector2.mag(vector2.sub(valkyries[iup].position, lastPposition))
+
+        if lastPos < 1 then
+          time = time + dt
+          valkyries[iup].body:setLinearVelocity(0, 0)
+          if time > 2 then
+            valkyries[iup].patroling = true
+            valkyries[iup].playerInSight = false
+            time = 0
+            return
+          end
+          return
+        elseif lastPos > 1 then
+          local playerDiretion = vector2.sub(lastPposition, vector2.new(valkyries[iup].body:getPosition()))
+          playerDiretion = vector2.norm(playerDiretion)
+          local force = vector2.mult(playerDiretion, 200)
+          valkyries[iup].body:setLinearVelocity(force.x, force.y)
+        end
       end
+    end
+  end 
+end
+
+function DrawValquiria(quantity)
+  for i = 1, quantity, 1 do
+
+    local iup
+
+    if i == 1 then
+      iup = 1
+    else
+      iup = i * 2
+    end
+
+    print(i)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.polygon("fill", valkyries[iup].body:getWorldPoints(valkyries[iup].shape:getPoints()))
+    love.graphics.circle("line", valkyries[iup + 1].body:getX(), valkyries[iup + 1].body:getY(), valkyries[iup + 1].shape:getRadius())
+    love.graphics.circle("line", valkyries[iup + 2].body:getX(), valkyries[iup + 2].body:getY(), valkyries[iup + 2].shape:getRadius())
+
+    if valkyries[iup].isChasing == false and lastPposition ~= nil and valkyries[iup].patroling == false then
+      love.graphics.line(valkyries[iup].body:getX(), valkyries[iup].body:getY(), lastPposition.x, lastPposition.y)
     end
   end
 end
 
-function DrawValquiria()
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.polygon("fill", valkyrie.body:getWorldPoints(valkyrie.shape:getPoints()))
+function GetValquiriaPosition(quantity)
+  for i = 1, quantity, 1 do
 
+    local iup
 
-
-  love.graphics.circle("line", meleeRange.body:getX(), meleeRange.body:getY(), meleeRange.shape:getRadius())
-  love.graphics.circle("line", rangedAttack.body:getX(), rangedAttack.body:getY(), rangedAttack.shape:getRadius())
-
-  if valkyrie.isChasing == false and lastPposition ~= nil and valkyrie.patroling == false then
-    love.graphics.line(valkyrie.body:getX(), valkyrie.body:getY(), lastPposition.x, lastPposition.y)
+    if i == 1 then
+      iup = 1
+    else
+      iup = i * 2
+    end
+    
+    return vector2.new(valkyries[iup].body:getX(), valkyries[iup].body:getY())
   end
-end
-
-function GetValquiriaPosition()
-  return vector2.new(valkyrie.body:getX(), valkyrie.body:getY())
 end
