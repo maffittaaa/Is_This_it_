@@ -51,6 +51,7 @@ function love.load()
     LoadGhost(world, 1000, 1000)
     LoadHealthBars()
     LoadValquiria(world, 1000, 1000)
+    LoadCollectibles(world)
 
 -- make a table where the colitions will be stored --
     walls = {}
@@ -202,19 +203,18 @@ function love.draw()
     --Call draw function of every script
     camera:attach()
 
-  gameMap:drawLayer(gameMap.layers["Relva"])
-  gameMap:drawLayer(gameMap.layers["Rio"])
-  gameMap:drawLayer(gameMap.layers["Path"])
-  gameMap:drawLayer(gameMap.layers["BUshes"])
-  gameMap:drawLayer(gameMap.layers["Arvores"])
+    gameMap:drawLayer(gameMap.layers["Relva"])
+    gameMap:drawLayer(gameMap.layers["Rio"])
+    gameMap:drawLayer(gameMap.layers["Path"])
+    gameMap:drawLayer(gameMap.layers["BUshes"])
+    gameMap:drawLayer(gameMap.layers["Arvores"])
  -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
 
     DrawGary()
     DrawGaryAttack()
     DrawHealthBars()
     DrawGhost()
-    DrawCollectibles()
     DrawValquiria()
-    wf:draw()
+    DrawCollectibles()
     camera:detach()
 end
