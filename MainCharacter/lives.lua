@@ -8,7 +8,7 @@ message3 = "full health"
 function LoadCollectibles(world)
     collectible_lifes.counter = 0
 
-    collectible_key.body = love.physics.newBody(world, 700, 500, "static") -- KEY
+    collectible_key.body = love.physics.newBody(world, 1000, 1000, "static") -- KEY
     collectible_key.shape = love.physics.newRectangleShape(sprites.key:getWidth(), sprites.key:getHeight())
     collectible_key.fixture = love.physics.newFixture(collectible_key.body, collectible_key.shape, 1)
     collectible_key.counter = 0

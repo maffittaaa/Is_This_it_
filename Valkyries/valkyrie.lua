@@ -6,11 +6,10 @@ local is_forward_backwards
 local lastPposition
 local time = 0
 
-function LoadValquiria(world)
-  valkyriex_patrolling = 900
-  is_forward_backwards = 1
+function LoadValquiria(world, x, y)
+  valkyriex_patrolling = x
 
-  valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, 100, "dynamic")
+  valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, y, "dynamic")
   valkyrie.shape = love.physics.newRectangleShape(30, 60)
   valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
   valkyrie.maxvelocity = 200
@@ -54,11 +53,12 @@ function UpdateValquiria(dt, playerPosition)
 
     if valkyriex_patrolling >= 1900 then
       is_forward_backwards = -1
-    end
-
-    if valkyriex_patrolling <= 100 then
+    elseif valkyriex_patrolling <= 100 then
+      is_forward_backwards = 1
+    elseif valkyriex_patrolling > 100 and valkyriex_patrolling < 1900 then
       is_forward_backwards = 1
     end
+
     valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
 
     if 95 < valkyrie.body:getY() and valkyrie.body:getY() < 105 then
