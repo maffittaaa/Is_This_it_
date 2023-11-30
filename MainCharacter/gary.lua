@@ -4,9 +4,9 @@ local force = 500
 destroy_gary_fixture = false
 
 
-function LoadGary(world)
-    gary.body = love.physics.newBody(world, 400, 100, "dynamic")
-    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth(), sprites.gary:getHeight())
+function LoadGary(world, x, y)
+    gary.body = love.physics.newBody(world, x, y, "dynamic")
+    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 10, sprites.gary:getHeight() - 50)
     gary.fixture = love.physics.newFixture(gary.body, gary.shape, 1)
     gary.maxvelocity = 200
     gary.fixture:setFriction(1)

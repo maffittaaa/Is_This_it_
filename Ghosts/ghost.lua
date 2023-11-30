@@ -8,10 +8,10 @@ local time = 0
 
 local destroy_ghost_fixture = false
 
-function LoadGhost(world)
-    ghostx_patrolling = 50
+function LoadGhost(world, x, y)
+    ghostx_patrolling = x
 
-    ghost.body = love.physics.newBody(world, ghostx_patrolling, 100, "dynamic")
+    ghost.body = love.physics.newBody(world, ghostx_patrolling, y, "dynamic")
     ghost.shape = love.physics.newRectangleShape(30, 60)
     ghost.fixture = love.physics.newFixture(ghost.body, ghost.shape, 1)
     ghost.maxvelocity = 200
@@ -65,12 +65,14 @@ function UpdateGhost(dt, world)
 
         if ghostx_patrolling >= 1900 then
             is_forward_backwards = -1
-        end
-
-        if ghostx_patrolling <= 100 then
+        elseif ghostx_patrolling <= 100 then
+            is_forward_backwards = 1
+        elseif ghostx_patrolling > 100 and ghostx_patrolling < 1900 then
             is_forward_backwards = 1
         end
+        
         ghostx_patrolling = ghostx_patrolling + (dt * 200 * is_forward_backwards)
+
 
         if 95 < ghost.body:getY() and ghost.body:getY() < 105 then
             ghost.body:setPosition(ghost.position.x, 100)
