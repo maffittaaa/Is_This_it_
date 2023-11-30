@@ -37,6 +37,7 @@ function LoadValquiria(world)
   rangedAttack.range = rangedAttack.shape:getRadius()
   rangedAttack.fixture:setSensor(true)
   rangedAttack.fixture:setUserData("RangedAttack")
+  rangedAttack.cooldown = 2
 end
 
 function UpdateValquiria(dt, playerPosition)

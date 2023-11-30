@@ -2,7 +2,7 @@ require "vector2"
 require "MainCharacter/gary"
 require "Ghosts/ghost"
 require "MainCharacter/healthbar"
-require "MainCharacter/sprites"
+require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 -- require "MainCharacter/valkyrie"
@@ -71,7 +71,6 @@ function BeginContactPlayer(fixtureA, fixtureB)
         if fixtureA:getUserData() == "attack" and fixtureB:getUserData() == "melee weapon" then
             print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.health = ghost.health - 1
-            sword.timer = 0
             -- Testes
             if ghost.health <= 0 then
                 ghost.isChasing = false
@@ -165,7 +164,7 @@ function love.update(dt)
     camera:setFollowStyle('TOPDOWN')
     UpdateHealthBars()
     UpdateGary(dt)
-    UpdateGaryAttack()
+    UpdateGaryAttack(dt)
     UpdateGhost(dt, world)
     -- UpdateValquiria(dt, GetPlayerPosition())
 end
