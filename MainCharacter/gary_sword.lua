@@ -1,5 +1,3 @@
-require "MainCharacter/gary"
-
 sword = {}
 
 function LoadGaryAttack(world)
@@ -21,10 +19,10 @@ function UpdateGaryAttack(dt)
 
     local attacking = sword.body:isActive()
     if attacking then
-        sword.timer = 0
         sword.timer = sword.timer + dt
         if sword.timer >= sword.attacktime then
             attacking = false
+            sword.timer = 0
             sword.body:setActive(false)
         end
     end

@@ -1,6 +1,6 @@
 valkyries = {}
-local valkyriex_patrolling
-local is_forward_backwards = 1
+valkyriex_patrolling = 1
+local is_forward_backwards
 local lastPposition
 local time = 0
 
@@ -50,7 +50,7 @@ function LoadValquiria(world, posicoes, quantity)
 
     print(x, y)
 
-    local valkyrie = {}
+    valkyrie = {}
 
     valkyrie.body = love.physics.newBody(world, x, y, "dynamic")
     valkyrie.shape = love.physics.newRectangleShape(30, 60)
@@ -63,23 +63,24 @@ function LoadValquiria(world, posicoes, quantity)
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
+    valkyrie.health = 7
     
-    local meleeRange = {}
+    meleeRange = {}
     meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
     meleeRange.shape = love.physics.newCircleShape(150)
     meleeRange.fixture = love.physics.newFixture(meleeRange.body, meleeRange.shape, 2)
     meleeRange.range = meleeRange.shape:getRadius()
     meleeRange.fixture:setSensor(true)
+    meleeRange.name = "enemy"
     meleeRange.fixture:setUserData("MelleAttack")
 
-    local rangedAttack = {}
+    rangedAttack = {}
     rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
     rangedAttack.shape = love.physics.newCircleShape(300)
     rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
     rangedAttack.range = rangedAttack.shape:getRadius()
     rangedAttack.fixture:setSensor(true)
     rangedAttack.fixture:setUserData("RangedAttack")
-    rangedAttack.cooldown = 2
 
     if i == 1  then
       table.insert(valkyries, i, valkyrie)

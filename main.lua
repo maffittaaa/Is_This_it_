@@ -7,6 +7,7 @@ require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
+require "Valkyries/valkyrie_bow_and_arrow"
 Camera = require "Camera/Camera"
 
 local world
@@ -14,7 +15,7 @@ local ground
 local speed
 local success
 local wf
-local valkeries_quantity = 3
+local valkeries_quantity = 1
 local ghosts_quantity
 local posicoes = {}
 
@@ -25,7 +26,6 @@ function love.keypressed(e)
         love.event.quit()
     end
     if e == 'e' then
-        print(sword.timer)
         if sword.body:isActive() then
             sword.body:setActive(false)
         else
@@ -67,8 +67,9 @@ function love.load()
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
-    LoadGhost(world, 1000, 1000)
+    LoadGhost(world, 1600, 800)
     LoadHealthBars()
+    LoadValkyrieRangedAttack(world)
     LoadValquiria(world, posicoes, #posicoes/ 2)
     LoadCollectibles(world)
 
@@ -152,7 +153,6 @@ function BeginContact(fixtureA, fixtureB)
             -- End testes
             print("Ghost health = " .. ghost.health)
         end
-        sword.timer = 10
     end
     if fixtureB:getUserData() == "key" and fixtureA:getUserData() == "player" then
         if collectible_key.counter == 0 then
@@ -210,8 +210,9 @@ function love.update(dt)
   camera:setFollowStyle('TOPDOWN')
   UpdateHealthBars()
   UpdateGary(dt)
-  UpdateGaryAttack()
+  UpdateGaryAttack(dt)
   UpdateGhost(dt, world)
+  UpdateValkyrieRangedAttack(dt)
   UpdateValquiria(dt, GetPlayerPosition(), posicoes, #posicoes/2)
 end
 
@@ -238,5 +239,6 @@ function love.draw()
     DrawGhost()
     DrawValquiria(7)
     DrawCollectibles()
+    DrawValkyrieAttack()
     camera:detach()
 end
