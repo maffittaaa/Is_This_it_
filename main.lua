@@ -1,4 +1,5 @@
 require "vector2"
+require "vector"
 require "MainCharacter/gary"
 require "Ghosts/ghost"
 require "MainCharacter/healthbar"
@@ -16,6 +17,9 @@ local success
 local wf
 local valkeries_quantity = 1
 local ghosts_quantity
+local posicoes = {}
+
+local enemyPostions = {}
 
 function love.keypressed(e)
     if e == 'escape' then
@@ -45,6 +49,25 @@ function love.load()
     gameMap = sti("Mapa/map.lua")
     --Call "load" function of every script
 
+    for i = 1, 7, 1 do
+        posicoes[1] = {vector.new(3464, 1782)}
+        posicoes[2] = {vector.new(4149, 1782)}
+        posicoes[3] = {vector.new(3561, 1643)}
+        posicoes[4] = {vector.new(4149, 1643)}
+        posicoes[5] = {vector.new(3633, 1526)}
+        posicoes[6] = {vector.new(4174, 1526)}
+        posicoes[7] = {vector.new(2960, 3138)}
+        posicoes[8] = {vector.new(3373, 3138)}
+        posicoes[9] = {vector.new(3574, 2968)}
+        posicoes[10] = {vector.new(2919, 2968)}
+        posicoes[11] = {vector.new(3142, 2796)}
+        posicoes[12] = {vector.new(3747, 2796)}
+        posicoes[13] = {vector.new(3645, 2710)}
+        posicoes[14] = {vector.new(3194, 2710)}
+        
+        table.insert(enemyPostions, i, posicoes)
+    end
+
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
@@ -52,6 +75,7 @@ function love.load()
     LoadHealthBars()
     LoadValquiria(world, 700, 500, 1100, 1200, valkeries_quantity)
     LoadValkyrieRangedAttack(world)
+    LoadValquiria(world, posicoes, #posicoes/ 2)
     LoadCollectibles(world)
 
     -- make a table where the colitions will be stored --
@@ -195,6 +219,7 @@ function love.update(dt)
   UpdateGhost(dt, world)
   UpdateValquiria(dt, GetPlayerPosition(), 1)
   UpdateValkyrieRangedAttack(dt)
+  UpdateValquiria(dt, GetPlayerPosition(), #posicoes/2)
 end
 
 function love.mousepressed(x, y, button)
@@ -218,7 +243,7 @@ function love.draw()
     DrawGaryAttack()
     DrawHealthBars()
     DrawGhost()
-    DrawValquiria(valkeries_quantity)
+    DrawValquiria(#posicoes/2)
     DrawCollectibles()
     DrawValkyrieAttack()
     camera:detach()
