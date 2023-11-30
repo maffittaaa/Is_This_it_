@@ -1,35 +1,58 @@
 valkyries = {}
 local valkyriex_patrolling
-local is_forward_backwards
+local is_forward_backwards = 1
 local lastPposition
 local time = 0
-local k = 1
 
-function LoadValquiria(world, posicoes, quantity, y)
+
+local function printTable( t )
+ 
+  local printTable_cache = {}
+
+  local function sub_printTable( t, indent )
+
+      if ( printTable_cache[tostring(t)] ) then
+          print( indent .. "*" .. tostring(t) )
+      else
+          printTable_cache[tostring(t)] = true
+          if ( type( t ) == "table" ) then
+              for pos,val in pairs( t ) do
+                  if ( type(val) == "table" ) then
+                      print( indent .. "[" .. pos .. "] => " .. tostring( t ).. " {" )
+                      sub_printTable( val, indent .. string.rep( " ", string.len(pos)+8 ) )
+                      print( indent .. string.rep( " ", string.len(pos)+6 ) .. "}" )
+                  elseif ( type(val) == "string" ) then
+                      print( indent .. "[" .. pos .. '] => "' .. val .. '"' )
+                  else
+                      print( indent .. "[" .. pos .. "] => " .. tostring(val) )
+                  end
+              end
+          else
+              print( indent..tostring(t) )
+          end
+      end
+  end
+
+  if ( type(t) == "table" ) then
+      print( tostring(t) .. " {" )
+      sub_printTable( t, "  " )
+      print( "}" )
+  else
+      sub_printTable( t, "  " )
+  end
+end
+
+function LoadValquiria(world, posicoes, quantity)
   for i = 1, quantity, 1 do
     
-    if i == 1 then
-      k = 1
-    elseif i == 2 then
-      k = k + 2
-    elseif i == 3 then
-      k = k + 2
-    elseif i == 4 then
-      k = k + 2
-    elseif i == 5 then
-      k = k + 2
-    elseif i == 6 then
-      k = k + 2
-    elseif i == 7 then
-      k = k + 2
-    end
+    x = posicoes[i].x
+    y = posicoes[i].y
 
-    valkyriex_patrolling = posicoes[k].x
-    y = posicoes[k].y
+    print(x, y)
 
     local valkyrie = {}
 
-    valkyrie.body = love.physics.newBody(world, valkyriex_patrolling, y, "dynamic")
+    valkyrie.body = love.physics.newBody(world, x, y, "dynamic")
     valkyrie.shape = love.physics.newRectangleShape(30, 60)
     valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
     valkyrie.maxvelocity = 200
@@ -40,7 +63,6 @@ function LoadValquiria(world, posicoes, quantity, y)
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
-
     
     local meleeRange = {}
     meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -69,15 +91,18 @@ function LoadValquiria(world, posicoes, quantity, y)
       table.insert(valkyries, i * 2 + 2, rangedAttack)
     end
 
-    for x, y in pairs(valkyries) do
-      print(x, y)
-    end
+    -- for x, y in pairs(valkyries) do
+    --   print(x, y)
+    -- end
+    
+    printTable(GetValquiriaPosition(quantity))
     print("done")
   end
 end
 
-function UpdateValquiria(dt, playerPosition, quantity)
+function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
+
 
     local iup
 
@@ -94,29 +119,31 @@ function UpdateValquiria(dt, playerPosition, quantity)
 
     valkyries[iup].range = vector2.mag(vector2.sub(valkyries[iup].position, playerPosition))
 
+    -- print(valkyriex_patrolling)
     if valkyries[iup].patroling == true then
       --If not in Sight, Patrol
       valkyriex_patrolling = valkyries[iup].body:getX()
 
-      if valkyriex_patrolling >= 1900 then
-        is_forward_backwards = -1
-      elseif valkyriex_patrolling <= 100 then
-        is_forward_backwards = 1
-      elseif valkyriex_patrolling > 100 and valkyriex_patrolling < 1900 then
-        is_forward_backwards = 1
-      end
 
-      valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
+      -- if valkyriex_patrolling >= 4149 then
+      --   is_forward_backwards = -1
+      -- elseif valkyriex_patrolling <= 100 then
+      --   is_forward_backwards = 1
+      -- elseif valkyriex_patrolling > 3464 and valkyriex_patrolling < 4149 then
+      --   is_forward_backwards = 1
+      -- end
 
-      if 95 < valkyries[iup].body:getY() and valkyries[iup].body:getY() < 105 then
-        valkyries[iup].body:setPosition(valkyries[iup].position.x, 100)
-      elseif valkyries[iup].body:getY() > 100 then
-        valkyries[iup].body:setLinearVelocity(0, -200)
-      elseif valkyries[iup].body:getY() < 100 then
-        valkyries[iup].body:setLinearVelocity(0, 200)
-      end
+      -- valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
 
-      valkyries[iup].body:setPosition(valkyriex_patrolling, valkyries[iup].body:getY())
+      -- if 95 < valkyries[iup].body:getY() and valkyries[iup].body:getY() < 105 then
+      --   valkyries[iup].body:setPosition(valkyries[iup].position.x, 100)
+      -- elseif valkyries[iup].body:getY() > 100 then
+      --   valkyries[iup].body:setLinearVelocity(0, -200)
+      -- elseif valkyries[iup].body:getY() < 100 then
+      --   valkyries[iup].body:setLinearVelocity(0, 200)
+      -- end
+
+      -- valkyries[iup].body:setPosition(valkyriex_patrolling, valkyries[iup].body:getY())
     elseif valkyries[iup].playerInSight == true then
       if valkyries[iup].isRanging == true then
         --stop velocity, while in rangedAttack
@@ -168,7 +195,6 @@ function DrawValquiria(quantity)
       iup = i * 2
     end
 
-    print(i)
     love.graphics.setColor(1, 1, 1)
     love.graphics.polygon("fill", valkyries[iup].body:getWorldPoints(valkyries[iup].shape:getPoints()))
     love.graphics.circle("line", valkyries[iup + 1].body:getX(), valkyries[iup + 1].body:getY(), valkyries[iup + 1].shape:getRadius())

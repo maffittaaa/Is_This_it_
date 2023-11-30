@@ -49,24 +49,20 @@ function love.load()
     gameMap = sti("Mapa/map.lua")
     --Call "load" function of every script
 
-    for i = 1, 7, 1 do
-        posicoes[1] = {vector.new(3464, 1782)}
-        posicoes[2] = {vector.new(4149, 1782)}
-        posicoes[3] = {vector.new(3561, 1643)}
-        posicoes[4] = {vector.new(4149, 1643)}
-        posicoes[5] = {vector.new(3633, 1526)}
-        posicoes[6] = {vector.new(4174, 1526)}
-        posicoes[7] = {vector.new(2960, 3138)}
-        posicoes[8] = {vector.new(3373, 3138)}
-        posicoes[9] = {vector.new(3574, 2968)}
-        posicoes[10] = {vector.new(2919, 2968)}
-        posicoes[11] = {vector.new(3142, 2796)}
-        posicoes[12] = {vector.new(3747, 2796)}
-        posicoes[13] = {vector.new(3645, 2710)}
-        posicoes[14] = {vector.new(3194, 2710)}
-        
-        table.insert(enemyPostions, i, posicoes)
-    end
+    posicoes[1] = {x = 3800, y = 1400}
+    posicoes[2] = {x = 3800,y = 1500}
+    posicoes[3] = {x = 3800,y = 1600}
+    posicoes[4] = {x = 3800,y = 1700}
+    posicoes[5] = {x = 3800,y = 1800}
+    posicoes[6] = {x = 3800,y = 1900}
+    posicoes[7] = {x = 3800,y = 2000}
+    posicoes[8] = {x = 4149,y = 1782}
+    posicoes[9] = {x = 4149,y = 1643}
+    posicoes[10] = {x = 4174,y = 1526}
+    posicoes[11] = {x = 3373,y = 3138}
+    posicoes[12] = {x = 2919,y = 2968}
+    posicoes[13] = {x = 3747,y = 2796}
+    posicoes[14] = {x = 3194,y = 2710}
 
     LoadSprites()
     LoadGary(world, 900, 1000)
@@ -97,7 +93,7 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.5)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.1)
 end
 
 function BeginContact(fixtureA, fixtureB)
@@ -216,7 +212,7 @@ function love.update(dt)
   UpdateGary(dt)
   UpdateGaryAttack()
   UpdateGhost(dt, world)
-  UpdateValquiria(dt, GetPlayerPosition(), #posicoes/2)
+  UpdateValquiria(dt, GetPlayerPosition(), posicoes, #posicoes/2)
 end
 
 function love.mousepressed(x, y, button)
@@ -240,7 +236,7 @@ function love.draw()
     DrawGaryAttack()
     DrawHealthBars()
     DrawGhost()
-    DrawValquiria(#posicoes/2)
+    DrawValquiria(7)
     DrawCollectibles()
     camera:detach()
 end
