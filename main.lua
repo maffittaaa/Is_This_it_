@@ -53,7 +53,7 @@ function love.load()
     LoadValquiria(world, 1000, 1000)
     LoadCollectibles(world)
 
--- make a table where the colitions will be stored --
+    -- make a table where the colitions will be stored --
     walls = {}
 
     if gameMap.layers['Arvores e bushes'] then
@@ -67,20 +67,17 @@ function love.load()
                 -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
                 local wall = {}
                 wall.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
-                wall.shape = love.physics.newRectangleShape(obj.width,obj.height)
+                wall.shape = love.physics.newRectangleShape(obj.width, obj.height)
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
                 table.insert(walls, wall)
             end
         end
     end
 
-    camera = Camera(gary.body:getX() , gary.body:getY(), width, height,1.5)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.5)
 end
 
-
-
 function BeginContact(fixtureA, fixtureB)
-
     if fixtureA:getUserData() == "player" and fixtureB:getUserData() == "MelleAttack" then
         valkyrie.isRanging = true
         valkyrie.isMeleeing = true
@@ -178,26 +175,27 @@ function EndContact(fixtureA, fixtureB)
     end
 end
 
-
 function love.update(dt)
-  world:update(dt)
-  camera:update(dt)
-  camera:follow(gary.body:getX(), gary.body:getY())
-  camera:setFollowLerp(0.2)
-  camera:setFollowLead(0)
-  camera:setFollowStyle('TOPDOWN')
-  UpdateHealthBars()
-  UpdateGary(dt)
-  UpdateGaryAttack()
-  UpdateGhost(dt, world)
-  UpdateValquiria(dt, GetPlayerPosition())
-  wf:update(dt)
+    world:update(dt)
+    camera:update(dt)
+    camera:follow(gary.body:getX(), gary.body:getY())
+    camera:setFollowLerp(0.2)
+    camera:setFollowLead(0)
+    camera:setFollowStyle('TOPDOWN')
+    UpdateHealthBars()
+    UpdateGary(dt)
+    UpdateGaryAttack(dt)
+    UpdateGhost(dt, world)
+    UpdateValquiria(dt, GetPlayerPosition())
+    wf:update(dt)
 end
+
 function love.mousepressed(x, y, button)
     if button == 1 then
         print(x, y)
     end
 end
+
 function love.draw()
     --Call draw function of every script
     camera:attach()
@@ -207,7 +205,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Path"])
     gameMap:drawLayer(gameMap.layers["BUshes"])
     gameMap:drawLayer(gameMap.layers["Arvores"])
- -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
+    -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
 
     DrawGary()
     DrawGaryAttack()
