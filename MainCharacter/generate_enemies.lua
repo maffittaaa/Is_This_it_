@@ -1,5 +1,8 @@
+require "Valkyrie/valkyrie"
+require "Ghosts/ghost"
+
 enemies = {}
-enemies.types = {valkyrie, ghost}
+enemies.types = {valkyries, ghost}
 enemies.timer = 0
 enemies.timerLimit = math.random (3, 5)
 enemies.mediumCounter = 0
@@ -14,7 +17,7 @@ function EnemyGenerator(dt)
             enemies.mediumCounter = enemies.mediumCounter + 1
             enemies.chosen_type = enemies.types[ghost]
         else
-            enemies.chosen_type = enemies.types[valkyrie]
+            enemies.chosen_type = enemies.types[valkyries]
             enemies.mediumCounter = 0 -- reset ghost counter
         end
 
@@ -35,5 +38,5 @@ function EnemyGenerator(dt)
 end
 
 function EnemySpawner(x, y, enemy)
-    table.insert(enemy, {x = valkyrie.body:getX(), y = valkyrie.body:getY()})
+    table.insert(enemy, {x = valkyries.body:getX(), y = valkyries.body:getY()})
 end

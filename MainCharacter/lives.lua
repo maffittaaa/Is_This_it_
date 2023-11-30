@@ -53,7 +53,6 @@ function DrawCollectibles()
     end
     if collectible_key.counter == 0 then
         love.graphics.draw(sprites.key, collectible_key.body:getX(), collectible_key.body:getY(),
-            collectible_key.body:getAngle(),
-            1, 1, sprites.key:getWidth() / 2, sprites.key:getHeight() / 2)
+            collectible_key.body:getAngle(), 1, 1, sprites.key:getWidth() / 2, sprites.key:getHeight() / 2)
     end
 end

@@ -6,6 +6,7 @@ require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
+require "Valkyries/valkyrie_bow_and_arrow"
 Camera = require "Camera/Camera"
 
 local world
@@ -13,7 +14,7 @@ local ground
 local speed
 local success
 local wf
-local valkeries_quantity = 3
+local valkeries_quantity = 1
 local ghosts_quantity
 
 function love.keypressed(e)
@@ -21,7 +22,6 @@ function love.keypressed(e)
         love.event.quit()
     end
     if e == 'e' then
-        print(sword.timer)
         if sword.body:isActive() then
             sword.body:setActive(false)
         else
@@ -48,9 +48,10 @@ function love.load()
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
-    LoadGhost(world, 1000, 1000)
+    LoadGhost(world, 1600, 800)
     LoadHealthBars()
-    LoadValquiria(world, 1000, 2000, 1100, 1200, valkeries_quantity)
+    LoadValquiria(world, 700, 500, 1100, 1200, valkeries_quantity)
+    LoadValkyrieRangedAttack(world)
     LoadCollectibles(world)
 
     -- make a table where the colitions will be stored --
@@ -133,7 +134,6 @@ function BeginContact(fixtureA, fixtureB)
             -- End testes
             print("Ghost health = " .. ghost.health)
         end
-        sword.timer = 10
     end
     if fixtureB:getUserData() == "key" and fixtureA:getUserData() == "player" then
         if collectible_key.counter == 0 then
@@ -191,9 +191,10 @@ function love.update(dt)
   camera:setFollowStyle('TOPDOWN')
   UpdateHealthBars()
   UpdateGary(dt)
-  UpdateGaryAttack()
+  UpdateGaryAttack(dt)
   UpdateGhost(dt, world)
-  UpdateValquiria(dt, GetPlayerPosition(), 3)
+  UpdateValquiria(dt, GetPlayerPosition(), 1)
+  UpdateValkyrieRangedAttack(dt)
 end
 
 function love.mousepressed(x, y, button)
@@ -219,5 +220,6 @@ function love.draw()
     DrawGhost()
     DrawValquiria(valkeries_quantity)
     DrawCollectibles()
+    DrawValkyrieAttack()
     camera:detach()
 end
