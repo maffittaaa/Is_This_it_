@@ -46,6 +46,7 @@ function LoadValquiria(world, x, y, x2, x3, quantity)
     rangedAttack.range = rangedAttack.shape:getRadius()
     rangedAttack.fixture:setSensor(true)
     rangedAttack.fixture:setUserData("RangedAttack")
+  rangedAttack.cooldown = 2
 
     if i == 1  then
       table.insert(valkyries, i, valkyrie)

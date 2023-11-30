@@ -21,14 +21,14 @@ end
 
 function UpdateGary(dt)
     gary.position = vector2.new(gary.body:getPosition())
-        
+
     local garyVelocity = vector2.new(0, 0)
 
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + 250
     end
 
-    if love.keyboard.isDown("left") or love.keyboard.isDown("a")then
+    if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         garyVelocity.x = garyVelocity.x - 250
     end
 
@@ -78,7 +78,7 @@ function DrawGary()
 end
 
 function PushGaryBack()
-    local garyDiretion = vector2.sub(gary.position, vector2.new(ghost.body:getPosition()))
+    garyDiretion = vector2.sub(gary.position, vector2.new(ghost.body:getPosition()))
     garyDiretion = vector2.norm(garyDiretion)
 
     local force = vector2.mult(garyDiretion, force)

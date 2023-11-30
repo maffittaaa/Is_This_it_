@@ -2,7 +2,7 @@ require "vector2"
 require "MainCharacter/gary"
 require "Ghosts/ghost"
 require "MainCharacter/healthbar"
-require "MainCharacter/sprites"
+require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
@@ -53,7 +53,7 @@ function love.load()
     LoadValquiria(world, 1000, 2000, 1100, 1200, valkeries_quantity)
     LoadCollectibles(world)
 
--- make a table where the colitions will be stored --
+    -- make a table where the colitions will be stored --
     walls = {}
 
     if gameMap.layers['Arvores e bushes'] then
@@ -67,17 +67,15 @@ function love.load()
                 -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
                 local wall = {}
                 wall.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
-                wall.shape = love.physics.newRectangleShape(obj.width,obj.height)
+                wall.shape = love.physics.newRectangleShape(obj.width, obj.height)
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
                 table.insert(walls, wall)
             end
         end
     end
 
-    camera = Camera(gary.body:getX() , gary.body:getY(), width, height,1.5)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.5)
 end
-
-
 
 function BeginContact(fixtureA, fixtureB)
 
@@ -123,7 +121,6 @@ function BeginContact(fixtureA, fixtureB)
         if fixtureA:getUserData() == "attack" and fixtureB:getUserData() == "melee weapon" then
             print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.health = ghost.health - 1
-            sword.timer = 0
             -- Testes
             if ghost.health <= 0 then
                 ghost.isChasing = false
@@ -185,7 +182,6 @@ function EndContact(fixtureA, fixtureB)
     end
 end
 
-
 function love.update(dt)
   world:update(dt)
   camera:update(dt)
@@ -215,7 +211,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Path"])
     gameMap:drawLayer(gameMap.layers["BUshes"])
     gameMap:drawLayer(gameMap.layers["Arvores"])
- -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
+    -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
 
     DrawGary()
     DrawGaryAttack()
