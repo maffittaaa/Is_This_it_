@@ -72,7 +72,6 @@ function UpdateValquiria(dt, playerPosition)
   elseif valkyrie.playerInSight == true then
     if valkyrie.isRanging == true then
       --stop velocity, while in rangedAttack
-
       time = 0
       lastPposition = playerPosition
 

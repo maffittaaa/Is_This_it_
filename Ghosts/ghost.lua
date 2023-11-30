@@ -43,7 +43,6 @@ function UpdateGhost(dt, world)
     ghostRange.body:destroy()
     ghostRange.body = love.physics.newBody(world, ghost.body:getX(), ghost.body:getY(), "dynamic")
     ghost.range = vector2.mag(vector2.sub(ghost.position, gary.position))
-    print(gary.position.x, gary.position.y)
 
     if ghost.timer > 0 then
         ghost.timer = ghost.timer - dt
