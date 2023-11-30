@@ -3,18 +3,29 @@ local valkyriex_patrolling
 local is_forward_backwards
 local lastPposition
 local time = 0
+local k = 1
 
-function LoadValquiria(world, x, y, x2, x3, quantity)
+function LoadValquiria(world, posicoes, quantity, y)
   for i = 1, quantity, 1 do
+    
     if i == 1 then
-      x = x
+      k = 1
     elseif i == 2 then
-      x = x2
+      k = k + 2
     elseif i == 3 then
-      x = x3
+      k = k + 2
+    elseif i == 4 then
+      k = k + 2
+    elseif i == 5 then
+      k = k + 2
+    elseif i == 6 then
+      k = k + 2
+    elseif i == 7 then
+      k = k + 2
     end
 
-    valkyriex_patrolling = x
+    valkyriex_patrolling = posicoes[k].x
+    y = posicoes[k].y
 
     local valkyrie = {}
 
@@ -46,7 +57,7 @@ function LoadValquiria(world, x, y, x2, x3, quantity)
     rangedAttack.range = rangedAttack.shape:getRadius()
     rangedAttack.fixture:setSensor(true)
     rangedAttack.fixture:setUserData("RangedAttack")
-  rangedAttack.cooldown = 2
+    rangedAttack.cooldown = 2
 
     if i == 1  then
       table.insert(valkyries, i, valkyrie)
