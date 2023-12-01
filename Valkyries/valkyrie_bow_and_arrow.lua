@@ -12,7 +12,7 @@ function LoadValkyrieRangedAttack(world)
     bullets.body:setFixedRotation(true)
     bullets.position = vector2.new(valkyries[1].body:getPosition())
     bullets.timer = 0.5
-    bullets.cooldown = 60
+    bullets.cooldown = 120
     bullets.body:setActive(false)
     canShoot = false
     bullets.fixture:setSensor(true)
@@ -26,7 +26,7 @@ function UpdateValkyrieRangedAttack(dt)
         bullets.cooldown = bullets.cooldown - 1
     else
         bullets.body:setActive(false)
-        bullets.cooldown = 60
+        bullets.cooldown = 120
     end
 
     if valkyries[1].playerInSight == true and valkyries[1].isRanging == true then
