@@ -56,3 +56,23 @@ function DrawCollectibles()
             collectible_key.body:getAngle(), 1, 1, sprites.key:getWidth() / 2, sprites.key:getHeight() / 2)
     end
 end
+
+
+function BeginContactCollectibles(fixtureA, fixtureB)
+    if fixtureB:getUserData().type == "key" and fixtureA:getUserData().type == "player" then -- colision for collectibles(key)
+        if collectible_key.counter == 0 then
+            success = love.window.showMessageBox(title, message)
+            collectible_key.counter = 1
+        end
+    end
+    if fixtureB:getUserData().type == "life" and fixtureA:getUserData().type == "player" then -- colision for collectibles(lives)
+        if gary.health == 5 then
+            success = love.window.showMessageBox(title, message3, "error")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
+            success = love.window.showMessageBox(title, message2)
+            collectible_lifes.counter = collectible_lifes.counter + 1
+            gary.health = gary.health + 1
+        end
+    end
+end

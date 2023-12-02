@@ -7,7 +7,7 @@ require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
-require "Valkyries/valkyrie_bow_and_arrow"
+require "Valkyries/arrow"
 Camera = require "Camera/Camera"
 
 local world
@@ -15,7 +15,6 @@ local ground
 local speed
 local success
 local wf
-local valkeries_quantity = 1
 local ghosts_quantity
 local posicoes = {}
 
@@ -37,6 +36,7 @@ end
 function love.load()
     love.physics.setMeter(30)
     world = love.physics.newWorld(0, 0, true)
+    world:setCallbacks(BeginContact, EndContact, nil, nil)
 
     -- love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
@@ -87,121 +87,24 @@ function love.load()
                 wall.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
                 wall.shape = love.physics.newRectangleShape(obj.width, obj.height)
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
+                wall.fixture:setUserData({type = "wall"})
                 table.insert(walls, wall)
             end
         end
     end
-    world:setCallbacks(BeginContact, EndContact, nil, nil)
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
-    print(fixtureA:getUserData())
-    for i = 1, valkeries_quantity, 3 do
-        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-            valkyries[i].isRanging = true
-            valkyries[i].isMeleeing = true
-            print("startMelee")
-        elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-            valkyries[i].playerInSight = true
-            valkyries[i].isRanging = true
-            valkyries[i].patroling = false
-            print("StartRanged")
-        end
-
-        if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-            valkyries[i].isRanging = true
-            valkyries[i].isMeleeing = true
-            print("starMelee")
-        elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-            valkyries[i].playerInSight = true
-            valkyries[i].patroling = false
-            valkyries[i].isRanging = false
-            print("StartRanged")
-        end
-    end
-
-    if #bullets > 0 and fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
-            gary.health = gary.health - 1
-            print(fixtureB:getUserData().id)
-            RemoveFromBulletsArray(fixtureB:getUserData().id)
-    end
-
-    if ghost.isChasing == true and ghost.garyInSight == true then
-        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-            print(fixtureA:getUserData(), fixtureB:getUserData())
-            ghost.timer = 1                                                                                                        -- tempo de cooldown para perseguir outra vez
-            gary.health = gary.health - 1
-            print("Gary health = " .. gary.health)
-            PushGaryBack()
-            if gary.health <= 0 then
-                ghost.isChasing = false
-                ghost.patroling = true
-            end
-        end
-    end
-    if ghost.health <= 4 and ghost.health > 0 then
-        if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
-            print(fixtureA:getUserData(), fixtureB:getUserData())
-            ghost.health = ghost.health - 1
-            -- Testes
-            if ghost.health <= 0 then
-                ghost.isChasing = false
-                ghost.patroling = false
-                -- ghost.fixture:destroy()
-                -- trigger.fixture:destroy()
-                -- ghost.body:destroy()
-                print('Morreu :')
-            end
-            -- End testes
-            print("Ghost health = " .. ghost.health)
-        end
-    end
-    if fixtureB:getUserData().type == "key" and fixtureA:getUserData().type == "player" then -- colision for collectibles(key)
-        if collectible_key.counter == 0 then
-            success = love.window.showMessageBox(title, message)
-            collectible_key.counter = 1
-        end
-    end
-    if fixtureB:getUserData().type == "life" and fixtureA:getUserData().type == "player" then -- colision for collectibles(lives)
-        if gary.health == 5 then
-            success = love.window.showMessageBox(title, message3, "error")
-            collectible_lifes.counter = collectible_lifes.counter
-        elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
-            success = love.window.showMessageBox(title, message2)
-            collectible_lifes.counter = collectible_lifes.counter + 1
-            gary.health = gary.health + 1
-        end
-    end
+    BeginContactValkyrie(fixtureA, fixtureB)
+    BeginContactGhost(fixtureA, fixtureB)
+    BeginContactCollectibles(fixtureA, fixtureB)
+    BeginContactArrows(fixtureA, fixtureB)
+ 
 end
 
 function EndContact(fixtureA, fixtureB)
-    for i = 1, valkeries_quantity, 1 do
-        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-            valkyries[i].isMeleeing = false
-            valkyries[i].isRanging = true
-            print("EndMelee")
-        end
-
-        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-            valkyries[i].playerInSight = false
-            valkyries[i].isRanging = false
-            valkyries[i].isMeleeing = false
-            print("EndRanged")
-        end
-
-        if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-            valkyries[i].isMeleeing = false
-            valkyries[i].isRanging = true
-            print("EndMelee")
-        end
-
-        if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-            valkyries[i].isRanging = false
-            valkyries[i].isMeleeing = false
-            print("EndRanged")
-        end
-    end
+    EndContactValkyrie(fixtureA, fixtureB)
 end
 
 function love.update(dt)
@@ -242,6 +145,6 @@ function love.draw()
     DrawGhost()
     DrawValquiria(1)
     DrawCollectibles()
-    DrawValkyrieAttack(valkyrie)
+    DrawValkyrieAttack()
     camera:detach()
 end

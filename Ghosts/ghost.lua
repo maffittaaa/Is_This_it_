@@ -149,3 +149,37 @@ function DrawGhost()
         end
     end
 end
+
+
+function BeginContactGhost(fixtureA, fixtureB)
+    if ghost.isChasing == true and ghost.garyInSight == true then
+        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
+            print(fixtureA:getUserData(), fixtureB:getUserData())
+            ghost.timer = 1                                                                                                        -- tempo de cooldown para perseguir outra vez
+            gary.health = gary.health - 1
+            print("Gary health = " .. gary.health)
+            PushGaryBack()
+            if gary.health <= 0 then
+                ghost.isChasing = false
+                ghost.patroling = true
+            end
+        end
+    end
+    if ghost.health <= 4 and ghost.health > 0 then
+        if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
+            print(fixtureA:getUserData(), fixtureB:getUserData())
+            ghost.health = ghost.health - 1
+            -- Testes
+            if ghost.health <= 0 then
+                ghost.isChasing = false
+                ghost.patroling = false
+                -- ghost.fixture:destroy()
+                -- trigger.fixture:destroy()
+                -- ghost.body:destroy()
+                print('Morreu :')
+            end
+            -- End testes
+            print("Ghost health = " .. ghost.health)
+        end
+    end
+end

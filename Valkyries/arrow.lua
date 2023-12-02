@@ -67,3 +67,11 @@ function DrawValkyrieAttack()
             c.body:getAngle(), 1, 1, sprites.arrow:getWidth() / 2, sprites.arrow:getHeight() / 2)
     end
 end
+
+function BeginContactArrows(fixtureA, fixtureB)
+    if #bullets > 0 and fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
+        gary.health = gary.health - 1
+        print(fixtureB:getUserData().id)
+        RemoveFromBulletsArray(fixtureB:getUserData().id)
+    end
+end

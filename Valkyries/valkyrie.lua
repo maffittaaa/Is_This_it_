@@ -3,7 +3,7 @@ valkyriex_patrolling = 1
 local is_forward_backwards
 local lastPposition
 local time = 0
-
+local valkeries_quantity = 1
 
 local function printTable(t)
   local printTable_cache = {}
@@ -93,10 +93,6 @@ function LoadValquiria(world, posicoes, quantity)
     table.insert(valkyries, i * 3 - 2, valkyrie)   -- 1, 4, 7
     table.insert(valkyries, i * 3 - 1, meleeRange) -- 2, 5, 8
     table.insert(valkyries, i * 3, rangedAttack)   -- 3, 6, 9
-
-    -- for x, y in pairs(valkyries) do
-    --   print(x, y)
-    -- end
 
     printTable(GetValquiriaPosition(quantity))
     print("done")
@@ -219,5 +215,60 @@ function GetValquiriaPosition(quantity)
     end
 
     return vector2.new(valkyries[iup].body:getX(), valkyries[iup].body:getY())
+  end
+end
+
+function BeginContactValkyrie(fixtureA, fixtureB)
+  for i = 1, valkeries_quantity, 1 do
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+        valkyries[i].isRanging = true
+        valkyries[i].isMeleeing = true
+        print("startMelee")
+    elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+        valkyries[i].playerInSight = true
+        valkyries[i].isRanging = true
+        valkyries[i].patroling = false
+        print("StartRanged")
+    end
+
+    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+        valkyries[i].isRanging = true
+        valkyries[i].isMeleeing = true
+        print("starMelee")
+    elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+        valkyries[i].playerInSight = true
+        valkyries[i].patroling = false
+        valkyries[i].isRanging = false
+        print("StartRanged")
+    end
+  end
+end
+
+function EndContactValkyrie(fixtureA, fixtureB)
+  for i = 1, valkeries_quantity, 1 do
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+        valkyries[i].isMeleeing = false
+        valkyries[i].isRanging = true
+        print("EndMelee")
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+        valkyries[i].playerInSight = false
+        valkyries[i].isRanging = false
+        valkyries[i].isMeleeing = false
+        print("EndRanged")
+    end
+
+    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+        valkyries[i].isMeleeing = false
+        valkyries[i].isRanging = true
+        print("EndMelee")
+    end
+
+    if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+        valkyries[i].isRanging = false
+        valkyries[i].isMeleeing = false
+        print("EndRanged")
+    end
   end
 end
