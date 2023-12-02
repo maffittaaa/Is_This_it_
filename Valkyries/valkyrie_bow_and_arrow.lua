@@ -3,54 +3,67 @@ require "MainCharacter/gary"
 require "Sprites/sprites"
 
 bullets = {}
+local cooldown_sec = 2
+local cooldown_intervalo = 0
 
-function LoadValkyrieRangedAttack(world)
-    bullets.body = love.physics.newBody(world, valkyries[1].position.x + 20, 500, "dynamic")
-    bullets.shape = love.physics.newRectangleShape(sprites.arrow:getWidth(), sprites.arrow:getHeight())
-    bullets.fixture = love.physics.newFixture(bullets.body, bullets.shape, 1)
-    bullets.maxvelocity = 200
-    bullets.body:setFixedRotation(true)
-    bullets.position = vector2.new(valkyries[1].body:getPosition())
-    bullets.timer = 0.5
-    bullets.cooldown = 120
-    bullets.body:setActive(false)
-    canShoot = false
-    bullets.fixture:setSensor(true)
-    bullets.fixture:setUserData("ArrowAttack")
+function CreateArrow(world, i, valkyrie)
+    arrow = {}
+    arrow.body = love.physics.newBody(world, valkyrie.position.x + 20, valkyrie.position.y - 20, "dynamic")
+    arrow.shape = love.physics.newRectangleShape(sprites.arrow:getWidth(), sprites.arrow:getHeight())
+    arrow.fixture = love.physics.newFixture(arrow.body, arrow.shape, 1)
+    arrow.maxvelocity = 200
+    arrow.body:setFixedRotation(true)
+    arrow.position = vector2.new(valkyrie.body:getPosition())
+    arrow.body:setActive(false)
+    arrow.fixture:setSensor(true)
+    arrow.fixture:setUserData({type = "ArrowAttack", id = i })
+    return arrow
 end
 
-function UpdateValkyrieRangedAttack(dt)
-    print(valkyries[1].playerInSight)
-
-    if bullets.body:isActive() and bullets.cooldown > 0 then
-        bullets.cooldown = bullets.cooldown - 1
-    else
-        bullets.body:setActive(false)
-        bullets.cooldown = 120
+function RemoveFromBulletsArray(id)
+    local keyToRemove = -1
+    for key, arrow in ipairs(bullets) do
+        if (arrow.fixture:getUserData().id == id) then
+            keyToRemove = key
+        end
     end
+    if (keyToRemove > -1) then
+        table.remove(bullets, keyToRemove)
+    end
+end
 
-    if valkyries[1].playerInSight == true and valkyries[1].isRanging == true then
+function UpdateValkyrieRangedAttack(world, dt)
+    cooldown_intervalo = cooldown_intervalo + dt
+    if cooldown_intervalo > cooldown_sec then
         canShoot = true
-        bullets.timer = bullets.timer + dt
-        -- bullets.cooldown = bullets.cooldown - 1
-        if not bullets.body:isActive() then
-            local playerDirection = vector2.sub(gary.position, vector2.new(valkyries[1].body:getPosition()))
+        cooldown_intervalo = 0
+    else
+        canShoot = false
+    end
+    print(" ", cooldown_intervalo, ", can shoot? ", canShoot)
+    for key, valkyrie in ipairs(valkyries) do
+        if (not (key == 1) and key - 1 % 3 > 0) then
+            goto continue --da  skip ao proximo loop
+        end
+        -- print("valk id ", key, " can shoot? ", canShoot)
+        if canShoot and valkyrie.health > 0 and valkyrie.playerInSight == true and valkyrie.isRanging == true then
+            arrow = CreateArrow(world, #bullets + 1, valkyrie)
+            local playerDirection = vector2.sub(gary.position, vector2.new(valkyrie.body:getPosition()))
             playerDirection = vector2.norm(playerDirection)
             force = vector2.mult(playerDirection, 200)
+            arrow.body:setActive(true)
+            local rotation = math.atan2(gary.position.y, gary.position.x)
+            arrow.body:setAngle(rotation)
+            arrow.body:setLinearVelocity(force.x, force.y)
+            table.insert(bullets, arrow)
         end
-        bullets.body:setActive(true)
-        local rotation = math.atan2(gary.position.y, gary.position.x)
-        bullets.body:setAngle(rotation)
-        bullets.body:setLinearVelocity(force.x, force.y)
-    else
-        bullets.position = vector2.new(valkyries[1].body:getPosition())
-        bullets.body:setPosition(valkyries[1].position.x + 20, valkyries[1].position.y)
+        ::continue::
     end
 end
 
 function DrawValkyrieAttack()
-    if valkyries[1].health > 0 and valkyries[1].playerInSight == true then
-        love.graphics.draw(sprites.arrow, bullets.body:getX(), bullets.body:getY(),
-            bullets.body:getAngle(), 1, 1, sprites.arrow:getWidth() / 2, sprites.arrow:getHeight() / 2)
+    for i, c in ipairs(bullets) do
+        love.graphics.draw(sprites.arrow, c.body:getX(), c.body:getY(),
+            c.body:getAngle(), 1, 1, sprites.arrow:getWidth() / 2, sprites.arrow:getHeight() / 2)
     end
 end

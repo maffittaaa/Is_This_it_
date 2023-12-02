@@ -33,7 +33,7 @@ function LoadGhost(world, x, y)
     trigger.shape = love.physics.newRectangleShape(40, 70)
     trigger.fixture = love.physics.newFixture(trigger.body, trigger.shape, 2)
     trigger.fixture:setSensor(true)
-    trigger.fixture:setUserData("attack") -- trigger de lado
+    trigger.fixture:setUserData({type ="attack"}) -- trigger de lado
 end
 
 function UpdateGhost(dt, world)

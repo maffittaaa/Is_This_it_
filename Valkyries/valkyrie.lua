@@ -46,6 +46,7 @@ function LoadValquiria(world, posicoes, quantity)
     y = posicoes[i].y
 
     print(x, y)
+    is_forward_backwards = 1
 
     valkyrie = {}
 
@@ -59,6 +60,7 @@ function LoadValquiria(world, posicoes, quantity)
     valkyrie.playerInSight = false
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
+    -- valkyrie.arrow = CreateArrow()
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
     valkyrie.health = 7
 
@@ -69,7 +71,7 @@ function LoadValquiria(world, posicoes, quantity)
     meleeRange.range = meleeRange.shape:getRadius()
     meleeRange.fixture:setSensor(true)
     meleeRange.name = "enemy"
-    meleeRange.fixture:setUserData("MelleAttack")
+    meleeRange.fixture:setUserData({type = "MelleAttack"})
 
     rangedAttack = {}
     rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -77,17 +79,20 @@ function LoadValquiria(world, posicoes, quantity)
     rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
     rangedAttack.range = rangedAttack.shape:getRadius()
     rangedAttack.fixture:setSensor(true)
-    rangedAttack.fixture:setUserData("RangedAttack")
+    rangedAttack.fixture:setUserData({type = "RangedAttack"})
 
-    if i == 1 then
-      table.insert(valkyries, i, valkyrie)
-      table.insert(valkyries, i + 1, meleeRange)
-      table.insert(valkyries, i + 2, rangedAttack)
-    else
-      table.insert(valkyries, i * 2, valkyrie)
-      table.insert(valkyries, i * 2 + 1, meleeRange)
-      table.insert(valkyries, i * 2 + 2, rangedAttack)
-    end
+    -- if i == 1 then
+    --   table.insert(valkyries, i, valkyrie) --1
+    --   table.insert(valkyries, i + 1, meleeRange) -- 2
+    --   table.insert(valkyries, i + 2, rangedAttack) -- 3
+    -- else
+    --   table.insert(valkyries, i * 2, valkyrie) -- 4, 6, 8, 10
+    --   table.insert(valkyries, i * 2 + 1, meleeRange) -- 5, 7, 9
+    --   table.insert(valkyries, i * 2 + 2, rangedAttack) -- 6, 8, 10
+    -- end
+    table.insert(valkyries, i * 3 - 2, valkyrie)   -- 1, 4, 7
+    table.insert(valkyries, i * 3 - 1, meleeRange) -- 2, 5, 8
+    table.insert(valkyries, i * 3, rangedAttack)   -- 3, 6, 9
 
     -- for x, y in pairs(valkyries) do
     --   print(x, y)
