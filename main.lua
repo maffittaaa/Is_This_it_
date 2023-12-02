@@ -96,10 +96,10 @@ function love.load()
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
+    BeginContactArrows(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
     BeginContactGhost(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
-    BeginContactArrows(fixtureA, fixtureB)
  
 end
 
