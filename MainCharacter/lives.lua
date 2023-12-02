@@ -1,5 +1,5 @@
 collectible_key = {}
-collectible_lifes = { life1 = {}, life2 = {}, life3 = {} }
+collectible_lifes = {life1 = {}, life2 = {}, life3 = {}}
 title = "inventory: "
 message = "1 key"
 message2 = "x1 life"
