@@ -40,19 +40,7 @@ function UpdateGary(dt)
     if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
         garyVelocity.y = garyVelocity.y + 250
     end
-
-    -- Passar isto para uma funcao no futuro :(
-    if gary.knockX > 0 then
-        gary.knockX = gary.knockX - dt * force
-    elseif gary.knockY < 0 then
-        gary.knockX = gary.knockX + dt * force
-    end
-    if gary.knockY > 0 then
-        gary.knockY = gary.knockY - dt * force
-    elseif gary.knockY < 0 then
-        gary.knockY = gary.knockY + dt * force
-    end
-
+    GaryKnock(dt)
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
 end
 
@@ -74,6 +62,19 @@ function DrawGary()
             destroy_gary_fixture = true
         end
         gary.body:setLinearVelocity(0, 0)
+    end
+end
+
+function GaryKnock(dt)
+    if gary.knockX > 0 then
+        gary.knockX = gary.knockX - dt * force
+    elseif gary.knockY < 0 then
+        gary.knockX = gary.knockX + dt * force
+    end
+    if gary.knockY > 0 then
+        gary.knockY = gary.knockY - dt * force
+    elseif gary.knockY < 0 then
+        gary.knockY = gary.knockY + dt * force
     end
 end
 

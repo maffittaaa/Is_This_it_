@@ -3,8 +3,7 @@ local time = 0
 local melee = false
 
 
-function printTable( t )
- 
+function printTable(t)
   local printTable_cache = {}
 
   local function sub_printTable(t, indent)
@@ -96,11 +95,10 @@ end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
-
-    
     variavel = variavel + dt
     if variavel > 2 then
-      printTable({i, valkyries[3].patroling, valkyries[3].playerInSight, valkyries[3].isRanging, valkyries[3].isMeleeing, valkyries[3].valkyriex_patrolling})      
+      printTable({ i, valkyries[3].patroling, valkyries[3].playerInSight, valkyries[3].isRanging, valkyries[3]
+          .isMeleeing, valkyries[3].valkyriex_patrolling })
       variavel = 0
     end
     --print(valkyries[i].isRanging)
@@ -129,7 +127,8 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         valkyries[i].fixture:setSensor(false)
       end
 
-      valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling + (dt * 200 * valkyries[i].is_forward_backwards)
+      valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling +
+      (dt * 200 * valkyries[i].is_forward_backwards)
 
       if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
         valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
@@ -140,15 +139,13 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       end
 
       valkyries[i].body:setPosition(valkyries[i].valkyriex_patrolling, valkyries[i].body:getY())
-      
     elseif valkyries[i].playerInSight == true then
       if valkyries[i].isRanging == true then
-        
         valkyries[i].fixture:setSensor(true)
 
         --stop velocity, while in rangedAttack
         time = 0
-         valkyries[i].lastPposition = playerPosition
+        valkyries[i].lastPposition = playerPosition
 
         if valkyries[i].isMeleeing == true then
           local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
@@ -161,8 +158,8 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         --if not meleeAttacking, do rangedAttack
       elseif valkyries[i].isRanging == false then
         --go to last location of player
-        
-        local lastPos = vector2.mag(vector2.sub(valkyries[i].position,  valkyries[i].lastPposition))
+
+        local lastPos = vector2.mag(vector2.sub(valkyries[i].position, valkyries[i].lastPposition))
 
 
         if lastPos < 1 then
@@ -176,7 +173,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
           end
           return
         elseif lastPos > 1 then
-          local playerDiretion = vector2.sub( valkyries[i].lastPposition, vector2.new(valkyries[i].body:getPosition()))
+          local playerDiretion = vector2.sub(valkyries[i].lastPposition, vector2.new(valkyries[i].body:getPosition()))
           playerDiretion = vector2.norm(playerDiretion)
           local force = vector2.mult(playerDiretion, 200)
           valkyries[i].body:setLinearVelocity(force.x, force.y)
