@@ -57,11 +57,11 @@ function LoadValquiria(world, quantity)
     valkyrie.playerInSight = false
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
-    valkyrie.fixture:setUserData({ type = "valkyrie" })
     -- valkyrie.arrow = CreateArrow()
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
     valkyrie.health = 7
-    valkyrie.fixture:setUserData("valquerie")
+    valkyrie.type = "valkyrie"
+    valkyrie.fixture:setUserData(valkyrie)
     
     valkyrie.meleeRange = {}
     valkyrie.meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")

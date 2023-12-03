@@ -13,28 +13,32 @@ function LoadCollectibles(world)
     collectible_key.fixture = love.physics.newFixture(collectible_key.body, collectible_key.shape, 1)
     collectible_key.counter = 0
     collectible_key.fixture:setSensor(true)
-    collectible_key.fixture:setUserData({ type = "key" })
+    collectible_key.type = "key"
+    collectible_key.fixture:setUserData(collectible_key)
 
     collectible_lifes.life1.body = love.physics.newBody(world, 300, 700, "static") -- LIVES
     collectible_lifes.life1.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
     collectible_lifes.life1.fixture = love.physics.newFixture(collectible_lifes.life1.body, collectible_lifes.life1
         .shape, 2)
     collectible_lifes.life1.fixture:setSensor(true)
-    collectible_lifes.life1.fixture:setUserData({ type = "life" })
+    collectible_lifes.life1.type = "life"
+    collectible_lifes.life1.fixture:setUserData(collectible_lifes.life1)
 
     collectible_lifes.life2.body = love.physics.newBody(world, 500, 1000, "static")
     collectible_lifes.life2.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
     collectible_lifes.life2.fixture = love.physics.newFixture(collectible_lifes.life2.body, collectible_lifes.life2
         .shape, 2)
     collectible_lifes.life2.fixture:setSensor(true)
-    collectible_lifes.life2.fixture:setUserData({ type = "life2" })
+    collectible_lifes.life2.type = "life2"
+    collectible_lifes.life2.fixture:setUserData(collectible_lifes.life2)
 
     collectible_lifes.life3.body = love.physics.newBody(world, 800, 1300, "static")
     collectible_lifes.life3.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
     collectible_lifes.life3.fixture = love.physics.newFixture(collectible_lifes.life3.body, collectible_lifes.life3
         .shape, 2)
     collectible_lifes.life3.fixture:setSensor(true)
-    collectible_lifes.life3.fixture:setUserData({ type = "life3" })
+    collectible_lifes.life3.type = "life3"
+    collectible_lifes.life3.fixture:setUserData(collectible_lifes.life3)
 end
 
 function DrawCollectibles()

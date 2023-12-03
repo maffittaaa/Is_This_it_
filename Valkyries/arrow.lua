@@ -16,7 +16,8 @@ function CreateArrow(world, i, valkyrie)
     arrow.position = vector2.new(valkyrie.body:getPosition())
     arrow.body:setActive(false)
     arrow.fixture:setSensor(true)
-    arrow.fixture:setUserData({ type = "ArrowAttack", id = i })
+    arrow.type = "ArrowAttack"
+    arrow.fixture:setUserData({arrow, id = i })
     return arrow
 end
 

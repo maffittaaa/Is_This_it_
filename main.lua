@@ -17,7 +17,6 @@ local success
 local wf
 local ghosts_quantity
 posicoes = {}
-local valkeries_quantity
 
 local enemyPostions = {}
 
@@ -64,6 +63,8 @@ function love.load()
     posicoes[13] = {x = 3747,y = 2796}
     posicoes[14] = {x = 3194,y = 2710}
 
+    valkeries_quantity = #posicoes/2
+
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
@@ -88,12 +89,14 @@ function love.load()
                 wall.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
                 wall.shape = love.physics.newRectangleShape(obj.width, obj.height)
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
+                wall.type = "wall"
+                wall.fixture:setUserData(wall)
                 table.insert(walls, wall)
             end
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.1)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
