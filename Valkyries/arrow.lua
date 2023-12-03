@@ -17,11 +17,12 @@ function CreateArrow(world, i, valkyrie)
     arrow.body:setActive(false)
     arrow.fixture:setSensor(true)
     arrow.type = "ArrowAttack"
-    arrow.fixture:setUserData({ arrow, id = i })
+    arrow.id = i
+    arrow.fixture:setUserData(arrow)
     return arrow
 end
 
-function RemoveFromBulletsArray(id)
+function RemoveFromBulletsArray(id) --remove arrow id from the table
     local keyToRemove = -1
     for key, arrow in ipairs(bullets) do
         if (arrow.fixture:getUserData().id == id) then
@@ -35,14 +36,13 @@ end
 
 function UpdateValkyrieRangedAttack(world, dt)
     cooldown_intervalo = cooldown_intervalo + dt
-    if cooldown_intervalo > cooldown_sec then
+    if cooldown_intervalo > cooldown_sec then -- verify if the cooldown is done so they can shoot again
         canShoot = true
         cooldown_intervalo = 0
     else
         canShoot = false
     end
-    --print(" ", cooldown_intervalo, ", can shoot? ", canShoot)
-    for key, valkyrie in ipairs(valkyries) do
+    for key, valkyrie in ipairs(valkyries) do -- arrow mechanic
         if canShoot and valkyrie.health > 0 and valkyrie.playerInSight == true and valkyrie.isRanging == true then
             arrow = CreateArrow(world, #bullets + 1, valkyrie)
             local playerDirection = vector2.sub(gary.position, vector2.new(valkyrie.body:getPosition()))

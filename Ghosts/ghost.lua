@@ -154,10 +154,7 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-    --print("fixtures: ", fixtureA, fixtureB)
-    --print("userData: ", fixtureA:getUserData(), fixtureB:getUserData())
     if ghost.isChasing == true and ghost.garyInSight == true then
-        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
             ghost.timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
             gary.health = gary.health - 1
@@ -170,7 +167,6 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if ghost.isChasing == true and ghost.garyInSight == true then
-        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
             ghost.timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
             gary.health = gary.health - 1
@@ -183,7 +179,6 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if ghost.health <= 4 and ghost.health > 0 then
-        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
             ghost.health = ghost.health - 1
             -- Testes
@@ -198,7 +193,6 @@ function BeginContactGhost(fixtureA, fixtureB)
             -- End testes
             print("Ghost health = " .. ghost.health)
         end
-        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
             ghost.health = ghost.health - 1
             -- Testes
