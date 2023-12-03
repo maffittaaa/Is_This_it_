@@ -17,7 +17,7 @@ function CreateArrow(world, i, valkyrie)
     arrow.body:setActive(false)
     arrow.fixture:setSensor(true)
     arrow.type = "ArrowAttack"
-    arrow.fixture:setUserData({arrow, id = i })
+    arrow.fixture:setUserData({ arrow, id = i })
     return arrow
 end
 
@@ -43,9 +43,6 @@ function UpdateValkyrieRangedAttack(world, dt)
     end
     print(" ", cooldown_intervalo, ", can shoot? ", canShoot)
     for key, valkyrie in ipairs(valkyries) do
-        if (not (key == 1) and key - 1 % 3 > 0) then
-            goto continue --da  skip ao proximo loop
-        end
         if canShoot and valkyrie.health > 0 and valkyrie.playerInSight == true and valkyrie.isRanging == true then
             arrow = CreateArrow(world, #bullets + 1, valkyrie)
             local playerDirection = vector2.sub(gary.position, vector2.new(valkyrie.body:getPosition()))
@@ -56,7 +53,6 @@ function UpdateValkyrieRangedAttack(world, dt)
             arrow.body:setLinearVelocity(force.x, force.y)
             table.insert(bullets, arrow)
         end
-        ::continue::
     end
 end
 
@@ -68,12 +64,12 @@ function DrawValkyrieAttack()
 end
 
 function BeginContactArrows(fixtureA, fixtureB)
-    if #bullets > 0 and fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
         gary.health = gary.health - 1
         print(fixtureB:getUserData().id)
         RemoveFromBulletsArray(fixtureB:getUserData().id)
     end
-    if #bullets > 0 and fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
+    if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
         gary.health = gary.health - 1
         print(fixtureB:getUserData().id)
         RemoveFromBulletsArray(fixtureB:getUserData().id)
