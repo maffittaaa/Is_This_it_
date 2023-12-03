@@ -1,11 +1,10 @@
 valkyries = {}
-valkyriex_patrolling = 1
-local lastPposition
 local time = 0
 local melee = false
 
 
-function printTable(t)
+function printTable( t )
+ 
   local printTable_cache = {}
 
   local function sub_printTable(t, indent)
@@ -53,6 +52,8 @@ function LoadValquiria(world, quantity)
     valkyrie.patroling = true
     valkyrie.playerInSight = false
     valkyrie.is_forward_backwards = 1
+    valkyrie.valkyriex_patrolling = 1
+    valkyrie.lastPposition = vector.new(0, 0)
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
@@ -70,7 +71,7 @@ function LoadValquiria(world, quantity)
     valkyrie.meleeRange.fixture:setSensor(true)
     valkyrie.meleeRange.type = "MelleAttack"
     valkyrie.meleeRange.fixture:setUserData(valkyrie.meleeRange)
-    valkyrie.meleeRange.parent = valkyrie
+    valkyrie.meleeRange.parent = i
 
     valkyrie.rangedAttack = {}
     valkyrie.rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -80,7 +81,7 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.fixture:setSensor(true)
     valkyrie.rangedAttack.type = "RangedAttack"
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
-    valkyrie.rangedAttack.parent = valkyrie
+    valkyrie.rangedAttack.parent = i
 
     table.insert(valkyries, i, valkyrie)
 
@@ -89,11 +90,19 @@ function LoadValquiria(world, quantity)
     -- end
     printTable(GetValquiriaPosition(quantity))
     print("done")
+    variavel = 1
   end
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
+
+    
+    variavel = variavel + dt
+    if variavel > 2 then
+      printTable({i, valkyries[3].patroling, valkyries[3].playerInSight, valkyries[3].isRanging, valkyries[3].isMeleeing, valkyries[3].valkyriex_patrolling})      
+      variavel = 0
+    end
     --print(valkyries[i].isRanging)
 
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
@@ -108,15 +117,19 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
     -- print(valkyriex_patrolling)
     if valkyries[i].patroling == true then
       --If not in Sight, Patrol
-      valkyriex_patrolling = valkyries[i].body:getX()
+      valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
 
-      if valkyriex_patrolling >= posicoes[i + 7].x then
+      if valkyries[i].valkyriex_patrolling >= posicoes[i + 7].x then
         valkyries[i].is_forward_backwards = -1
-      elseif valkyriex_patrolling <= posicoes[i].x then
+      elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
         valkyries[i].is_forward_backwards = 1
       end
 
-      valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * valkyries[i].is_forward_backwards)
+      if valkyries[i].valkyriex_patrolling < posicoes[i + 7].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
+        valkyries[i].fixture:setSensor(false)
+      end
+
+      valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling + (dt * 200 * valkyries[i].is_forward_backwards)
 
       if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
         valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
@@ -126,13 +139,16 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         valkyries[i].body:setLinearVelocity(0, 200)
       end
 
-      valkyries[i].body:setPosition(valkyriex_patrolling, valkyries[i].body:getY())
-      valkyries[i].fixture:setSensor(false)
+      valkyries[i].body:setPosition(valkyries[i].valkyriex_patrolling, valkyries[i].body:getY())
+      
     elseif valkyries[i].playerInSight == true then
       if valkyries[i].isRanging == true then
+        
+        valkyries[i].fixture:setSensor(true)
+
         --stop velocity, while in rangedAttack
         time = 0
-        lastPposition = playerPosition
+         valkyries[i].lastPposition = playerPosition
 
         if valkyries[i].isMeleeing == true then
           local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
@@ -145,11 +161,9 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         --if not meleeAttacking, do rangedAttack
       elseif valkyries[i].isRanging == false then
         --go to last location of player
+        
+        local lastPos = vector2.mag(vector2.sub(valkyries[i].position,  valkyries[i].lastPposition))
 
-        local lastPos = vector2.mag(vector2.sub(valkyries[i].position, lastPposition))
-        print("isRanging = false", lastPos)
-
-        valkyries[i].fixture:setSensor(true)
 
         if lastPos < 1 then
           time = time + dt
@@ -162,7 +176,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
           end
           return
         elseif lastPos > 1 then
-          local playerDiretion = vector2.sub(lastPposition, vector2.new(valkyries[i].body:getPosition()))
+          local playerDiretion = vector2.sub( valkyries[i].lastPposition, vector2.new(valkyries[i].body:getPosition()))
           playerDiretion = vector2.norm(playerDiretion)
           local force = vector2.mult(playerDiretion, 200)
           valkyries[i].body:setLinearVelocity(force.x, force.y)
@@ -197,25 +211,21 @@ end
 function BeginContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      fixtureB:getUserData().parent.isRanging = true
-      fixtureB:getUserData().parent.isMeleeing = true
-      print("startMelee")
+      valkyries[fixtureB:getUserData().parent].isMeleeing = true
+      valkyries[fixtureB:getUserData().parent].isRanging = true
     elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      fixtureB:getUserData().parent.playerInSight = true
-      fixtureB:getUserData().parent.isRanging = true
-      fixtureB:getUserData().parent.patroling = false
-      print("StartRanged")
+      valkyries[fixtureB:getUserData().parent].playerInSight = true
+      valkyries[fixtureB:getUserData().parent].isRanging = true
+      valkyries[fixtureB:getUserData().parent].patroling = false
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().parent.isRanging = true
-      fixtureA:getUserData().parent.isMeleeing = true
-      print("starMelee")
+      valkyries[fixtureA:getUserData().parent].isRanging = true
+      valkyries[fixtureA:getUserData().parent].isMeleeing = true
     elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().parent.playerInSight = true
-      fixtureA:getUserData().parent.patroling = false
-      fixtureA:getUserData().parent.isRanging = false
-      print("StartRanged")
+      valkyries[fixtureA:getUserData().parent].playerInSight = true
+      valkyries[fixtureA:getUserData().parent].patroling = false
+      valkyries[fixtureA:getUserData().parent].isRanging = false
     end
   end
 end
@@ -223,28 +233,24 @@ end
 function EndContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      fixtureB:getUserData().parent.isMeleeing = false
-      fixtureB:getUserData().parent.isRanging = true
-      print("EndMelee")
+      valkyries[fixtureB:getUserData().parent].isMeleeing = false
+      valkyries[fixtureB:getUserData().parent].isRanging = true
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      fixtureB:getUserData().parent.playerInSight = true
-      fixtureB:getUserData().parent.isRanging = false
-      fixtureB:getUserData().parent.isMeleeing = false
-      print("EndRanged")
+      valkyries[fixtureB:getUserData().parent].playerInSight = true
+      valkyries[fixtureB:getUserData().parent].isRanging = false
+      valkyries[fixtureB:getUserData().parent].isMeleeing = false
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().parent.isMeleeing = false
-      fixtureA:getUserData().parent.isRanging = true
-      print("EndMelee")
+      valkyries[fixtureA:getUserData().parent].isMeleeing = false
+      valkyries[fixtureA:getUserData().parent].isRanging = true
     end
 
     if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().parent.isRanging = false
-      fixtureA:getUserData().parent.isMeleeing = false
-      print("EndRanged")
+      valkyries[fixtureA:getUserData().parent].isRanging = false
+      valkyries[fixtureA:getUserData().parent].isMeleeing = false
     end
   end
 end
