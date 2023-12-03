@@ -60,6 +60,7 @@ function LoadValquiria(world, posicoes, quantity)
     valkyrie.playerInSight = false
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
+    valkyrie.fixture:setUserData({ type = "valkyrie" })
     -- valkyrie.arrow = CreateArrow()
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
     valkyrie.health = 7
@@ -71,7 +72,7 @@ function LoadValquiria(world, posicoes, quantity)
     meleeRange.range = meleeRange.shape:getRadius()
     meleeRange.fixture:setSensor(true)
     meleeRange.name = "enemy"
-    meleeRange.fixture:setUserData({type = "MelleAttack"})
+    meleeRange.fixture:setUserData({ type = "MelleAttack" })
 
     rangedAttack = {}
     rangedAttack.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -79,7 +80,7 @@ function LoadValquiria(world, posicoes, quantity)
     rangedAttack.fixture = love.physics.newFixture(rangedAttack.body, rangedAttack.shape, 2)
     rangedAttack.range = rangedAttack.shape:getRadius()
     rangedAttack.fixture:setSensor(true)
-    rangedAttack.fixture:setUserData({type = "RangedAttack"})
+    rangedAttack.fixture:setUserData({ type = "RangedAttack" })
 
     -- if i == 1 then
     --   table.insert(valkyries, i, valkyrie) --1
@@ -221,25 +222,25 @@ end
 function BeginContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-        valkyries[i].isRanging = true
-        valkyries[i].isMeleeing = true
-        print("startMelee")
+      valkyries[i].isRanging = true
+      valkyries[i].isMeleeing = true
+      print("startMelee")
     elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-        valkyries[i].playerInSight = true
-        valkyries[i].isRanging = true
-        valkyries[i].patroling = false
-        print("StartRanged")
+      valkyries[i].playerInSight = true
+      valkyries[i].isRanging = true
+      valkyries[i].patroling = false
+      print("StartRanged")
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-        valkyries[i].isRanging = true
-        valkyries[i].isMeleeing = true
-        print("starMelee")
+      valkyries[i].isRanging = true
+      valkyries[i].isMeleeing = true
+      print("starMelee")
     elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-        valkyries[i].playerInSight = true
-        valkyries[i].patroling = false
-        valkyries[i].isRanging = false
-        print("StartRanged")
+      valkyries[i].playerInSight = true
+      valkyries[i].patroling = false
+      valkyries[i].isRanging = false
+      print("StartRanged")
     end
   end
 end
@@ -247,28 +248,28 @@ end
 function EndContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-        valkyries[i].isMeleeing = false
-        valkyries[i].isRanging = true
-        print("EndMelee")
+      valkyries[i].isMeleeing = false
+      valkyries[i].isRanging = true
+      print("EndMelee")
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-        valkyries[i].playerInSight = false
-        valkyries[i].isRanging = false
-        valkyries[i].isMeleeing = false
-        print("EndRanged")
+      valkyries[i].playerInSight = false
+      valkyries[i].isRanging = false
+      valkyries[i].isMeleeing = false
+      print("EndRanged")
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-        valkyries[i].isMeleeing = false
-        valkyries[i].isRanging = true
-        print("EndMelee")
+      valkyries[i].isMeleeing = false
+      valkyries[i].isRanging = true
+      print("EndMelee")
     end
 
     if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-        valkyries[i].isRanging = false
-        valkyries[i].isMeleeing = false
-        print("EndRanged")
+      valkyries[i].isRanging = false
+      valkyries[i].isMeleeing = false
+      print("EndRanged")
     end
   end
 end

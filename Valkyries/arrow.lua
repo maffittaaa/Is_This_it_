@@ -16,7 +16,7 @@ function CreateArrow(world, i, valkyrie)
     arrow.position = vector2.new(valkyrie.body:getPosition())
     arrow.body:setActive(false)
     arrow.fixture:setSensor(true)
-    arrow.fixture:setUserData({type = "ArrowAttack", id = i })
+    arrow.fixture:setUserData({ type = "ArrowAttack", id = i })
     return arrow
 end
 
@@ -51,8 +51,7 @@ function UpdateValkyrieRangedAttack(world, dt)
             playerDirection = vector2.norm(playerDirection)
             force = vector2.mult(playerDirection, 200)
             arrow.body:setActive(true)
-            local rotation = math.atan2(gary.position.y, gary.position.x)
-            arrow.body:setAngle(rotation)
+            arrow.body:setAngle(math.atan2(force.y, force.x))
             arrow.body:setLinearVelocity(force.x, force.y)
             table.insert(bullets, arrow)
         end

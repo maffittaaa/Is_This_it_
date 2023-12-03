@@ -87,7 +87,7 @@ function love.load()
                 wall.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
                 wall.shape = love.physics.newRectangleShape(obj.width, obj.height)
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
-                wall.fixture:setUserData({type = "wall"})
+                wall.fixture:setUserData({ type = "wall" })
                 table.insert(walls, wall)
             end
         end
@@ -96,11 +96,10 @@ function love.load()
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
+    BeginContactGhost(fixtureA, fixtureB)
     BeginContactArrows(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
-    BeginContactGhost(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
- 
 end
 
 function EndContact(fixtureA, fixtureB)

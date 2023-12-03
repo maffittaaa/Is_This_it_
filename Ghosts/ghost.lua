@@ -22,6 +22,7 @@ function LoadGhost(world, x, y)
     ghost.fixture:setFriction(10)
     ghost.body:setFixedRotation(true)
     ghost.position = vector2.new(ghost.body:getPosition())
+    ghost.fixture:setUserData({ type = "ghost" })
     ghost.health = 4
     ghost.timer = 2
 
@@ -33,7 +34,7 @@ function LoadGhost(world, x, y)
     trigger.shape = love.physics.newRectangleShape(40, 70)
     trigger.fixture = love.physics.newFixture(trigger.body, trigger.shape, 2)
     trigger.fixture:setSensor(true)
-    trigger.fixture:setUserData({type ="attack"}) -- trigger de lado
+    trigger.fixture:setUserData({ type = "attack" }) -- trigger de lado
 end
 
 function UpdateGhost(dt, world)
@@ -69,7 +70,7 @@ function UpdateGhost(dt, world)
         elseif ghostx_patrolling > 100 and ghostx_patrolling < 1900 then
             is_forward_backwards = 1
         end
-        
+
         ghostx_patrolling = ghostx_patrolling + (dt * 200 * is_forward_backwards)
 
 
@@ -150,12 +151,13 @@ function DrawGhost()
     end
 end
 
-
 function BeginContactGhost(fixtureA, fixtureB)
+    print("fixtures: ", fixtureA, fixtureB)
+    print("userData: ", fixtureA:getUserData(), fixtureB:getUserData())
     if ghost.isChasing == true and ghost.garyInSight == true then
+        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-            print(fixtureA:getUserData(), fixtureB:getUserData())
-            ghost.timer = 1                                                                                                        -- tempo de cooldown para perseguir outra vez
+            ghost.timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
             gary.health = gary.health - 1
             print("Gary health = " .. gary.health)
             PushGaryBack()
@@ -166,9 +168,9 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if ghost.isChasing == true and ghost.garyInSight == true then
+        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-            print(fixtureA:getUserData(), fixtureB:getUserData())
-            ghost.timer = 1                                                                                                        -- tempo de cooldown para perseguir outra vez
+            ghost.timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
             gary.health = gary.health - 1
             print("Gary health = " .. gary.health)
             PushGaryBack()
@@ -179,9 +181,8 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if ghost.health <= 4 and ghost.health > 0 then
-        print(fixtureA:getUserData(), fixtureB:getUserData())
+        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
-            print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.health = ghost.health - 1
             -- Testes
             if ghost.health <= 0 then
@@ -195,8 +196,8 @@ function BeginContactGhost(fixtureA, fixtureB)
             -- End testes
             print("Ghost health = " .. ghost.health)
         end
+        -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
-            print(fixtureA:getUserData(), fixtureB:getUserData())
             ghost.health = ghost.health - 1
             -- Testes
             if ghost.health <= 0 then
