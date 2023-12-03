@@ -38,10 +38,10 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    -- love.window.setFullscreen(true)
+    love.window.setFullscreen(true)
 
 
     sti = require "Mapa/sti"
@@ -69,7 +69,7 @@ function love.load()
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
-    LoadGhost(world, 1200, 800)
+    LoadGhost(world, 1300, 800)
     LoadHealthBars()
     LoadValquiria(world, valkeries_quantity)
     LoadCollectibles(world)

@@ -10,8 +10,8 @@ function LoadGaryAttack(world)
     sword.body:setActive(false)
     sword.fixture:setCategory(2)
     sword.fixture:setMask(2)
-    sword.timer = 0.5
-    sword.attacktime = 0.5
+    sword.timer = 0
+    sword.attacktime = 1
 end
 
 function UpdateGaryAttack(dt)
@@ -34,4 +34,7 @@ function DrawGaryAttack()
         love.graphics.draw(sprites.sword, sword.body:getX(), sword.body:getY(), sword.body:getAngle(),
             1, 1, sprites.sword:getWidth() / 2, sprites.sword:getHeight() / 2)
     end
+    love.graphics.setColor(1,0,0)
+    love.graphics.polygon("line", sword.body:getWorldPoints(sword.shape:getPoints()))
+    love.graphics.setColor(1,1,1)
 end
