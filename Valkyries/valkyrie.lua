@@ -62,6 +62,8 @@ function LoadValquiria(world, quantity)
     valkyrie.health = 7
     valkyrie.type = "valkyrie"
     valkyrie.fixture:setUserData(valkyrie)
+    valkyrie.fixture:setCategory(6)
+    valkyrie.fixture:setMask(5)
     
     valkyrie.meleeRange = {}
     valkyrie.meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -70,10 +72,6 @@ function LoadValquiria(world, quantity)
     valkyrie.meleeRange.range = valkyrie.meleeRange.shape:getRadius()
     valkyrie.meleeRange.fixture:setSensor(true)
     valkyrie.meleeRange.type = "MelleAttack"
-    valkyrie.meleeRange.isMeleeing = false
-    valkyrie.meleeRange.isRanging = false
-    valkyrie.meleeRange.patroling = true
-    valkyrie.meleeRange.playerInSight = false
     valkyrie.meleeRange.fixture:setUserData(valkyrie.meleeRange)
     valkyrie.meleeRange.parent = valkyrie
 
@@ -84,10 +82,6 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.range = valkyrie.rangedAttack.shape:getRadius()
     valkyrie.rangedAttack.fixture:setSensor(true)
     valkyrie.rangedAttack.type = "RangedAttack"
-    valkyrie.rangedAttack.isMeleeing = false
-    valkyrie.rangedAttack.isRanging = false
-    valkyrie.rangedAttack.patroling = true
-    valkyrie.rangedAttack.playerInSight = false
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
     valkyrie.rangedAttack.parent = valkyrie
 
@@ -127,7 +121,6 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       end
 
       valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * valkyries[i].is_forward_backwards)
-      valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * valkyries[i].is_forward_backwards)
 
       if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
         valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
@@ -138,6 +131,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       end
 
       valkyries[i].body:setPosition(valkyriex_patrolling, valkyries[i].body:getY())
+      valkyries[i].fixture:setSensor(false)
     elseif valkyries[i].playerInSight == true then
 
       if valkyries[i].isRanging == true then
@@ -157,9 +151,11 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         --if not meleeAttacking, do rangedAttack
       elseif valkyries[i].isRanging == false then
         --go to last location of player
+        
         local lastPos = vector2.mag(vector2.sub(valkyries[i].position, lastPposition))
         print("isRanging = false", lastPos)
 
+        valkyries[i].fixture:setSensor(true)
 
         if lastPos < 1 then
           time = time + dt
@@ -205,24 +201,24 @@ end
 function BeginContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      fixtureB:getUserData().ref.isRanging = true
-      fixtureB:getUserData().isMeleeing = true
+      fixtureB:getUserData().parent.isRanging = true
+      fixtureB:getUserData().parent.isMeleeing = true
       print("startMelee")
     elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      fixtureB:getUserData().playerInSight = true
-      fixtureB:getUserData().isRanging = true
-      fixtureB:getUserData().patroling = false
+      fixtureB:getUserData().parent.playerInSight = true
+      fixtureB:getUserData().parent.isRanging = true
+      fixtureB:getUserData().parent.patroling = false
       print("StartRanged")
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().isRanging = true
-      fixtureA:getUserData().isMeleeing = true
+      fixtureA:getUserData().parent.isRanging = true
+      fixtureA:getUserData().parent.isMeleeing = true
       print("starMelee")
     elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
       fixtureA:getUserData().parent.playerInSight = true
-      fixtureA:getUserData().patroling = false
-      fixtureA:getUserData().isRanging = false
+      fixtureA:getUserData().parent.patroling = false
+      fixtureA:getUserData().parent.isRanging = false
       print("StartRanged")
     end
   end
@@ -231,51 +227,28 @@ end
 function EndContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      fixtureB:getUserData().isMeleeing = false
-      fixtureB:getUserData().isRanging = true
+      fixtureB:getUserData().parent.isMeleeing = false
+      fixtureB:getUserData().parent.isRanging = true
       print("EndMelee")
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      fixtureB:getUserData().playerInSight = true
-      fixtureB:getUserData().isRanging = false
-      fixtureB:getUserData().isMeleeing = false
+      fixtureB:getUserData().parent.playerInSight = true
+      fixtureB:getUserData().parent.isRanging = false
+      fixtureB:getUserData().parent.isMeleeing = false
       print("EndRanged")
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().isMeleeing = false
-      fixtureA:getUserData().isRanging = true
+      fixtureA:getUserData().parent.isMeleeing = false
+      fixtureA:getUserData().parent.isRanging = true
       print("EndMelee")
     end
 
     if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      fixtureA:getUserData().isRanging = false
-      fixtureA:getUserData().isMeleeing = false
+      fixtureA:getUserData().parent.isRanging = false
+      fixtureA:getUserData().parent.isMeleeing = false
       print("EndRanged")
-    end
-
-    if valkyries[i].isMeleeing ~= valkyries[i].rangedAttack.isMeleeing  then
-      valkyries[i].isMeleeing = valkyries[i].rangedAttack.isMeleeing
-    end
-    
-    if valkyries[i].isRanging ~= valkyries[i].meleeRange.isRanging then
-      valkyries[i].isRanging = valkyries[i].meleeRange.isRanging
-    end
-
-    if valkyries[i].isMeleeing ~= valkyries[i].meleeRange.isMeleeing then
-      valkyries[i].isMeleeing = valkyries[i].meleeRange.isMeleeing
-    end
-
-    if valkyries[i].isRanging ~= valkyries[i].rangedAttack.isRanging then
-      valkyries[i].isRanging = valkyries[i].rangedAttack.isRanging
-    end
-
-    if valkyries[i].patroling ~= valkyries[i].rangedAttack.patroling then
-      valkyries[i].patroling = valkyries[i].rangedAttack.patroling
-    end
-    if valkyries[i].playerInSight ~= valkyries[i].rangedAttack.playerInSight then
-      valkyries[i].playerInSight = valkyries[i].rangedAttack.playerInSight
     end
   end
 end

@@ -92,6 +92,8 @@ function love.load()
                 wall.fixture = love.physics.newFixture(wall.body, wall.shape, 1)
                 wall.type = "wall"
                 wall.fixture:setUserData(wall)
+                wall.fixture:setCategory(7)
+                wall.fixture:setMask(5)
                 table.insert(walls, wall)
             end
         end
