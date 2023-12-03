@@ -57,7 +57,6 @@ function LoadValquiria(world, quantity)
     valkyrie.is_forward_backwards = 1
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
-    -- valkyrie.arrow = CreateArrow()
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
     valkyrie.health = 7
     valkyrie.type = "valkyrie"
