@@ -85,21 +85,12 @@ function LoadValquiria(world, quantity)
     -- for x, y in pairs(valkyries) do
     --   print(x, y)
     -- end
-    printTable(GetValquiriaPosition(quantity))
-    print("done")
     variavel = 1
   end
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
-    variavel = variavel + dt
-    if variavel > 2 then
-      printTable({ i, valkyries[3].patroling, valkyries[3].playerInSight, valkyries[3].isRanging, valkyries[3]
-          .isMeleeing, valkyries[3].valkyriex_patrolling })
-      variavel = 0
-    end
-    --print(valkyries[i].isRanging)
 
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
 

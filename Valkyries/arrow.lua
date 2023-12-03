@@ -19,6 +19,8 @@ function CreateArrow(world, i, valkyrie)
     arrow.type = "ArrowAttack"
     arrow.id = i
     arrow.fixture:setUserData(arrow)
+    arrow.fixture:setCategory(1)
+    arrow.fixture:setMask(1)
     return arrow
 end
 
@@ -27,6 +29,7 @@ function RemoveFromBulletsArray(id) --remove arrow id from the table
     for key, arrow in ipairs(bullets) do
         if (arrow.fixture:getUserData().id == id) then
             keyToRemove = key
+            arrow.fixture:getUserData().fixture:destroy()
         end
     end
     if (keyToRemove > -1) then
@@ -64,6 +67,8 @@ function DrawValkyrieAttack()
 end
 
 function BeginContactArrows(fixtureA, fixtureB)
+    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
+
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
         gary.health = gary.health - 1
         print(fixtureB:getUserData().id)
@@ -71,7 +76,16 @@ function BeginContactArrows(fixtureA, fixtureB)
     end
     if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
         gary.health = gary.health - 1
-        print(fixtureB:getUserData().id)
+        print(fixtureA:getUserData().id)
+        RemoveFromBulletsArray(fixtureA:getUserData().id)
+    end
+
+    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ArrowAttack" then
+        print(fixtureB:getUserData().type)
         RemoveFromBulletsArray(fixtureB:getUserData().id)
+    end
+    if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "melee weapon" then
+        print(fixtureA:getUserData().type)
+        RemoveFromBulletsArray(fixtureA:getUserData().id)
     end
 end
