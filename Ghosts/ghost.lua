@@ -24,6 +24,8 @@ function LoadGhost(world, x, y)
     ghost.position = vector2.new(ghost.body:getPosition())
     ghost.health = 4
     ghost.timer = 2
+    ghost.name = "ghost"
+    ghost.fixture:setUserData(ghost)
 
     ghostRange = {}
     ghostRange.body = love.physics.newBody(world, ghost.body:getX(), ghost.body:getY(), "dynamic")
@@ -33,7 +35,8 @@ function LoadGhost(world, x, y)
     trigger.shape = love.physics.newRectangleShape(40, 70)
     trigger.fixture = love.physics.newFixture(trigger.body, trigger.shape, 2)
     trigger.fixture:setSensor(true)
-    trigger.fixture:setUserData("attack") -- trigger de lado
+    trigger.name = "attack"
+    trigger.fixture:setUserData(trigger) -- trigger de lado
 end
 
 function UpdateGhost(dt, world)
