@@ -54,7 +54,6 @@ function UpdateGary(dt)
     end
 
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
-    --gary.body:setLinearVelocity(garyVelocity.x, garyVelocity.y)
 end
 
 function DrawGary()

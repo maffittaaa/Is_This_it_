@@ -5,8 +5,7 @@ local time = 0
 local melee = false
 
 
-function printTable( t )
- 
+function printTable(t)
   local printTable_cache = {}
 
   local function sub_printTable(t, indent)
@@ -43,11 +42,10 @@ end
 
 function LoadValquiria(world, quantity)
   for i = 1, quantity, 1 do
-
     valkyrie = {}
 
     valkyrie.body = love.physics.newBody(world, posicoes[i].x, posicoes[i].y, "dynamic")
-    valkyrie.shape = love.physics.newRectangleShape(30, 60)
+    valkyrie.shape = love.physics.newRectangleShape(sprites.valkyrie:getWidth(), sprites.valkyrie:getHeight())
     valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
     valkyrie.maxvelocity = 200
     valkyrie.isMeleeing = false
@@ -63,7 +61,7 @@ function LoadValquiria(world, quantity)
     valkyrie.fixture:setUserData(valkyrie)
     valkyrie.fixture:setCategory(6)
     valkyrie.fixture:setMask(5)
-    
+
     valkyrie.meleeRange = {}
     valkyrie.meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
     valkyrie.meleeRange.shape = love.physics.newCircleShape(150)
@@ -96,7 +94,6 @@ end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
-
     --print(valkyries[i].isRanging)
 
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
@@ -132,9 +129,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       valkyries[i].body:setPosition(valkyriex_patrolling, valkyries[i].body:getY())
       valkyries[i].fixture:setSensor(false)
     elseif valkyries[i].playerInSight == true then
-
       if valkyries[i].isRanging == true then
-
         --stop velocity, while in rangedAttack
         time = 0
         lastPposition = playerPosition
@@ -150,7 +145,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         --if not meleeAttacking, do rangedAttack
       elseif valkyries[i].isRanging == false then
         --go to last location of player
-        
+
         local lastPos = vector2.mag(vector2.sub(valkyries[i].position, lastPposition))
         print("isRanging = false", lastPos)
 
@@ -179,11 +174,13 @@ end
 
 function DrawValquiria(quantity)
   for i = 1, quantity, 1 do
-
     love.graphics.setColor(1, 1, 1)
-    love.graphics.polygon("fill", valkyries[i].body:getWorldPoints(valkyries[i].shape:getPoints()))
-    love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(), valkyries[i].meleeRange.shape:getRadius())
-    love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(), valkyries[i].rangedAttack.shape:getRadius())
+    love.graphics.draw(sprites.valkyrie, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+      1, 1, sprites.valkyrie:getWidth() / 2, sprites.valkyrie:getHeight() / 2)
+    love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(),
+      valkyries[i].meleeRange.shape:getRadius())
+    love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),
+      valkyries[i].rangedAttack.shape:getRadius())
 
     if valkyries[i].isChasing == false and lastPposition ~= nil and valkyries[i].patroling == false then
       love.graphics.line(valkyries[i].body:getX(), valkyries[i].body:getY(), lastPposition.x, lastPposition.y)
@@ -192,7 +189,7 @@ function DrawValquiria(quantity)
 end
 
 function GetValquiriaPosition(quantity)
-  for i = 1, quantity, 1 do 
+  for i = 1, quantity, 1 do
     return vector2.new(valkyries[i].body:getX(), valkyries[i].body:getY())
   end
 end
