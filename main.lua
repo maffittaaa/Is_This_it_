@@ -8,6 +8,7 @@ require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
 require "Valkyries/arrow"
+require "Valkyries/melee_attack"
 Camera = require "Camera/Camera"
 
 local world
@@ -38,10 +39,10 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    -- love.window.setFullscreen(true)
+    love.window.setFullscreen(true)
 
 
     sti = require "Mapa/sti"
@@ -72,6 +73,7 @@ function love.load()
     LoadGhost(world, 1200, 800)
     LoadHealthBars()
     LoadValquiria(world, valkeries_quantity)
+    LoadSword(world, valkyrie)
     LoadCollectibles(world)
 
     -- make a table where the colitions will be stored --
@@ -99,12 +101,13 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
     BeginContactGhost(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
+    BeginContactValkyrieSword(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
     BeginContactArrows(fixtureA, fixtureB)
 end
@@ -126,6 +129,7 @@ function love.update(dt)
     UpdateGhost(dt, world)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
+    UpdateValkyrieSword()
 end
 
 function love.mousepressed(x, y, button)
@@ -152,6 +156,7 @@ function love.draw()
     DrawValquiria(valkeries_quantity)
     DrawCollectibles()
     DrawValkyrieAttack()
+    DrawValkyrieSword()
 
     for i = 1, valkeries_quantity, 1 do
         love.graphics.setColor(1, 0, 0)
