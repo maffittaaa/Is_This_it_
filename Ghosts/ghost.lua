@@ -154,8 +154,8 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-    print("fixtures: ", fixtureA, fixtureB)
-    print("userData: ", fixtureA:getUserData(), fixtureB:getUserData())
+    --print("fixtures: ", fixtureA, fixtureB)
+    --print("userData: ", fixtureA:getUserData(), fixtureB:getUserData())
     if ghost.isChasing == true and ghost.garyInSight == true then
         -- print(fixtureA:getUserData(), fixtureB:getUserData())
         if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player

@@ -41,7 +41,7 @@ function UpdateValkyrieRangedAttack(world, dt)
     else
         canShoot = false
     end
-    print(" ", cooldown_intervalo, ", can shoot? ", canShoot)
+    --print(" ", cooldown_intervalo, ", can shoot? ", canShoot)
     for key, valkyrie in ipairs(valkyries) do
         if (not (key == 1) and key - 1 % 3 > 0) then
             goto continue --da  skip ao proximo loop

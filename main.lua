@@ -38,32 +38,33 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    -- love.window.setFullscreen(true)
+    love.window.setFullscreen(true)
 
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
     --Call "load" function of every script
 
-    posicoes[1] = {x = 3800, y = 1400}
-    posicoes[2] = {x = 3800,y = 1500}
-    posicoes[3] = {x = 3800,y = 1600}
-    posicoes[4] = {x = 3800,y = 1700}
-    posicoes[5] = {x = 3800,y = 1800}
-    posicoes[6] = {x = 3800,y = 1900}
-    posicoes[7] = {x = 3800,y = 2000}
+    posicoes[1] = {x = 3464,y = 1782}
+    posicoes[2] = {x = 3561,y = 1643}
+    posicoes[3] = {x = 3633,y = 1526}
+    posicoes[4] = {x = 2960,y = 3138}
+    posicoes[5] = {x = 2919,y = 2968}
+    posicoes[6] = {x = 3142,y = 2796}
+    posicoes[7] = {x = 3194,y = 2710}
+
     posicoes[8] = {x = 4149,y = 1782}
     posicoes[9] = {x = 4149,y = 1643}
     posicoes[10] = {x = 4174,y = 1526}
     posicoes[11] = {x = 3373,y = 3138}
-    posicoes[12] = {x = 2919,y = 2968}
+    posicoes[12] = {x = 3574,y = 2968}
     posicoes[13] = {x = 3747,y = 2796}
-    posicoes[14] = {x = 3194,y = 2710}
+    posicoes[14] = {x = 3645,y = 2710}
 
-    valkeries_quantity = #posicoes/2
+    valkeries_quantity = #posicoes / 2
 
     LoadSprites()
     LoadGary(world, 900, 1000)
