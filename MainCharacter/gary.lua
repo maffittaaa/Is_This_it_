@@ -16,8 +16,7 @@ function LoadGary(world, x, y)
     gary.health = 5
     gary.knockX = 0
     gary.knockY = 0
-    gary.name = "player"
-    gary.fixture:setUserData(gary)
+    gary.fixture:setUserData({type = "player"})
 end
 
 function UpdateGary(dt)

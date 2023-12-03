@@ -1,6 +1,6 @@
 valkyries = {}
 valkyriex_patrolling = 1
-local is_forward_backwards = 1
+local is_forward_backwards
 local lastPposition
 local time = 0
 
@@ -9,41 +9,41 @@ function printTable( t )
  
   local printTable_cache = {}
 
-  local function sub_printTable( t, indent )
-
-      if ( printTable_cache[tostring(t)] ) then
-          print( indent .. "*" .. tostring(t) )
-      else
-          printTable_cache[tostring(t)] = true
-          if ( type( t ) == "table" ) then
-              for pos,val in pairs( t ) do
-                  if ( type(val) == "table" ) then
-                      print( indent .. "[" .. pos .. "] => " .. tostring( t ).. " {" )
-                      sub_printTable( val, indent .. string.rep( " ", string.len(pos)+8 ) )
-                      print( indent .. string.rep( " ", string.len(pos)+6 ) .. "}" )
-                  elseif ( type(val) == "string" ) then
-                      print( indent .. "[" .. pos .. '] => "' .. val .. '"' )
-                  else
-                      print( indent .. "[" .. pos .. "] => " .. tostring(val) )
-                  end
-              end
+  local function sub_printTable(t, indent)
+    if (printTable_cache[tostring(t)]) then
+      print(indent .. "*" .. tostring(t))
+    else
+      printTable_cache[tostring(t)] = true
+      if (type(t) == "table") then
+        for pos, val in pairs(t) do
+          if (type(val) == "table") then
+            print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
+            sub_printTable(val, indent .. string.rep(" ", string.len(pos) + 8))
+            print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
+          elseif (type(val) == "string") then
+            print(indent .. "[" .. pos .. '] => "' .. val .. '"')
           else
-              print( indent..tostring(t) )
+            print(indent .. "[" .. pos .. "] => " .. tostring(val))
           end
+        end
+      else
+        print(indent .. tostring(t))
       end
+    end
   end
 
-  if ( type(t) == "table" ) then
-      print( tostring(t) .. " {" )
-      sub_printTable( t, "  " )
-      print( "}" )
+  if (type(t) == "table") then
+    print(tostring(t) .. " {")
+    sub_printTable(t, "  ")
+    print("}")
   else
-      sub_printTable( t, "  " )
+    sub_printTable(t, "  ")
   end
 end
 
 function LoadValquiria(world, quantity)
   for i = 1, quantity, 1 do
+    is_forward_backwards = 1
 
     valkyrie = {}
 
@@ -57,6 +57,8 @@ function LoadValquiria(world, quantity)
     valkyrie.playerInSight = false
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
+    valkyrie.fixture:setUserData({ type = "valkyrie" })
+    -- valkyrie.arrow = CreateArrow()
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
     valkyrie.health = 7
     valkyrie.fixture:setUserData("valquerie")
@@ -67,7 +69,7 @@ function LoadValquiria(world, quantity)
     valkyrie.meleeRange.fixture = love.physics.newFixture(valkyrie.meleeRange.body, valkyrie.meleeRange.shape, 2)
     valkyrie.meleeRange.range = valkyrie.meleeRange.shape:getRadius()
     valkyrie.meleeRange.fixture:setSensor(true)
-    valkyrie.meleeRange.name = "MelleAttack"
+    valkyrie.meleeRange.type = "MelleAttack"
     valkyrie.meleeRange.fixture:setUserData(valkyrie.meleeRange)
 
     valkyrie.rangedAttack = {}
@@ -76,7 +78,7 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.fixture = love.physics.newFixture(valkyrie.rangedAttack.body, valkyrie.rangedAttack.shape, 2)
     valkyrie.rangedAttack.range = valkyrie.rangedAttack.shape:getRadius()
     valkyrie.rangedAttack.fixture:setSensor(true)
-    valkyrie.rangedAttack.name = "RangedAttack"
+    valkyrie.rangedAttack.type = "RangedAttack"
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
 
     table.insert(valkyries, i, valkyrie)
@@ -84,7 +86,6 @@ function LoadValquiria(world, quantity)
     -- for x, y in pairs(valkyries) do
     --   print(x, y)
     -- end
-    
     printTable(GetValquiriaPosition(quantity))
     print("done")
   end
@@ -111,6 +112,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         is_forward_backwards = 1
       end
 
+      valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
       valkyriex_patrolling = valkyriex_patrolling + (dt * 200 * is_forward_backwards)
 
       if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
@@ -160,7 +162,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         end
       end
     end
-  end 
+  end
 end
 
 function DrawValquiria(quantity)
@@ -180,5 +182,60 @@ end
 function GetValquiriaPosition(quantity)
   for i = 1, quantity, 1 do 
     return vector2.new(valkyries[i].body:getX(), valkyries[i].body:getY())
+  end
+end
+
+function BeginContactValkyrie(fixtureA, fixtureB)
+  for i = 1, valkeries_quantity, 1 do
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+      valkyries[i].isRanging = true
+      valkyries[i].isMeleeing = true
+      print("startMelee")
+    elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+      valkyries[i].playerInSight = true
+      valkyries[i].isRanging = true
+      valkyries[i].patroling = false
+      print("StartRanged")
+    end
+
+    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+      valkyries[i].isRanging = true
+      valkyries[i].isMeleeing = true
+      print("starMelee")
+    elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+      valkyries[i].playerInSight = true
+      valkyries[i].patroling = false
+      valkyries[i].isRanging = false
+      print("StartRanged")
+    end
+  end
+end
+
+function EndContactValkyrie(fixtureA, fixtureB)
+  for i = 1, valkeries_quantity, 1 do
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+      valkyries[i].isMeleeing = false
+      valkyries[i].isRanging = true
+      print("EndMelee")
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+      valkyries[i].playerInSight = false
+      valkyries[i].isRanging = false
+      valkyries[i].isMeleeing = false
+      print("EndRanged")
+    end
+
+    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+      valkyries[i].isMeleeing = false
+      valkyries[i].isRanging = true
+      print("EndMelee")
+    end
+
+    if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+      valkyries[i].isRanging = false
+      valkyries[i].isMeleeing = false
+      print("EndRanged")
+    end
   end
 end
