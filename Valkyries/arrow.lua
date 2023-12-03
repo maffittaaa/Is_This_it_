@@ -17,7 +17,8 @@ function CreateArrow(world, i, valkyrie)
     arrow.body:setActive(false)
     arrow.fixture:setSensor(true)
     arrow.type = "ArrowAttack"
-    arrow.fixture:setUserData({ arrow, id = i })
+    arrow.id = i
+    arrow.fixture:setUserData(arrow)
     return arrow
 end
 
