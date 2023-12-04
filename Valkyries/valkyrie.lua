@@ -85,7 +85,6 @@ function LoadValquiria(world, quantity)
     -- for x, y in pairs(valkyries) do
     --   print(x, y)
     -- end
-    variavel = 1
   end
 end
 

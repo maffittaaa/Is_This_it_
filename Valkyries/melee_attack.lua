@@ -45,8 +45,8 @@ end
 function ProcessSwordOnPlayer(gary, sword)
     -- printTable(gary)
     sword.timer = 1
-    gary.health = gary.health - 1
-    PushGaryBack()
+    gary.health = gary.health - 0.5
+    PushGaryBack(sword.id)
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)

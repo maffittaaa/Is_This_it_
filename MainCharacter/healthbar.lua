@@ -1,15 +1,16 @@
 healthbar = {}
 
 function LoadHealthBars()
+    healthbar.ghost = {}
     for i = 1, #ghosts, 1 do
-        healthbar.ghost = vector2.new(ghosts[i].body:getX(), ghosts[i].body:getY() + 60)
+        healthbar.ghost[i] = vector2.new(ghosts[i].body:getX(), ghosts[i].body:getY() + 60)
     end
     healthbar.gary = vector2.new(gary.body:getX(), gary.body:getY() + 60)
 end
 
 function UpdateHealthBars()
     for i = 1, #ghosts, 1 do
-        healthbar.ghost = vector2.new(ghosts[i].body:getX() - 35, ghosts[i].body:getY() - 60)
+        healthbar.ghost[i] = vector2.new(ghosts[i].body:getX() - 35, ghosts[i].body:getY() - 60)
     end
     healthbar.gary = vector2.new(gary.body:getX() - 35, gary.body:getY() - 60)
 end
@@ -33,9 +34,9 @@ function DrawHealthBars()
     for i = 1, #ghosts, 1 do    
         if ghosts[i].health <= 4 and ghosts[i].health > 0 then
             love.graphics.setColor(1, 1, 1)
-            love.graphics.rectangle("fill", healthbar.ghost.x, healthbar.ghost.y, 70, 10)
+            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 70, 10)
             love.graphics.setColor(1, 0, 0)
-            love.graphics.rectangle("fill", healthbar.ghost.x, healthbar.ghost.y, 17.5 * ghosts[i].health, 4)
+            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
         else
             for i = #healthbar, 1, -1 do
                 local num = healthbar[i]
