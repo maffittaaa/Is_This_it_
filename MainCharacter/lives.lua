@@ -1,9 +1,6 @@
 collectible_key = {}
 collectible_lifes = { life1 = {}, life2 = {}, life3 = {} }
-title = "inventory: "
-message = "1 key"
-message2 = "x1 life"
-message3 = "full health"
+local message
 
 function LoadCollectibles(world)
     collectible_lifes.counter = 0
@@ -41,6 +38,15 @@ function LoadCollectibles(world)
     collectible_lifes.life3.fixture:setUserData(collectible_lifes.life3)
 end
 
+function UpdateCollectibles(dt)
+    if message ~= nil then
+        message.timer = message.timer - dt
+        if message.timer <= 0 then
+            message = nil
+        end
+    end
+end
+
 function DrawCollectibles()
     if collectible_lifes.counter == 0 and collectible_lifes.counter <= 3 then
         love.graphics.draw(sprites.life, collectible_lifes.life1.body:getX(), collectible_lifes.life1.body:getY(),
@@ -59,12 +65,18 @@ function DrawCollectibles()
         love.graphics.draw(sprites.key, collectible_key.body:getX(), collectible_key.body:getY(),
             collectible_key.body:getAngle(), 1, 1, sprites.key:getWidth() / 2, sprites.key:getHeight() / 2)
     end
+    if message ~= nil then
+        love.graphics.draw(sprites.inventory, camera.x, camera.y - 600, 0, 3, 3)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(15))
+        love.graphics.print(message.message, camera.x + 35, camera.y - 539)
+    end
 end
 
 function BeginContactCollectibles(fixtureA, fixtureB)
     if fixtureB:getUserData().type == "key" and fixtureA:getUserData().type == "player" then -- colision for collectibles(key)
         if collectible_key.counter == 0 then
-            success = love.window.showMessageBox(title, message)
+            message = CreateMessage("inventory: 1 key")
             collectible_key.counter = 1
         end
     end

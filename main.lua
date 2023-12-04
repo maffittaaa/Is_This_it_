@@ -9,6 +9,7 @@ require "MainCharacter/lives"
 require "Valkyries/valkyrie"
 require "Valkyries/arrow"
 require "Valkyries/melee_attack"
+require "MainCharacter/message"
 Camera = require "Camera/Camera"
 
 local world
@@ -50,22 +51,22 @@ function love.load()
     gameMap = sti("Mapa/map.lua")
     --Call "load" function of every script
 
---valquirias first Patroling Position
+    --valquirias first Patroling Position
     posicoes[1] = { x = 3464, y = 1782 }
     posicoes[2] = { x = 2960, y = 3138 }
 
---ghosts first Patroling Position
+    --ghosts first Patroling Position
     posicoes[3] = { x = 3561, y = 1643 }
     posicoes[4] = { x = 3633, y = 1526 }
     posicoes[5] = { x = 2919, y = 2968 }
     posicoes[6] = { x = 3142, y = 2796 }
     posicoes[7] = { x = 3194, y = 2710 }
 
---valquirias final Patroling Position
+    --valquirias final Patroling Position
     posicoes[8] = { x = 4149, y = 1782 }
     posicoes[9] = { x = 3373, y = 3138 }
 
---ghosts final Patroling Position
+    --ghosts final Patroling Position
     posicoes[10] = { x = 4149, y = 1643 }
     posicoes[11] = { x = 4174, y = 1526 }
     posicoes[12] = { x = 3574, y = 2968 }
@@ -74,7 +75,7 @@ function love.load()
 
     valkeries_quantity = 2
 
-    
+
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
@@ -84,7 +85,6 @@ function love.load()
     ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
     ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
     LoadValquiria(world, valkeries_quantity)
-    LoadSword(world, valkyrie)
 
     printTable(ghosts)
     LoadHealthBars()
@@ -192,7 +192,7 @@ function love.load()
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
-    -- BeginContactGary(fixtureA, fixtureB)
+    BeginContactGary(fixtureA, fixtureB)
     BeginContactValkyrieSword(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
     BeginContactGhost(fixtureA, fixtureB)
@@ -201,7 +201,7 @@ function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valqu
 end
 
 function EndContact(fixtureA, fixtureB)
-    -- EndContactGary(fixtureA, fixtureB)
+    EndContactGary(fixtureA, fixtureB)
     EndContactValkyrie(fixtureA, fixtureB)
 end
 
@@ -219,6 +219,7 @@ function love.update(dt)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
+    UpdateCollectibles(dt)
 end
 
 function love.mousepressed(x, y, button)

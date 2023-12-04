@@ -11,4 +11,5 @@ function LoadSprites()
     sprites.key = love.graphics.newImage("Sprites/Key.png")
     sprites.life = love.graphics.newImage("Sprites/life.png")
     sprites.arrow = love.graphics.newImage("Sprites/Arrow.png")
+    sprites.inventory = love.graphics.newImage("Sprites/inventory.png")
 end

@@ -80,18 +80,18 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
     valkyrie.rangedAttack.parent = i
 
+    valkyrie.sword = CreateSword(world, valkyrie.meleeRange.parent)
+
     table.insert(valkyries, i, valkyrie)
 
     -- for x, y in pairs(valkyries) do
     --   print(x, y)
     -- end
-    variavel = 1
   end
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
-
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
 
     valkyries[i].meleeRange.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
