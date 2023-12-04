@@ -13,20 +13,20 @@ require "MainCharacter/message"
 Camera = require "Camera/Camera"
 
 local world
-local ground
-local speed
-local success
-local wf
-local ghosts_quantity
+local message
+local k = 1
+local onoff = true
+invencible = false
+drawCheats = true
 posicoes = {}
 ghosts = {}
 
-local enemyPostions = {}
-
 function love.keypressed(e)
+
     if e == 'escape' then
         love.event.quit()
     end
+
     if e == 'e' then
         if gary_sword.body:isActive() then
             gary_sword.body:setActive(false)
@@ -34,7 +34,65 @@ function love.keypressed(e)
             gary_sword.body:setActive(true)
         end
     end
+
+    --Cheats
+    if e == "tab" then
+        if drawCheats == true then
+            drawCheats = false
+            return
+        elseif drawCheats == false then
+            drawCheats = true
+        end
+    end
+
+    if e == "q" then
+        if player_velocity < 1000 then
+            player_velocity = player_velocity + 250
+        elseif player_velocity >= 1000 then
+            player_velocity = 250
+        end
+    end
+
+    if e == "p" then
+        local strategicPositions = {}
+        strategicPositions[1] = {x = 3349, y = 1152}
+        strategicPositions[2] = {x = 2497, y = 2791}
+        strategicPositions[3] = {x = 6482, y = 4538}
+        strategicPositions[4] = {x = 900, y = 1000}
+
+        gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
+
+        k = k + 1
+
+        if k > 4 then
+            k = 1
+        end
+    end
+
+    if e == "f" then
+        if onoff == true then
+            gary.fixture:setSensor(false)
+            onoff = false
+            return
+        elseif onoff == false then
+            gary.fixture:setSensor(true)
+            onoff = true
+        end
+    end
+
+    if e == "+" then
+        if invencible == false then
+            invencible = true
+        elseif invencible == true then
+            invencible = false
+        end
+    end
 end
+
+-- vida infinita
+-- andar quick
+-- no fixture
+-- posições no mapa
 
 function love.load()
     love.physics.setMeter(30)
@@ -46,6 +104,7 @@ function love.load()
     width = love.graphics.getWidth()
     --love.window.setFullscreen(true)
 
+    message = CreateMessage("Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
@@ -187,8 +246,7 @@ function love.load()
         end
     end
 
-
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.3)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
@@ -219,7 +277,7 @@ function love.update(dt)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
-    UpdateCollectibles(dt)
+    UpdateCollectibles(dt)   
 end
 
 function love.mousepressed(x, y, button)
@@ -239,6 +297,14 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Arvores"])
     -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
 
+    if drawCheats == true then
+        love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(12))
+        love.graphics.print(message.message, camera.x  - 730, camera.y - 25)
+        love.graphics.setColor(1, 1, 1)
+    end
+
     DrawGary()
     DrawGaryAttack()
     DrawGhost()
@@ -253,6 +319,7 @@ function love.draw()
         love.graphics.circle("line", posicoes[i].x, posicoes[i].y, 30)
         love.graphics.setColor(1, 1, 1)
     end
+
     camera:detach()
     camera:draw() -- Must call this to use camera:fade!
 end

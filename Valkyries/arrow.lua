@@ -67,14 +67,15 @@ function DrawValkyrieAttack()
 end
 
 function BeginContactArrows(fixtureA, fixtureB)
-
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
-        gary.health = gary.health - 1
-        RemoveFromBulletsArray(fixtureB:getUserData().id)
-    end
-    if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
-        gary.health = gary.health - 1
-        RemoveFromBulletsArray(fixtureA:getUserData().id)
+    if invencible == false then
+        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
+            gary.health = gary.health - 1
+            RemoveFromBulletsArray(fixtureB:getUserData().id)
+        end
+        if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
+            gary.health = gary.health - 1
+            RemoveFromBulletsArray(fixtureA:getUserData().id)
+        end
     end
 
     if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ArrowAttack" then
