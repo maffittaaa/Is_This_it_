@@ -71,6 +71,7 @@ function UpdateGhost(dt, world)
             if ghosts[i].range < 300 then
                 ghosts[i].garyInSight = true
                 ghosts[i].patroling = false
+                ghosts[i].fixture:setSensor(true)
             end
             --If not in Sight, Patrol
             ghosts[i].ghostx_patrolling = ghosts[i].body:getX()
@@ -166,7 +167,7 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-
+if invencible == false then
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
         if ghosts[fixtureB:getUserData().id].isChasing == true and ghosts[fixtureB:getUserData().id].garyInSight == true then
 
@@ -192,6 +193,7 @@ function BeginContactGhost(fixtureA, fixtureB)
             end
         end
     end
+end
     
     if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
         if ghosts[fixtureA:getUserData().id].health <= 4 and ghosts[fixtureA:getUserData().id].health > 0 then

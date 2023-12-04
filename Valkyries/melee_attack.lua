@@ -52,18 +52,18 @@ function ProcessSwordOnPlayer(gary, sword)
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)
-    -- print(fixtureA:getUserData().type, fixtureB:getUserData().type)
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "melee weapon valkyrie" then
-        print(fixtureB:getUserData().timer)
-        if valkyries[fixtureB:getUserData().id].isMeleeing == true then
-            -- gary.health = gary.health - 1
-            ProcessSwordOnPlayer(fixtureA:getUserData(), fixtureB:getUserData())
+    if invencible == false then
+        
+        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "melee weapon valkyrie" then
+            if valkyries[fixtureB:getUserData().id].isMeleeing == true then
+                ProcessSwordOnPlayer(fixtureA:getUserData(), fixtureB:getUserData())
+            end
         end
-        -- print(ProcessSwordOnPlayer(fixtureA:getUserData().type, fixtureB:getUserData().type))
-    end
-    -- if fixtureB:getUserData().type == "melee weapon valkyrie" and fixtureA:getUserData().type == "valkyrie" then
-    --         sword = fixtureB:getUserData()
-    --         ProcessSwordOnPlayer(fixtureA:getUserData().type, fixtureB:getUserData().type)
 
-    -- end
+        if fixtureA:getUserData().type == "melee weapon valkyrie" and fixtureB:getUserData().type == "player" then
+            if valkyries[fixtureA:getUserData().id].isMeleeing == true then
+                ProcessSwordOnPlayer(fixtureB:getUserData(), fixtureA:getUserData())
+            end
+        end
+    end
 end

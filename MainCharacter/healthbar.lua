@@ -16,7 +16,7 @@ function UpdateHealthBars()
 end
 
 function DrawHealthBars()
-    if gary.health <= 5 and gary.health > 0 then
+    if gary.health > 0 then
         love.graphics.setColor(1, 1, 1)
         love.graphics.rectangle("fill", healthbar.gary.x, healthbar.gary.y, 70, 10)
         love.graphics.setColor(1, 0, 0)

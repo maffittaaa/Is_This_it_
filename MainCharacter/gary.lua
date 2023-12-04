@@ -9,6 +9,8 @@ local trigger_door_mas = false
 timer_camera = 0
 local repeatOnce = true
 
+player_velocity = 250
+
 function LoadGary(world, x, y)
     gary.body = love.physics.newBody(world, x, y, "dynamic")
     gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 10, sprites.gary:getHeight() - 50)
@@ -67,26 +69,26 @@ function UpdateGary(dt)
     local garyVelocity = vector2.new(0, 0)
 
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
-        garyVelocity.x = garyVelocity.x + 250
+        garyVelocity.x = garyVelocity.x + player_velocity
     end
 
     if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
-        garyVelocity.x = garyVelocity.x - 250
+        garyVelocity.x = garyVelocity.x - player_velocity
     end
 
     if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
-        garyVelocity.y = garyVelocity.y - 250
+        garyVelocity.y = garyVelocity.y - player_velocity
     end
 
     if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
-        garyVelocity.y = garyVelocity.y + 250
+        garyVelocity.y = garyVelocity.y + player_velocity
     end
     GaryKnock(dt)
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
 end
 
 function DrawGary()
-    if gary.health <= 5 and gary.health > 0 then
+    if gary.health > 0 then
         local velx, vely = gary.body:getLinearVelocity()
         if velx >= 0 then
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
