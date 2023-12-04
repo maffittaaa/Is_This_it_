@@ -98,8 +98,6 @@ function DrawGary()
                 -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
         end
     elseif gary.health <= 0 then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print("LOSER! YOU ARE DEAD", 500, 500)
         if destroy_gary_fixture == false then
             gary.fixture:destroy()
             destroy_gary_fixture = true
@@ -149,11 +147,5 @@ function BeginContactGary(fixtureA, fixtureB)
             repeatOnce = true
             trigger_door_mas = true
         end
-    end
-end
-
-function EndContactGary(fixtureA, fixtureB)
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
-        
     end
 end

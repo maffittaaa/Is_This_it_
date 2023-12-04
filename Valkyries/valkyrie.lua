@@ -1,42 +1,5 @@
 valkyries = {}
 local time = 0
-local melee = false
-
-
-function printTable(t)
-  local printTable_cache = {}
-
-  local function sub_printTable(t, indent)
-    if (printTable_cache[tostring(t)]) then
-      print(indent .. "*" .. tostring(t))
-    else
-      printTable_cache[tostring(t)] = true
-      if (type(t) == "table") then
-        for pos, val in pairs(t) do
-          if (type(val) == "table") then
-            print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
-            sub_printTable(val, indent .. string.rep(" ", string.len(pos) + 8))
-            print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-          elseif (type(val) == "string") then
-            print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-          else
-            print(indent .. "[" .. pos .. "] => " .. tostring(val))
-          end
-        end
-      else
-        print(indent .. tostring(t))
-      end
-    end
-  end
-
-  if (type(t) == "table") then
-    print(tostring(t) .. " {")
-    sub_printTable(t, "  ")
-    print("}")
-  else
-    sub_printTable(t, "  ")
-  end
-end
 
 function LoadValquiria(world, quantity)
   for i = 1, quantity, 1 do
@@ -83,10 +46,6 @@ function LoadValquiria(world, quantity)
     valkyrie.sword = CreateSword(world, valkyrie.meleeRange.parent)
 
     table.insert(valkyries, i, valkyrie)
-
-    -- for x, y in pairs(valkyries) do
-    --   print(x, y)
-    -- end
   end
 end
 
@@ -180,8 +139,9 @@ function DrawValquiria(quantity)
     love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),
       valkyries[i].rangedAttack.shape:getRadius())
 
-    if valkyries[i].isChasing == false and lastPposition ~= nil and valkyries[i].patroling == false then
-      love.graphics.line(valkyries[i].body:getX(), valkyries[i].body:getY(), lastPposition.x, lastPposition.y)
+    if valkyries[i].isChasing == false and valkyries[i].lastPposition ~= nil and valkyries[i].patroling == false then
+      love.graphics.line(valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].lastPposition.x,
+        valkyries[i].lastPposition.y)
     end
   end
 end

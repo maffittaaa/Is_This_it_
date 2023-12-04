@@ -1,3 +1,4 @@
+ghost = {}
 -- trigger = {}
 -- local ghostRange
 local lastPposition
@@ -6,7 +7,6 @@ local i
 local destroy_ghost_fixture = false
 
 function LoadGhost(world, x, y, i)
-
     local ghost = {}
 
     ghost.body = love.physics.newBody(world, x, y, "dynamic")
@@ -38,16 +38,12 @@ function LoadGhost(world, x, y, i)
     ghost.trigger.fixture = love.physics.newFixture(ghost.trigger.body, ghost.trigger.shape, 2)
     ghost.trigger.fixture:setSensor(true)
     ghost.trigger.type = "attack"
-    ghost.trigger.id = i
     ghost.trigger.fixture:setUserData(ghost.trigger) -- trigger de lado
-
     return ghost
 end
 
 function UpdateGhost(dt, world)
-
     for k = 1, #ghosts, 1 do
-        
         i = ghosts[k].id
 
         ghosts[i].position = vector2.new(ghosts[i].body:getPosition())
@@ -71,7 +67,6 @@ function UpdateGhost(dt, world)
             if ghosts[i].range < 300 then
                 ghosts[i].garyInSight = true
                 ghosts[i].patroling = false
-                ghosts[i].fixture:setSensor(true)
             end
             --If not in Sight, Patrol
             ghosts[i].ghostx_patrolling = ghosts[i].body:getX()
@@ -94,7 +89,6 @@ function UpdateGhost(dt, world)
             end
 
             ghosts[i].body:setPosition(ghosts[i].ghostx_patrolling, ghosts[i].body:getY())
-
         elseif ghosts[i].garyInSight == true then
             --check again if gary in sight
             if ghosts[i].range > 300 then
@@ -147,19 +141,17 @@ function DrawGhost()
             love.graphics.polygon("line", ghosts[i].trigger.body:getWorldPoints(ghosts[i].trigger.shape:getPoints()))
 
             love.graphics.setColor(1, 1, 1)
-            love.graphics.circle("line", ghosts[i].ghostRange.body:getX(), ghosts[i].ghostRange.body:getY(), ghosts[i].ghostRange.shape:getRadius())
+            love.graphics.circle("line", ghosts[i].ghostRange.body:getX(), ghosts[i].ghostRange.body:getY(),
+                ghosts[i].ghostRange.shape:getRadius())
         elseif ghosts[i].health <= 0 then
-            love.graphics.setColor(1, 1, 1)
-            love.graphics.print("WINNER! YOU STAYED ALIVE", 500, 500)
             ghosts[i].body:setLinearVelocity(0, 0)
             if destroy_ghost_fixture == true then
                 ghosts[i].isChasing = false
                 ghosts[i].patroling = false
-                ghosts[i].body.setPosition(-999999, -9999999)
                 ghosts[i].fixture:destroy()
                 ghosts[i].trigger.fixture:destroy()
                 ghosts[i].body:destroy()
-                print('Morreu :')
+
                 destroy_ghost_fixture = false
             end
         end
@@ -167,64 +159,45 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-if invencible == false then
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        if ghosts[fixtureB:getUserData().id].isChasing == true and ghosts[fixtureB:getUserData().id].garyInSight == true then
+    for i = 1, #ghosts, 1 do
+        if ghosts[ghosts[i].id].isChasing == true and ghosts[ghosts[i].id].garyInSight == true then
+            if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
+                ghosts[ghosts[i].id].timer = 1                                                                                                   -- cooldown tipe to chase again
+                gary.health = gary.health - 1
+                PushGaryBack(ghosts[i].id)
+                if gary.health <= 0 then
+                    ghosts[ghosts[i].id].isChasing = false
+                    ghosts[ghosts[i].id].patroling = true
+                end
+            end
+        end
+        if ghosts[ghosts[i].id].isChasing == true and ghosts[ghosts[i].id].garyInSight == true then
+            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
+                ghosts[i].timer = 1                                                                                                              -- cooldown tipe to chase again
+                gary.health = gary.health - 1
+                PushGaryBack(ghosts[i].id)
+                if gary.health <= 0 then
+                    ghosts[i].isChasing = false
+                    ghosts[i].patroling = true
+                end
+            end
+        end
+        if ghosts[ghosts[i].id].health <= 4 and ghosts[ghosts[i].id].health > 0 then
+            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
+                ghosts[ghosts[i].id].health = ghosts[ghosts[i].id].health - 1
 
-            ghosts[fixtureB:getUserData().id].timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
-            gary.health = gary.health - 1
-            print("Gary health = " .. gary.health)
-            PushGaryBack(fixtureB:getUserData().id)
-            if gary.health <= 0 then
-                ghosts[fixtureB:getUserData().id].isChasing = false
-                ghosts[fixtureB:getUserData().id].patroling = true
+                if ghosts[ghosts[i].id].health <= 0 then
+                    ghosts[ghosts[i].id].isChasing = false
+                    ghosts[ghosts[i].id].patroling = false
+                end
+            end
+            if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
+                ghosts[ghosts[i].id].health = ghosts[ghosts[i].id].health - 1
+                if ghosts[ghosts[i].id].health <= 0 then
+                    ghosts[ghosts[i].id].isChasing = false
+                    ghosts[ghosts[i].id].patroling = false
+                end
             end
         end
     end
-    if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        if ghosts[fixtureA:getUserData().id].isChasing == true and ghosts[fixtureA:getUserData().id].garyInSight == true then
-            ghosts[fixtureA:getUserData().id].timer = 1                                                                                                                  -- tempo de cooldown para perseguir outra vez
-            gary.health = gary.health - 1
-            print("Gary health = " .. gary.health)
-            PushGaryBack(fixtureB:getUserData().id)
-            if gary.health <= 0 then
-                ghosts[fixtureA:getUserData().id].isChasing = false
-                ghosts[fixtureA:getUserData().id].patroling = true
-            end
-        end
-    end
-end
-    
-    if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
-        if ghosts[fixtureA:getUserData().id].health <= 4 and ghosts[fixtureA:getUserData().id].health > 0 then
-            ghosts[fixtureA:getUserData().id].health = ghosts[fixtureA:getUserData().id].health - 1
-            print(fixtureA:getUserData().id)
-            -- Testes
-            if ghosts[fixtureA:getUserData().id].health <= 0 then
-                ghosts[fixtureA:getUserData().id].isChasing = false
-                ghosts[fixtureA:getUserData().id].patroling = false
-                ghosts[fixtureA:getUserData().id].trigger.fixture:destroy()
-
-                print('Morreu :')
-            end
-            -- End testes
-            print("Ghost health = " .. ghosts[fixtureA:getUserData().id].health)
-        end
-    end
-
-    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
-        if ghosts[fixtureB:getUserData().id].health <= 4 and ghosts[fixtureB:getUserData().id].health > 0 then
-            ghosts[fixtureB:getUserData().id].health = ghosts[fixtureB:getUserData().id].health - 1
-            -- Testes
-            if ghosts[fixtureB:getUserData().id].health <= 0 then
-                ghosts[fixtureB:getUserData().id].isChasing = false
-                ghosts[fixtureB:getUserData().id].patroling = false
-                ghosts[fixtureB:getUserData().id].trigger.fixture:destroy()
-                print('Morreu :')
-            end
-            -- End testes
-            print("Ghost health = " .. ghosts[fixtureB:getUserData().id].health)
-        end
-    end
-    
 end
