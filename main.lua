@@ -27,10 +27,10 @@ function love.keypressed(e)
         love.event.quit()
     end
     if e == 'e' then
-        if sword.body:isActive() then
-            sword.body:setActive(false)
+        if gary_sword.body:isActive() then
+            gary_sword.body:setActive(false)
         else
-            sword.body:setActive(true)
+            gary_sword.body:setActive(true)
         end
     end
 end
@@ -188,20 +188,20 @@ function love.load()
     end
 
     
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.3)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
-    BeginContactGary(fixtureA, fixtureB)
-    BeginContactGhost(fixtureA, fixtureB)
-    BeginContactValkyrie(fixtureA, fixtureB)
+    -- BeginContactGary(fixtureA, fixtureB)
     BeginContactValkyrieSword(fixtureA, fixtureB)
+    BeginContactValkyrie(fixtureA, fixtureB)
+    BeginContactGhost(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
     BeginContactArrows(fixtureA, fixtureB)
 end
 
 function EndContact(fixtureA, fixtureB)
-    EndContactGary(fixtureA, fixtureB)
+    -- EndContactGary(fixtureA, fixtureB)
     EndContactValkyrie(fixtureA, fixtureB)
 end
 
@@ -218,7 +218,7 @@ function love.update(dt)
     UpdateGhost(dt, world)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
-    UpdateValkyrieSword()
+    UpdateValkyrieSword(world)
 end
 
 function love.mousepressed(x, y, button)
