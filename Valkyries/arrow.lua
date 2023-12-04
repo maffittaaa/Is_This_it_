@@ -46,7 +46,7 @@ function UpdateValkyrieRangedAttack(world, dt)
         canShoot = false
     end
     for key, valkyrie in ipairs(valkyries) do -- arrow mechanic --key,value in ipairs
-        if canShoot and valkyrie.health > 0 and valkyrie.playerInSight == true and valkyrie.isRanging == true then
+        if canShoot and valkyrie.health > 0 and valkyrie.playerInSight == true and valkyrie.isRanging == true and valkyrie.isMeleeing == false then
             arrow = CreateArrow(world, #bullets + 1, valkyrie)
             local playerDirection = vector2.sub(gary.position, vector2.new(valkyrie.body:getPosition()))
             playerDirection = vector2.norm(playerDirection)
