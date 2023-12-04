@@ -39,10 +39,10 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setMode(1920, 1080)
+    -- love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    love.window.setFullscreen(true)
+    -- love.window.setFullscreen(true)
 
 
     sti = require "Mapa/sti"
@@ -101,7 +101,7 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
