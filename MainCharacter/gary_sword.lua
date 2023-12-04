@@ -18,7 +18,7 @@ function UpdateGaryAttack(dt)
     gary_sword.position = vector2.new(gary.body:getPosition())
     gary_sword.body:setPosition(gary.position.x - 40, gary.position.y)
 
-    local attacking = gary_sword.body:isActive()
+    local attacking = gary_sword.body:isActive() -- setting a timer for the sword activated
     if attacking then
         gary_sword.timer = gary_sword.timer + dt
         if gary_sword.timer >= gary_sword.attacktime then

@@ -20,7 +20,6 @@ end
 function UpdateValkyrieSword(world, dt)
     for i, valkyrie in ipairs(valkyries) do
         if valkyrie.isMeleeing == true and valkyrie.health > 0 then
-            -- print("ooooooooooooo")
             valkyrie.sword.position = vector2.new(valkyrie.body:getPosition())
             valkyrie.sword.body:setPosition(valkyrie.position.x - 60, valkyrie.position.y)
         end
@@ -35,16 +34,12 @@ function DrawValkyrieSword()
         if valkyrie.health > 0 and valkyrie.isMeleeing == true then
             love.graphics.draw(sprites.sword, valkyrie.body:getX() - 60, valkyrie.body:getY(),
                 valkyrie.body:getAngle(), 1, 1, sprites.sword_right:getWidth() / 2, sprites.sword_right:getHeight() / 2)
-            love.graphics.setColor(1, 0, 0)
-            love.graphics.polygon("line", valkyrie.sword.body:getWorldPoints(valkyrie.sword.shape:getPoints()))
         end
     end
 end
 
 function ProcessSwordOnPlayer(gary, sword)
-    -- printTable(gary)
     if sword.timer <= 0 then
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         gary.health = gary.health - 1
         PushGaryBack(sword.id)
         sword.timer = 1

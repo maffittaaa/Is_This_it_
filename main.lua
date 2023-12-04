@@ -88,11 +88,6 @@ function love.keypressed(e)
     end
 end
 
--- vida infinita
--- andar quick
--- no fixture
--- posições no mapa
-
 function love.load()
     love.physics.setMeter(30)
     world = love.physics.newWorld(0, 0, true)
@@ -101,7 +96,6 @@ function love.load()
     love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    --love.window.setFullscreen(true)
 
     message = CreateMessage(
     "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
@@ -145,7 +139,6 @@ function love.load()
     ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
     LoadValquiria(world, valkeries_quantity)
 
-    printTable(ghosts)
     LoadHealthBars()
     LoadCollectibles(world)
 
@@ -249,7 +242,7 @@ function love.load()
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
 end
 
-function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
+function BeginContact(fixtureA, fixtureB)
     BeginContactGary(fixtureA, fixtureB)
     BeginContactValkyrieSword(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
@@ -259,7 +252,6 @@ function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valqu
 end
 
 function EndContact(fixtureA, fixtureB)
-    EndContactGary(fixtureA, fixtureB)
     EndContactValkyrie(fixtureA, fixtureB)
 end
 
@@ -280,12 +272,6 @@ function love.update(dt)
     UpdateCollectibles(dt)
 end
 
-function love.mousepressed(x, y, button)
-    if button == 1 then
-        print(gary.position.x, gary.position.y)
-    end
-end
-
 function love.draw()
     --Call draw function of every script
     camera:attach()
@@ -295,7 +281,6 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Path"])
     gameMap:drawLayer(gameMap.layers["BUshes"])
     gameMap:drawLayer(gameMap.layers["Arvores"])
-    -- gameMap:drawLayer(gameMap.layers["Arvores e bushes"])
 
     if drawCheats == true then
         love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
