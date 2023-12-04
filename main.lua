@@ -84,7 +84,6 @@ function love.load()
     ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
     ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
     LoadValquiria(world, valkeries_quantity)
-    LoadSword(world, valkyrie)
 
     printTable(ghosts)
     LoadHealthBars()
