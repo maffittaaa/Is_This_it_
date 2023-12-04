@@ -88,20 +88,16 @@ function UpdateGary(dt)
 end
 
 function DrawGary()
-    if gary.health > 0 then
+    if gary.health > 0  and destroy_gary_fixture == false then
         local velx, vely = gary.body:getLinearVelocity()
         if velx >= 0 then
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
-            love.graphics.setColor(1, 0, 0)
-            love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
-        else
+        else 
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
         end
     elseif gary.health <= 0 then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print("LOSER! YOU ARE DEAD", 500, 500)
         if destroy_gary_fixture == false then
             gary.fixture:destroy()
             destroy_gary_fixture = true
@@ -139,7 +135,7 @@ end
 function BeginContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door = true
         end
@@ -147,7 +143,7 @@ function BeginContactGary(fixtureA, fixtureB)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerMas" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door_mas = true
         end
@@ -156,6 +152,6 @@ end
 
 function EndContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
-        
+
     end
 end

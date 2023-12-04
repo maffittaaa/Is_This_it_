@@ -22,7 +22,6 @@ posicoes = {}
 ghosts = {}
 
 function love.keypressed(e)
-
     if e == 'escape' then
         love.event.quit()
     end
@@ -55,10 +54,10 @@ function love.keypressed(e)
 
     if e == "p" then
         local strategicPositions = {}
-        strategicPositions[1] = {x = 3349, y = 1152}
-        strategicPositions[2] = {x = 2497, y = 2791}
-        strategicPositions[3] = {x = 6482, y = 4538}
-        strategicPositions[4] = {x = 900, y = 1000}
+        strategicPositions[1] = { x = 3349, y = 1152 }
+        strategicPositions[2] = { x = 2497, y = 2791 }
+        strategicPositions[3] = { x = 6482, y = 4538 }
+        strategicPositions[4] = { x = 900, y = 1000 }
 
         gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
 
@@ -104,7 +103,8 @@ function love.load()
     width = love.graphics.getWidth()
     --love.window.setFullscreen(true)
 
-    message = CreateMessage("Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
+    message = CreateMessage(
+    "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
@@ -246,7 +246,7 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
@@ -277,7 +277,7 @@ function love.update(dt)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
-    UpdateCollectibles(dt)   
+    UpdateCollectibles(dt)
 end
 
 function love.mousepressed(x, y, button)
@@ -301,7 +301,7 @@ function love.draw()
         love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(12))
-        love.graphics.print(message.message, camera.x  - 730, camera.y - 25)
+        love.graphics.print(message.message, camera.x - 730, camera.y - 25)
         love.graphics.setColor(1, 1, 1)
     end
 
