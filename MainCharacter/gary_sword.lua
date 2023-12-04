@@ -34,7 +34,4 @@ function DrawGaryAttack()
         love.graphics.draw(sprites.sword, gary_sword.body:getX(), gary_sword.body:getY(), gary_sword.body:getAngle(),
             1, 1, sprites.sword:getWidth() / 2, sprites.sword:getHeight() / 2)
     end
-    love.graphics.setColor(1,0,0)
-    love.graphics.polygon("line", gary_sword.body:getWorldPoints(gary_sword.shape:getPoints()))
-    love.graphics.setColor(1,1,1)
 end

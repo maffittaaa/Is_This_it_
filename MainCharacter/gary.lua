@@ -93,8 +93,6 @@ function DrawGary()
         if velx >= 0 then
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
-            love.graphics.setColor(1, 0, 0)
-            love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
         else
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
