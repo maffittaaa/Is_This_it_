@@ -70,21 +70,17 @@ function BeginContactArrows(fixtureA, fixtureB)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
         gary.health = gary.health - 1
-        print(fixtureB:getUserData().id)
         RemoveFromBulletsArray(fixtureB:getUserData().id)
     end
     if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "player" then
         gary.health = gary.health - 1
-        print(fixtureA:getUserData().id)
         RemoveFromBulletsArray(fixtureA:getUserData().id)
     end
 
     if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ArrowAttack" then
-        print(fixtureB:getUserData().type)
         RemoveFromBulletsArray(fixtureB:getUserData().id)
     end
     if fixtureA:getUserData().type == "ArrowAttack" and fixtureB:getUserData().type == "melee weapon" then
-        print(fixtureA:getUserData().type)
         RemoveFromBulletsArray(fixtureA:getUserData().id)
     end
 end

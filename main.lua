@@ -18,6 +18,7 @@ local success
 local wf
 local ghosts_quantity
 posicoes = {}
+ghosts = {}
 
 local enemyPostions = {}
 
@@ -32,14 +33,6 @@ function love.keypressed(e)
             gary_sword.body:setActive(true)
         end
     end
-
-    if e == 'f' then
-        camera:fade(1, { 0, 0, 0, 1 })
-    end
-
-    if e == 'g' then
-        camera:fade(1, { 0, 0, 0, 0 })
-    end
 end
 
 function love.load()
@@ -47,40 +40,54 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
-    -- love.window.setFullscreen(true)
+    --love.window.setFullscreen(true)
 
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
     --Call "load" function of every script
 
+--valquirias first Patroling Position
     posicoes[1] = { x = 3464, y = 1782 }
-    posicoes[2] = { x = 3561, y = 1643 }
-    posicoes[3] = { x = 3633, y = 1526 }
-    posicoes[4] = { x = 2960, y = 3138 }
+    posicoes[2] = { x = 2960, y = 3138 }
+
+--ghosts first Patroling Position
+    posicoes[3] = { x = 3561, y = 1643 }
+    posicoes[4] = { x = 3633, y = 1526 }
     posicoes[5] = { x = 2919, y = 2968 }
     posicoes[6] = { x = 3142, y = 2796 }
     posicoes[7] = { x = 3194, y = 2710 }
 
+--valquirias final Patroling Position
     posicoes[8] = { x = 4149, y = 1782 }
-    posicoes[9] = { x = 4149, y = 1643 }
-    posicoes[10] = { x = 4174, y = 1526 }
-    posicoes[11] = { x = 3373, y = 3138 }
+    posicoes[9] = { x = 3373, y = 3138 }
+
+--ghosts final Patroling Position
+    posicoes[10] = { x = 4149, y = 1643 }
+    posicoes[11] = { x = 4174, y = 1526 }
     posicoes[12] = { x = 3574, y = 2968 }
     posicoes[13] = { x = 3747, y = 2796 }
     posicoes[14] = { x = 3645, y = 2710 }
 
-    valkeries_quantity = #posicoes / 2
+    valkeries_quantity = 2
 
+    
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
-    LoadGhost(world, 1300, 800)
-    LoadHealthBars()
+    ghosts[1] = LoadGhost(world, posicoes[3].x, posicoes[3].y, 1)
+    ghosts[2] = LoadGhost(world, posicoes[4].x, posicoes[4].y, 2)
+    ghosts[3] = LoadGhost(world, posicoes[5].x, posicoes[5].y, 3)
+    ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
+    ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
     LoadValquiria(world, valkeries_quantity)
+    LoadSword(world, valkyrie)
+
+    printTable(ghosts)
+    LoadHealthBars()
     LoadCollectibles(world)
 
     -- make a table where the colitions will be stored --
@@ -108,6 +115,28 @@ function love.load()
         end
     end
 
+    if gameMap.layers['RioColliders'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['RioColliders'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local river = {}
+                river.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                river.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                river.fixture = love.physics.newFixture(river.body, river.shape, 1)
+                river.type = "wall"
+                river.fixture:setUserData(river)
+                river.fixture:setCategory(7)
+                river.fixture:setMask(5)
+                table.insert(walls, river)
+            end
+        end
+    end
+
     doors = {}
 
     if gameMap.layers['TriggerCabana'] then
@@ -129,7 +158,6 @@ function love.load()
                 triggerCbn.fixture:setCategory(7)
                 triggerCbn.fixture:setMask(5)
                 table.insert(doors, triggerCbn)
-                print(triggerCbn.body:getPosition())
             end
         end
     end
@@ -155,7 +183,6 @@ function love.load()
                 triggerMas.fixture:setCategory(7)
                 triggerMas.fixture:setMask(5)
                 table.insert(doorsMasmorra, triggerMas)
-                print(triggerMas.body:getPosition())
             end
         end
     end
@@ -213,12 +240,12 @@ function love.draw()
 
     DrawGary()
     DrawGaryAttack()
-    DrawHealthBars()
     DrawGhost()
     DrawValquiria(valkeries_quantity)
     DrawCollectibles()
     DrawValkyrieAttack()
     DrawValkyrieSword()
+    DrawHealthBars()
 
     for i = 1, valkeries_quantity, 1 do
         love.graphics.setColor(1, 0, 0)
