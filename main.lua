@@ -34,13 +34,12 @@ function love.keypressed(e)
     end
 
     if e == 'f' then
-        camera:fade(1, {0, 0, 0, 1})
-    end
-    
-    if e == 'g' then
-        camera:fade(1, {0, 0, 0, 0})
+        camera:fade(1, { 0, 0, 0, 1 })
     end
 
+    if e == 'g' then
+        camera:fade(1, { 0, 0, 0, 0 })
+    end
 end
 
 function love.load()
@@ -161,7 +160,7 @@ function love.load()
         end
     end
 
-    
+
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
 end
 
@@ -192,7 +191,7 @@ function love.update(dt)
     UpdateGhost(dt, world)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
-    UpdateValkyrieSword(world)
+    UpdateValkyrieSword(world, dt)
 end
 
 function love.mousepressed(x, y, button)
