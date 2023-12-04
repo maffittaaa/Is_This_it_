@@ -31,6 +31,15 @@ function love.keypressed(e)
             sword.body:setActive(true)
         end
     end
+
+    if e == 'f' then
+        camera:fade(1, {0, 0, 0, 1})
+    end
+    
+    if e == 'g' then
+        camera:fade(1, {0, 0, 0, 0})
+    end
+
 end
 
 function love.load()
@@ -99,10 +108,64 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
+    doors = {}
+
+    if gameMap.layers['TriggerCabana'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['TriggerCabana'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local triggerCbn = {}
+                triggerCbn.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                triggerCbn.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                triggerCbn.fixture = love.physics.newFixture(triggerCbn.body, triggerCbn.shape, 1)
+                triggerCbn.type = "triggerCbn"
+                triggerCbn.fixture:setSensor(true)
+                triggerCbn.fixture:setUserData(triggerCbn)
+                triggerCbn.fixture:setCategory(7)
+                triggerCbn.fixture:setMask(5)
+                table.insert(doors, triggerCbn)
+                print(triggerCbn.body:getPosition())
+            end
+        end
+    end
+
+    doorsMasmorra = {}
+
+    if gameMap.layers['TriggerMasmorra'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['TriggerMasmorra'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local triggerMas = {}
+                triggerMas.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                triggerMas.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                triggerMas.fixture = love.physics.newFixture(triggerMas.body, triggerMas.shape, 1)
+                triggerMas.type = "triggerMas"
+                triggerMas.fixture:setSensor(true)
+                triggerMas.fixture:setUserData(triggerMas)
+                triggerMas.fixture:setCategory(7)
+                triggerMas.fixture:setMask(5)
+                table.insert(doorsMasmorra, triggerMas)
+                print(triggerMas.body:getPosition())
+            end
+        end
+    end
+
+    
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.3)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
+    BeginContactGary(fixtureA, fixtureB)
     BeginContactGhost(fixtureA, fixtureB)
     BeginContactValkyrie(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
@@ -110,6 +173,7 @@ function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valqu
 end
 
 function EndContact(fixtureA, fixtureB)
+    EndContactGary(fixtureA, fixtureB)
     EndContactValkyrie(fixtureA, fixtureB)
 end
 
@@ -126,6 +190,8 @@ function love.update(dt)
     UpdateGhost(dt, world)
     UpdateValkyrieRangedAttack(world, dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
+
+    --print(camera.x, camera.y)
 end
 
 function love.mousepressed(x, y, button)
@@ -159,4 +225,5 @@ function love.draw()
         love.graphics.setColor(1, 1, 1)
     end
     camera:detach()
+    camera:draw() -- Must call this to use camera:fade!
 end

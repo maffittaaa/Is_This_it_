@@ -59,8 +59,6 @@ function LoadValquiria(world, quantity)
     valkyrie.health = 7
     valkyrie.type = "valkyrie"
     valkyrie.fixture:setUserData(valkyrie)
-    valkyrie.fixture:setCategory(6)
-    valkyrie.fixture:setMask(5)
 
     valkyrie.meleeRange = {}
     valkyrie.meleeRange.body = love.physics.newBody(world, valkyrie.body:getX(), valkyrie.body:getY(), "dynamic")
@@ -100,8 +98,6 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
     valkyries[i].rangedAttack.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
 
     valkyries[i].range = vector2.mag(vector2.sub(valkyries[i].position, playerPosition))
-
-
 
     -- print(valkyriex_patrolling)
     if valkyries[i].patroling == true then

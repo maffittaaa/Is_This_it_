@@ -39,7 +39,7 @@ end
 
 function UpdateValkyrieRangedAttack(world, dt)
     cooldown_intervalo = cooldown_intervalo + dt
-    if cooldown_intervalo > cooldown_sec then -- verify if the cooldown is done so they can shoot again
+    if cooldown_intervalo > cooldown_sec then -- verify if the cooldown is done so they can shoot again 
         canShoot = true
         cooldown_intervalo = 0
     else
@@ -67,7 +67,6 @@ function DrawValkyrieAttack()
 end
 
 function BeginContactArrows(fixtureA, fixtureB)
-    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ArrowAttack" then
         gary.health = gary.health - 1
