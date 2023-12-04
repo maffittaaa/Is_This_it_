@@ -30070,7 +30070,7 @@ return {
       type = "objectgroup",
       draworder = "topdown",
       id = 16,
-      name = "Rio",
+      name = "RioColliders",
       class = "",
       visible = true,
       opacity = 1,

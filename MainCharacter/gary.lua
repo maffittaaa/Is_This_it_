@@ -120,8 +120,8 @@ function GaryKnock(dt)
     end
 end
 
-function PushGaryBack()
-    garyDiretion = vector2.sub(gary.position, vector2.new(ghost.body:getPosition()))
+function PushGaryBack(id)
+    garyDiretion = vector2.sub(gary.position, vector2.new(ghosts[id].body:getPosition()))
     garyDiretion = vector2.norm(garyDiretion)
 
     local force = vector2.mult(garyDiretion, force)

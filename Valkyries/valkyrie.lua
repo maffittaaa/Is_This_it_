@@ -111,7 +111,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       end
 
       if valkyries[i].valkyriex_patrolling < posicoes[i + 7].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
-        valkyries[i].fixture:setSensor(false)
+        valkyries[i].fixture:setSensor(true)
       end
 
       valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling +
