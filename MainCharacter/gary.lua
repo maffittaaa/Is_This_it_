@@ -137,7 +137,7 @@ end
 function BeginContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
         if collectible_key.counter == 1 then
-            camera:fade(1, { 0, 0, 0, 1 })
+            camera:fade(1, {0, 0, 0, 1})
             repeatOnce = true
             trigger_door = true
         end
@@ -145,7 +145,7 @@ function BeginContactGary(fixtureA, fixtureB)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerMas" then
         if collectible_key.counter == 1 then
-            camera:fade(1, { 0, 0, 0, 1 })
+            camera:fade(1, {0, 0, 0, 1})
             repeatOnce = true
             trigger_door_mas = true
         end
@@ -154,6 +154,6 @@ end
 
 function EndContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
-
+        
     end
 end

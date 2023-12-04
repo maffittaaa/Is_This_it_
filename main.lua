@@ -188,7 +188,7 @@ function love.load()
     end
 
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.8)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.3)
 end
 
 function BeginContact(fixtureA, fixtureB) -- player, lista de arrow, lista valquirias, lista ghhosts, lista de todos os colisiveis separados
