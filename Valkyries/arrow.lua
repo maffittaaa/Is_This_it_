@@ -1,6 +1,5 @@
 require "Valkyries/valkyrie"
 require "MainCharacter/gary"
-require "Sprites/sprites"
 
 bullets = {}
 local cooldown_sec = 2
