@@ -42,10 +42,10 @@ function DrawCollectibles()
             1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2)
     end
     if message ~= nil then
-        love.graphics.draw(sprites.inventory, camera.x, camera.y - 600, 0, 3, 3)
+        love.graphics.draw(sprites.inventory, camera.x - 50, camera.y - 400, 0, 2, 2)
         love.graphics.setColor(0, 0, 0)
-        love.graphics.setFont(love.graphics.newFont(15))
-        love.graphics.print(message.message, camera.x + 35, camera.y - 539)
+        love.graphics.setFont(love.graphics.newFont(12))
+        love.graphics.print(message.message, camera.x - 35, camera.y - 360)
     end
 end
 
