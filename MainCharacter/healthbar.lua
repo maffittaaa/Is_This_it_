@@ -47,4 +47,6 @@ function DrawHealthBars()
             end
         end
     end
+    love.graphics.setColor(1, 1, 1)
+
 end

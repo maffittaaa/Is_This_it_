@@ -261,7 +261,14 @@ function love.update(dt)
     camera:follow(gary.body:getX(), gary.body:getY())
     camera:setFollowLerp(0.2)
     camera:setFollowLead(0)
+
     camera:setFollowStyle('TOPDOWN')
+    
+    if timer_camera > 1 then
+        camera:setFollowStyle('LOCKON')
+    end
+
+    
     UpdateHealthBars()
     UpdateGary(dt)
     UpdateGaryAttack(dt)
@@ -282,26 +289,37 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["BUshes"])
     gameMap:drawLayer(gameMap.layers["Arvores"])
 
+    gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
+    
+    if collectible_key.counter == 1 then
+        gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
+        gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
+    else
+        gameMap:drawLayer(gameMap.layers["MasmorraClosed"])
+        gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
+    end
+
+    DrawGary()
+    DrawHealthBars()
+
+
+    DrawGaryAttack()
+    DrawGhost()
+    DrawValquiria(valkeries_quantity)
+    DrawValkyrieAttack()
+    DrawValkyrieSword()
+    gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
+
+    DrawCollectibles()
+
+
+
     if drawCheats == true then
+        love.graphics.setColor(1, 1, 1)
         love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(12))
         love.graphics.print(message.message, camera.x - 730, camera.y - 25)
-        love.graphics.setColor(1, 1, 1)
-    end
-
-    DrawGary()
-    DrawGaryAttack()
-    DrawGhost()
-    DrawValquiria(valkeries_quantity)
-    DrawCollectibles()
-    DrawValkyrieAttack()
-    DrawValkyrieSword()
-    DrawHealthBars()
-
-    for i = 1, valkeries_quantity, 1 do
-        love.graphics.setColor(1, 0, 0)
-        love.graphics.circle("line", posicoes[i].x, posicoes[i].y, 30)
         love.graphics.setColor(1, 1, 1)
     end
 

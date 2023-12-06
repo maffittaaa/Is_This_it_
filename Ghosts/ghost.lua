@@ -26,6 +26,7 @@ function LoadGhost(world, x, y, i)
     ghost.timer = 2
     ghost.type = "ghost"
     ghost.id = i
+    ghost.fixture:setSensor(true)
     ghost.fixture:setUserData(ghost)
 
     ghost.ghostRange = {}
@@ -95,6 +96,7 @@ function UpdateGhost(dt, world)
                 ghosts[i].isChasing = false
             else
                 ghosts[i].isChasing = true
+                ghosts[i].fixture:setSensor(true)
             end
 
             if ghosts[i].isChasing == false then

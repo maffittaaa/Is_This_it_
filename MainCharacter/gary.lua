@@ -13,7 +13,7 @@ player_velocity = 250
 
 function LoadGary(world, x, y)
     gary.body = love.physics.newBody(world, x, y, "dynamic")
-    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 10, sprites.gary:getHeight() - 50)
+    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 25, sprites.gary:getHeight() - 10)
     gary.fixture = love.physics.newFixture(gary.body, gary.shape, 1)
     gary.maxvelocity = 200
     gary.fixture:setFriction(1)
@@ -28,6 +28,9 @@ function LoadGary(world, x, y)
 end
 
 function UpdateGary(dt)
+
+    gary.position = vector2.new(gary.body:getPosition())
+
     if repeatOnce == true then
         timer_camera = timer_camera + dt
 
@@ -64,7 +67,6 @@ function UpdateGary(dt)
     end
 
 
-    gary.position = vector2.new(gary.body:getPosition())
 
     local garyVelocity = vector2.new(0, 0)
 
@@ -93,6 +95,7 @@ function DrawGary()
         if velx >= 0 then
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
+                --love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
         else
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
