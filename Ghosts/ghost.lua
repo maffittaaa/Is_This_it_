@@ -39,6 +39,7 @@ function LoadGhost(world, x, y, i)
     ghost.trigger.fixture = love.physics.newFixture(ghost.trigger.body, ghost.trigger.shape, 2)
     ghost.trigger.fixture:setSensor(true)
     ghost.trigger.type = "attack"
+    ghost.trigger.id = ghost.id
     ghost.trigger.fixture:setUserData(ghost.trigger) -- trigger de lado
     return ghost
 end
@@ -161,45 +162,54 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-    for i = 1, #ghosts, 1 do
-        if ghosts[ghosts[i].id].isChasing == true and ghosts[ghosts[i].id].garyInSight == true then
+    for k = 1, #ghosts, 1 do
+
+
+        if ghosts[k].isChasing == true and ghosts[k].garyInSight == true then
             if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-                ghosts[ghosts[i].id].timer = 1                                                                                                   -- cooldown tipe to chase again
+                i = fixtureB:getUserData().id
+                ghosts[i].timer = 1                                                                                                   -- cooldown tipe to chase again
                 gary.health = gary.health - 1
-                PushGaryBack(ghosts[i].id)
-                if gary.health <= 0 then
-                    ghosts[ghosts[i].id].isChasing = false
-                    ghosts[ghosts[i].id].patroling = true
-                end
-            end
-        end
-        if ghosts[ghosts[i].id].isChasing == true and ghosts[ghosts[i].id].garyInSight == true then
-            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-                ghosts[i].timer = 1                                                                                                              -- cooldown tipe to chase again
-                gary.health = gary.health - 1
-                PushGaryBack(ghosts[i].id)
+                PushGaryBack(i)
                 if gary.health <= 0 then
                     ghosts[i].isChasing = false
                     ghosts[i].patroling = true
                 end
             end
         end
-        if ghosts[ghosts[i].id].health <= 4 and ghosts[ghosts[i].id].health > 0 then
-            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
-                ghosts[ghosts[i].id].health = ghosts[ghosts[i].id].health - 1
-
-                if ghosts[ghosts[i].id].health <= 0 then
-                    ghosts[ghosts[i].id].isChasing = false
-                    ghosts[ghosts[i].id].patroling = false
-                end
-            end
-            if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
-                ghosts[ghosts[i].id].health = ghosts[ghosts[i].id].health - 1
-                if ghosts[ghosts[i].id].health <= 0 then
-                    ghosts[ghosts[i].id].isChasing = false
-                    ghosts[ghosts[i].id].patroling = false
+        if ghosts[k].isChasing == true and ghosts[k].garyInSight == true then
+            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
+                i = fixtureA:getUserData().id
+                ghosts[i].timer = 1                                                                                                              -- cooldown tipe to chase again
+                gary.health = gary.health - 1
+                PushGaryBack(i)
+                if gary.health <= 0 then
+                    ghosts[i].isChasing = false
+                    ghosts[i].patroling = true
                 end
             end
         end
+        if ghosts[k].health <= 4 and ghosts[k].health > 0 then
+            if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
+                ghosts[i].health = ghosts[i].health - 1
+                i = fixtureA:getUserData().id
+                print(i)
+
+                if ghosts[i].health <= 0 then
+                    ghosts[i].isChasing = false
+                    ghosts[i].patroling = false
+                end
+            end
+            if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "attack" then -- attack from player to ghost
+                i = fixtureB:getUserData().id
+                ghosts[i].health = ghosts[i].health - 1
+                if ghosts[i].health <= 0 then
+                    ghosts[i].isChasing = false
+                    ghosts[i].patroling = false
+                end
+            end
+        end
+
+        print(k, ghosts[k].health)
     end
 end

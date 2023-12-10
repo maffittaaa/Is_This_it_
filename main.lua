@@ -34,58 +34,58 @@ function love.keypressed(e)
         end
     end
 
-    --Cheats
-    if e == "tab" then
-        if drawCheats == true then
-            drawCheats = false
-            return
-        elseif drawCheats == false then
-            drawCheats = true
-        end
-    end
+    -- --Cheats
+    -- if e == "tab" then
+    --     if drawCheats == true then
+    --         drawCheats = false
+    --         return
+    --     elseif drawCheats == false then
+    --         drawCheats = true
+    --     end
+    -- end
 
-    if e == "q" then
-        if player_velocity < 1000 then
-            player_velocity = player_velocity + 250
-        elseif player_velocity >= 1000 then
-            player_velocity = 250
-        end
-    end
+    -- if e == "q" then
+    --     if player_velocity < 1000 then
+    --         player_velocity = player_velocity + 250
+    --     elseif player_velocity >= 1000 then
+    --         player_velocity = 250
+    --     end
+    -- end
 
-    if e == "p" then
-        local strategicPositions = {}
-        strategicPositions[1] = { x = 3349, y = 1152 }
-        strategicPositions[2] = { x = 2497, y = 2791 }
-        strategicPositions[3] = { x = 6482, y = 4538 }
-        strategicPositions[4] = { x = 900, y = 1000 }
+    -- if e == "p" then
+    --     local strategicPositions = {}
+    --     strategicPositions[1] = { x = 3349, y = 1152 }
+    --     strategicPositions[2] = { x = 2497, y = 2791 }
+    --     strategicPositions[3] = { x = 6482, y = 4538 }
+    --     strategicPositions[4] = { x = 900, y = 1000 }
 
-        gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
+    --     gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
 
-        k = k + 1
+    --     k = k + 1
 
-        if k > 4 then
-            k = 1
-        end
-    end
+    --     if k > 4 then
+    --         k = 1
+    --     end
+    -- end
 
-    if e == "f" then
-        if onoff == true then
-            gary.fixture:setSensor(false)
-            onoff = false
-            return
-        elseif onoff == false then
-            gary.fixture:setSensor(true)
-            onoff = true
-        end
-    end
+    -- if e == "f" then
+    --     if onoff == true then
+    --         gary.fixture:setSensor(false)
+    --         onoff = false
+    --         return
+    --     elseif onoff == false then
+    --         gary.fixture:setSensor(true)
+    --         onoff = true
+    --     end
+    -- end
 
-    if e == "+" then
-        if invencible == false then
-            invencible = true
-        elseif invencible == true then
-            invencible = false
-        end
-    end
+    -- if e == "+" then
+    --     if invencible == false then
+    --         invencible = true
+    --     elseif invencible == true then
+    --         invencible = false
+    --     end
+    -- end
 end
 
 function love.load()
@@ -314,14 +314,14 @@ function love.draw()
 
 
 
-    if drawCheats == true then
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.setFont(love.graphics.newFont(12))
-        love.graphics.print(message.message, camera.x - 730, camera.y - 25)
-        love.graphics.setColor(1, 1, 1)
-    end
+    -- if drawCheats == true then
+    --     love.graphics.setColor(1, 1, 1)
+    --     love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
+    --     love.graphics.setColor(0, 0, 0)
+    --     love.graphics.setFont(love.graphics.newFont(12))
+    --     love.graphics.print(message.message, camera.x - 730, camera.y - 25)
+    --     love.graphics.setColor(1, 1, 1)
+    -- end
 
     camera:detach()
     camera:draw() -- Must call this to use camera:fade!
