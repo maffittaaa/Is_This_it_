@@ -1,12 +1,9 @@
-require "vector"
-
-local player
+player = {}
 local height
 local width
 
 function CreatePlayer(world)
-  player = {}
-  player.body = love.physics.newBody(world, 1800, 900,"dynamic")
+  player.body = love.physics.newBody(world, 0, 0,"dynamic")
   player.shape = love.physics.newRectangleShape(30, 60)
   player.fixture = love.physics.newFixture(player.body, player.shape, 1)
   player.maxvelocity = 200

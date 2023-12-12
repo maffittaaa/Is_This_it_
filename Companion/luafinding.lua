@@ -1,8 +1,8 @@
 
 -- Positions must be a table (or metatable) where table.x and table.y are accessible.
 
-local Vector = require( "loveExample/vector" )
-local Heap = require( "loveExample/heap" )
+local Vector = require( "Companion/vector" )
+local Heap = require( "Companion/heap" )
 
 local Luafinding = {}
 Luafinding.__index = Luafinding
