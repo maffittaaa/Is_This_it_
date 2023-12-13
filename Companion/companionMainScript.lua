@@ -9,8 +9,8 @@ end
 
 local map = {}
 
-local mapSize = 181
-screenSize = 1500
+local mapSize = 240
+screenSize = 1920
 local tileSize = screenSize / mapSize
 
 local pathAstar = nil
@@ -267,7 +267,7 @@ local timesToRun = 100
 local seed = os.clock()
 
 function LoadMap()
-    mapData = mirroredDrawing
+    mapData = originalData
     -- reads the content of the file
     --local file = io.open("loveExample/map.txt")
 
@@ -286,10 +286,12 @@ function LoadMap()
     --     end
     -- end
 
+-- mapData[y + (x - 1) * 240]
+
     for x = 1, #mapData, 1 do
         map[x] = {}
         for y = 1, 240, 1 do
-            map[x][y] = mapData[y + (x - 1) * 240]
+            map[x][y] = mapData[(y - 1) * 240 + (x%240)]
             if map[x][y] ~= 0 then
                 map[x][y] = true
             elseif map[x][y] == 0 then
