@@ -9,8 +9,8 @@ local world
 
 function love.load()
     world = love.physics.newWorld(0, 0, true)
-    love.window.setMode(screenSize, (screenSize * 9)/16 )
-
+    love.window.setMode(screenSize, screenSize )
+    --(screenSize * 9)/16
     LoadCompanion()
     CreatePlayer(world)
 end
