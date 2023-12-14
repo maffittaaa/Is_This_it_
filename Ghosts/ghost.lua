@@ -158,20 +158,20 @@ function DrawGhost()
 end
 
 function BeginContactGhost(fixtureA, fixtureB)
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        print(fixtureB:getUserData().id)
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ghost" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
         ghost = ghosts[fixtureB:getUserData().id]
+        -- print(ghosts[fixtureB:getUserData().id])
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown time to chase again
             gary.health = gary.health - 1
-            PushGaryBack(ghost)
+            PushGaryBack(fixtureB:getUserData().id)
             if gary.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = true
             end
         end
     end
-    if fixtureA:getUserData().type == "attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
+    if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
         ghost = ghosts[fixtureA:getUserData().id]
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown tipe to chase again
@@ -183,6 +183,7 @@ function BeginContactGhost(fixtureA, fixtureB)
             end
         end
     end
+    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
         ghost = ghosts[fixtureA:getUserData().id]
         if ghost.health <= 4 and ghost.health > 0 then
