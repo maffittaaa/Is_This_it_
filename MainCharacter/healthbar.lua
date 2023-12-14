@@ -31,7 +31,7 @@ function DrawHealthBars()
         end
     end
 
-    for i = 1, #ghosts, 1 do    
+    for i = 1, #ghosts, 1 do
         if ghosts[i].health <= 4 and ghosts[i].health > 0 then
             love.graphics.setColor(1, 1, 1)
             love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 70, 10)
@@ -48,5 +48,4 @@ function DrawHealthBars()
         end
     end
     love.graphics.setColor(1, 1, 1)
-
 end
