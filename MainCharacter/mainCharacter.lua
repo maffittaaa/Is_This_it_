@@ -1,6 +1,7 @@
 player = {}
 local height
 local width
+local playerVelocity = vector.new(0, 0)
 
 function CreatePlayer(world)
   player.body = love.physics.newBody(world, 0, 0,"dynamic")
@@ -14,8 +15,6 @@ end
 
 function UpdatePlayer(dt)
   player.position = vector.new(player.body:getPosition())
-
-  local playerVelocity = vector.new(0, 0)
 
   if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
     playerVelocity.x = playerVelocity.x + 250
@@ -33,7 +32,10 @@ function UpdatePlayer(dt)
     playerVelocity.y = playerVelocity.y + 250
   end
 
-  player.body:setLinearVelocity(playerVelocity.x, playerVelocity.y)
+  player.body:applyForce(playerVelocity.x, playerVelocity.y)
+  --PrintTable(player.position)
+  --PrintTable(playerVelocity)
+  playerVelocity = vector.new(0, 0)
 end
 
 function DrawPlayer()
