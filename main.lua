@@ -2,10 +2,12 @@ Vector = require ("Companion/vector")
 profile = require ("Companion/profile")
 Luafinding = require ("Companion/luafinding")
 require "Companion/companionMainScript"
-require "MainCharacter.mainCharacter"
+require "MainCharacter/mainCharacter"
 require "vector"
 
 local world
+local lowest_number
+
 
 function love.load()
     world = love.physics.newWorld(0, 0, true)
