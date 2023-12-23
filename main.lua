@@ -11,6 +11,11 @@ require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
 Camera = require "Camera/Camera"
+Vector = require ("Companion/vector")
+profile = require ("Companion/profile")
+Luafinding = require ("Companion/luafinding")
+require "Companion/companionMainScript"
+require "Companion/map"
 
 local world
 local message
@@ -142,6 +147,8 @@ function love.load()
     LoadHealthBars()
     LoadCollectibles(world)
 
+    LoadCompanion()
+
     -- make a table where the colitions will be stored --
     walls = {}
 
@@ -268,7 +275,7 @@ function love.update(dt)
         camera:setFollowStyle('LOCKON')
     end
 
-    
+    UpdateCompanion(dt)
     UpdateHealthBars()
     UpdateGary(dt)
     UpdateGaryAttack(dt)
@@ -303,6 +310,7 @@ function love.draw()
     DrawHealthBars()
 
 
+    DrawCompanion()
     DrawGaryAttack()
     DrawGhost()
     DrawValquiria(valkeries_quantity)
