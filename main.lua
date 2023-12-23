@@ -98,12 +98,12 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setMode(1920, 1080)
+    -- love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
     message = CreateMessage(
-    "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
+        "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
@@ -270,7 +270,7 @@ function love.update(dt)
     camera:setFollowLead(0)
 
     camera:setFollowStyle('TOPDOWN')
-    
+
     if timer_camera > 1 then
         camera:setFollowStyle('LOCKON')
     end
@@ -297,7 +297,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Arvores"])
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
-    
+
     if collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])

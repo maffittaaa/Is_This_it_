@@ -28,7 +28,6 @@ function LoadGary(world, x, y)
 end
 
 function UpdateGary(dt)
-
     gary.position = vector2.new(gary.body:getPosition())
 
     if repeatOnce == true then
@@ -95,7 +94,7 @@ function DrawGary()
         if velx >= 0 then
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
-                --love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
+            --love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
         else
             love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
                 -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
@@ -122,8 +121,9 @@ function GaryKnock(dt)
     end
 end
 
-function PushGaryBack(id)
-    garyDiretion = vector2.sub(gary.position, vector2.new(ghosts[id].body:getPosition()))
+function PushGaryBack(i)
+    local garyDiretion = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
+    print(ghosts[i].body:getPosition())
     garyDiretion = vector2.norm(garyDiretion)
 
     local force = vector2.mult(garyDiretion, force)
@@ -138,7 +138,7 @@ end
 function BeginContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door = true
         end
@@ -146,7 +146,7 @@ function BeginContactGary(fixtureA, fixtureB)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerMas" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door_mas = true
         end
