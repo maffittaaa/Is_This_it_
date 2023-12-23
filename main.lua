@@ -91,6 +91,10 @@ function love.keypressed(e)
             invencible = false
         end
     end
+
+    if e == "space" then
+        CompanionPath()
+    end
 end
 
 function love.load()
@@ -98,7 +102,7 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    love.window.setMode(1920, 1080)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 

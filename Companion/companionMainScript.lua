@@ -125,7 +125,7 @@ function UpdateCompanion(dt)
     
     if deltaTime > 0.1 and variable == true then
         destino = Luafinding(start, finish, map ):GetPath()[i]
-        
+        print("here")
         companionPosition = destino * tileSize
         deltaTime = 0
         i = i + 1
@@ -143,27 +143,20 @@ function CompanionPath()
     companionPosition = vector.new(start.x, start.y)
 end
 
-function love.keypressed( key )
-    if key == "escape" then
-        love.event.quit()
-    elseif key == "space" then
-        CompanionPath()
-    end
-end
+-- function love.keypressed( key )
+--     if key == "escape" then
+--         love.event.quit()
+--     elseif key == "space" then
+--         CompanionPath()
+--     end
+-- end
 
 function love.mousepressed( x, y, button )
     if button == 1 then
-        local cameraPosX, cameraPosY
+        mx, my = camera:toWorldCoords(x, y)
 
-        cameraPosX = camera.x - 1920/2
-        print(cameraPosX, x)
-        x = camera.x * x / 960
-
-        cameraPosY = camera.y - 1080/2
-        print(cameraPosY, y)
-        y = camera.y * y / 540
-        
-        print(x, y)
+        x = mx
+        y = my
 
         local hoveredTile = Vector( math.floor( x / tileSize ) + 1, math.floor( y / tileSize ) + 1 )
         if not clickedTile then
