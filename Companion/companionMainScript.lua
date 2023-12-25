@@ -3,31 +3,22 @@ function PrintTable( tbl )
         print( k, v )
     end
 end
--- local profile = require "profile"
--- local Vector = require "vector"
--- local Luafinding = require "luafinding"
 
 local map = {}
 
 local mapSize = 240
-screenSize = 1920 - (1920 * 0.2)
 local tileSize = 32
---screenSize / mapSize
 
 local pathAstar = nil
 local start = Vector( 1, 1 )
 local finish = Vector( mapSize, mapSize )
 
 local clickedTile = nil
-
-local world
-local companionPosition
-local waitFor = 0
 local deltaTime = 0
-local variable = false
+variable = false
 local i = 1
-local ones = 0
-local zeros = 0
+local companionPath = {}
+local p = 2 --p de path (que path é que o companion irá fazer)
 
 local function updatePath()
     pathAstar = Luafinding( start, finish, map ):GetPath()
@@ -37,29 +28,9 @@ local runPerformanceTest = true
 local printEveryTest = false
 local profileFromProfiler = false
 local timesToRun = 100
-local seed = os.clock()
 
 function LoadMap()
     mapData = originalData
-    -- reads the content of the file
-    --local file = io.open("loveExample/map.txt")
-
-    -- for x = 1, mapSize do
-    --     for line in file:lines() do
-    --         map[x] = {}
-    --         for y = 1, #line, 1 do
-    --             map[x][y] = line:sub(y,y)
-    --             if map[x][y] == "1" then
-    --                 map[x][y] = false
-    --             elseif map[x][y] == "0" then
-    --                 map[x][y] = true
-    --             end
-    --         end
-    --         x = x + 1
-    --     end
-    -- end
-
--- mapData[y + (x - 1) * 240]
 
     for x = 1, #mapData, 1 do
         map[x] = {}
@@ -72,18 +43,10 @@ function LoadMap()
             end
         end
     end
-
-    --file:close()
-    --print(map)
     updatePath()
 end
 
-function LoadCompanion() --AiLoad()
-    math.randomseed( seed )
-
-    companionPosition = start
-    --LoadCompanion()
-
+function LoadCompanion(world) --AiLoad()
     LoadMap()
 
     if runPerformanceTest then
@@ -116,21 +79,142 @@ function LoadCompanion() --AiLoad()
             --print( "\n\nprofile.lua report:\n" .. profile.report( 10 ) )
         end
     end
+
+    --Loading with preset coordinates for the companion
+
+    companionPath[1] = Vector(28, 37)
+    companionPath[2] = Vector(112, 42)
+    companionPath[3] = Vector(137, 46)
+    companionPath[4] = Vector(55, 68)
+    companionPath[5] = Vector(73, 143)
+    companionPath[6] = Vector(144, 127)
+    companionPath[7] = Vector(153, 147)
+    companionPath[8] = Vector(189, 104)
+    companionPath[9] = Vector(190, 92)
+    companionPath[10] = Vector(98, 80)
+    companionPath[11] = Vector(100, 122)
+    companionPath[12] = Vector(26, 153)
+    companionPath[13] = Vector(184, 71)
+    companionPath[14] = Vector(211, 113)
+    companionPath[15] = Vector(203, 146)
+
+    start = companionPath[1]
+    finish = companionPath[p]
+
+    --companion.position = vector.new((start.x * 32) - 16, (start.y * 32) - 16)
+    LoadCompanionBody(world, vector.new((start.x * 32) - 16, (start.y * 32) - 16))
 end
 
 
 function UpdateCompanion(dt)
+    UpdateCompanionBody(dt)
+
     deltaTime = deltaTime + dt
     local destino
-    
+    local chosenPath
+    chosenPath = math.random(100)
+
     if deltaTime > 0.1 and variable == true then
         destino = Luafinding(start, finish, map ):GetPath()[i]
-        print("here")
-        companionPosition = destino * tileSize
+        companion.position = vector.sub(destino * tileSize, vector.new(tileSize/2, tileSize/2))
+        --companion.body:applyForce()
+        companion.body:setPosition(companion.position.x, companion.position.y)
         deltaTime = 0
         i = i + 1
-        if i > #Luafinding(start, finish, map ):GetPath() then
+        if i > #Luafinding(start, finish, map):GetPath() then
             i = 1
+            start = finish
+
+            if p == 2 then
+
+                if chosenPath <= 50 then
+                    p = 3
+                elseif chosenPath > 50 then
+                    p = 4
+                end
+
+            elseif p == 3 then
+
+                if chosenPath <= 66 then
+                    p = 9
+                elseif chosenPath > 66 then
+                    p = 6
+                end
+
+            elseif p == 4 then
+
+                if chosenPath <= 50 then
+                    p = 10
+                elseif chosenPath > 50 then
+                    p = 5
+                end
+
+            elseif p == 5 then
+
+                if chosenPath <= 25 then
+                    p = 11
+                elseif chosenPath <= 50 then
+                    p = 12
+                elseif chosenPath > 50 then
+                    p = 6
+                end
+
+            elseif p == 6 then
+
+                if chosenPath <= 66 then
+                    p = 7
+                elseif chosenPath > 66 then
+                    p = 5
+                end
+
+            elseif p == 7 then
+
+                p = 15
+            
+            elseif p == 8 then
+
+                if chosenPath <= 66 then
+                    p = 7
+                elseif chosenPath > 66 then
+                    p = 14
+                end
+
+            elseif p == 9 then
+
+                if chosenPath <= 50 then
+                    p = 13
+                elseif chosenPath > 50 then
+                    p = 8
+                end
+
+            elseif p == 10 then
+
+                p = 5
+
+            elseif p == 11 then
+
+                p = 6
+
+            elseif p == 12 then
+
+                p = 6
+
+            elseif p == 13 then
+
+                p = 8
+
+            elseif p == 14 then
+
+                p = 7
+
+            end
+
+            print(chosenPath)
+
+            finish = companionPath[p]
+
+            PrintTable(start)
+            PrintTable(finish)
             deltaTime = 0
             variable = false
         end
@@ -138,113 +222,57 @@ function UpdateCompanion(dt)
 end
 
 function CompanionPath()
-    print("here")
     variable = true
-    companionPosition = vector.new(start.x, start.y)
+    companion.position = vector.new(start.x, start.y)
 end
-
--- function love.keypressed( key )
---     if key == "escape" then
---         love.event.quit()
---     elseif key == "space" then
---         CompanionPath()
---     end
--- end
 
 function love.mousepressed( x, y, button )
     if button == 1 then
-        mx, my = camera:toWorldCoords(x, y)
-
-        x = mx
-        y = my
+        x, y = camera:toWorldCoords(x, y)
 
         local hoveredTile = Vector( math.floor( x / tileSize ) + 1, math.floor( y / tileSize ) + 1 )
         if not clickedTile then
             clickedTile = hoveredTile
-            companionPosition = vector.new(x, y)
+            companion.position = vector.new(x, y)
             return
         end
-        
+
         start = clickedTile
         finish = hoveredTile
         
+        PrintTable(start)
+        PrintTable(finish)
+
         clickedTile = nil
         hoveredTile = nil
-        
+
         updatePath()
     end
 end
 
 function DrawCompanion() --Aidraw()
-    for x = 1, mapSize do -- iterates through the matrix and draw the elements
-        for y = 1, mapSize do
-            local fillStyle = "line"
+    -- for x = 1, mapSize do -- iterates through the matrix and draw the elements
+    --     for y = 1, mapSize do
+    --         local fillStyle = "line"
 
-            if map[x][y] == false then
-                fillStyle = "fill"
-                love.graphics.setColor(1, 0, 0)
-            else
-                love.graphics.setColor(1, 1, 1)
-                love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
-            end
-        end
-    end
+    --         if map[x][y] == false then
+    --             fillStyle = "fill"
+    --             love.graphics.setColor(1, 0, 0)
+    --         else
+    --             love.graphics.setColor(1, 1, 1)
+    --             love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
+    --         end
+    --     end
+    -- end
 
     if pathAstar then
         love.graphics.setColor( 0, 0.8, 0 )
         for _, v in ipairs( pathAstar ) do
-            love.graphics.rectangle( "fill", ( v.x - 1 ) * tileSize, ( v.y - 1 ) * tileSize, tileSize, tileSize )
+            love.graphics.circle( "fill", ( v.x - 0.5) * tileSize, ( v.y - 0.5 ) * tileSize, 5)
         end
         love.graphics.setColor( 0, 0, 0 )
-
-        --PrintTable(Luafinding( start, finish, map ):GetPath())
     end
-
-    love.graphics.setColor(0, 0, 1)
-    love.graphics.circle("fill", companionPosition.x, companionPosition.y, 20)
+    DrawCompanionBody()
+    -- love.graphics.setColor(0, 0, 1)
+    -- love.graphics.circle("fill", companion.position.x, companion.position.y, 20)
 end
-
---FUNÇÕES QUE NÃO ESTOU A USAR DE MOMENTO
-
--- local function randomizeMap()
---     for x = 1, mapSize do
---         map[x] = {}
---         for y = 1, mapSize do
---             map[x][y] = true
---         end
---     end
-
---     for _ = 1, math.random( 10, 100 ) do
---         local x = math.random( 1, mapSize - 2 )
---         local y = math.random( 1, mapSize - 2 )
-
---         if math.random() > 0.5 then
---             for n = 1, 5 do
---                 map[x][math.min( mapSize, y + n )] = false
---             end
---         else
---             for n = 1, 5 do
---                 map[math.min( mapSize, x + n )][y] = false
---             end
---         end
---     end
-
---     updatePath()
--- end
-
---LOVE.DRAW
--- love.graphics.setColor( 0.3, 0.3, 0.3 )
--- for x = 1, mapSize do
---     for y = 1, mapSize do
---         local fillStyle = "line"
-
---         love.graphics.setColor( 0.3, 0.3, 0.3 )
-
---         if not map[x][y] then
---             fillStyle = "fill"
---             love.graphics.setColor( 1, 0, 0)
---         end
-
---         love.graphics.rectangle( fillStyle, ( x - 1 ) * tileSize, ( y - 1 ) * tileSize, tileSize, tileSize )
---     end
--- end

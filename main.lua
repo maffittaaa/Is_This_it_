@@ -16,6 +16,7 @@ profile = require ("Companion/profile")
 Luafinding = require ("Companion/luafinding")
 require "Companion/companionMainScript"
 require "Companion/map"
+require "Companion/companionBody"
 
 local world
 local message
@@ -92,7 +93,7 @@ function love.keypressed(e)
         end
     end
 
-    if e == "space" then
+    if e == "space" and variable == false then
         CompanionPath()
     end
 end
@@ -141,17 +142,17 @@ function love.load()
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
+
     ghosts[1] = LoadGhost(world, posicoes[3].x, posicoes[3].y, 1)
     ghosts[2] = LoadGhost(world, posicoes[4].x, posicoes[4].y, 2)
     ghosts[3] = LoadGhost(world, posicoes[5].x, posicoes[5].y, 3)
     ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
     ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
-    LoadValquiria(world, valkeries_quantity)
 
+    LoadValquiria(world, valkeries_quantity)
     LoadHealthBars()
     LoadCollectibles(world)
-
-    LoadCompanion()
+    LoadCompanion(world)
 
     -- make a table where the colitions will be stored --
     walls = {}
@@ -312,8 +313,6 @@ function love.draw()
 
     DrawGary()
     DrawHealthBars()
-
-
     DrawCompanion()
     DrawGaryAttack()
     DrawGhost()
@@ -323,8 +322,6 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
 
     DrawCollectibles()
-
-
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
