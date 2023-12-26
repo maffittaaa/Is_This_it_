@@ -5,7 +5,7 @@ local lastPposition
 local time = 0
 local i
 
-function LoadGhost(world, x, y)
+function LoadGhost(world, x, y, i)
     local ghost = {}
 
     ghost.body = love.physics.newBody(world, x, y, "dynamic")
