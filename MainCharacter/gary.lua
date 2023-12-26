@@ -67,7 +67,7 @@ function UpdateGary(dt)
 
 
 
-    local garyVelocity = vector2.new(0, 0)
+    garyVelocity = vector2.new(0, 0)
 
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + player_velocity
@@ -122,11 +122,10 @@ function GaryKnock(dt)
 end
 
 function PushGaryBack(i)
-    local garyDiretion = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
-    print(ghosts[i].body:getPosition())
-    garyDiretion = vector2.norm(garyDiretion)
+    local garyDirection = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
+    garyDirection = vector2.norm(garyDirection)
 
-    local force = vector2.mult(garyDiretion, force)
+    local force = vector2.mult(garyDirection, force)
     gary.knockX = force.x
     gary.knockY = force.y
 end

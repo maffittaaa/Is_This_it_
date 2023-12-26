@@ -159,8 +159,7 @@ end
 
 function BeginContactGhost(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ghost" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        ghost = ghosts[fixtureB:getUserData().id]
-        -- print(ghosts[fixtureB:getUserData().id])
+        ghost = fixtureB:getUserData()
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown time to chase again
             gary.health = gary.health - 1
@@ -172,11 +171,11 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        ghost = ghosts[fixtureA:getUserData().id]
+        ghost = fixtureA:getUserData()
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown tipe to chase again
             gary.health = gary.health - 1
-            PushGaryBack(ghost)
+            PushGaryBack(fixtureA:getUserData().id)
             if gary.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = true
@@ -185,7 +184,7 @@ function BeginContactGhost(fixtureA, fixtureB)
     end
     print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
-        ghost = ghosts[fixtureA:getUserData().id]
+        ghost = fixtureA:getUserData()
         if ghost.health <= 4 and ghost.health > 0 then
             ghost.health = ghost.health - 1
 
@@ -195,7 +194,7 @@ function BeginContactGhost(fixtureA, fixtureB)
             end
         end
         if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
-            ghost = ghosts[fixtureB:getUserData().id]
+            ghost = fixtureB:getUserData()
             ghost.health = ghost.health - 1
             if ghost.health <= 0 then
                 ghost.isChasing = false
