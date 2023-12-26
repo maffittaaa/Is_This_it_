@@ -11,7 +11,7 @@ function LoadGaryAttack(world)
     gary_sword.fixture:setCategory(2)
     gary_sword.fixture:setMask(2)
     gary_sword.timer = 0
-    gary_sword.attacktime = 0.5
+    gary_sword.attacktime = 1
 end
 
 function UpdateGaryAttack(dt)
