@@ -42,13 +42,13 @@ function DrawGaryAttack()
             gary_sword.body:setPosition(gary.position.x - 40, gary.position.y)
         elseif vely > 0 then
             swordSprites = sprites.sword_down
-            gary_sword.body:setPosition(gary.position.x + 40, gary.position.y)
+            gary_sword.body:setPosition(gary.position.x, gary.position.y + 40)
         elseif vely < 0 then
             swordSprites = sprites.sword_up
-            gary_sword.body:setPosition(gary.position.x + 40, gary.position.y - 80)
+            gary_sword.body:setPosition(gary.position.x, gary.position.y - 40)
         end
 
         love.graphics.draw(swordSprites, gary_sword.body:getX(), gary_sword.body:getY(), gary.body:getAngle(),
-            1, 1, sprites.sword_right:getWidth() / 2, sprites.sword_right:getHeight() / 2)
+            1, 1, swordSprites:getWidth() / 2, swordSprites:getHeight() / 2)
     end
 end

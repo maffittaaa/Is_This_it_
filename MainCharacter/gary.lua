@@ -13,7 +13,7 @@ player_velocity = 250
 
 function LoadGary(world, x, y)
     gary.body = love.physics.newBody(world, x, y, "dynamic")
-    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 25, sprites.gary:getHeight() - 10)
+    gary.shape = love.physics.newRectangleShape(sprites.gary_idle:getWidth(), sprites.gary_idle:getHeight())
     gary.fixture = love.physics.newFixture(gary.body, gary.shape, 1)
     gary.maxvelocity = 200
     gary.fixture:setFriction(1)
@@ -90,15 +90,19 @@ end
 
 function DrawGary()
     if gary.health > 0 then
+        local garySprites = sprites.gary_idle
         local velx, vely = gary.body:getLinearVelocity()
-        if velx >= 0 then
-            love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
-                1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
-            --love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
-        else
-            love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
-                -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
+        if velx > 0 then
+            garySprites = sprites.gary_right
+        elseif velx < 0 then
+            garySprites = sprites.gary_left
+        elseif vely >= 0 then
+            garySprites = sprites.gary_idle
+        elseif vely < 0 then
+            garySprites = sprites.gary_behind
         end
+        love.graphics.draw(garySprites, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
+            1, 1, garySprites:getWidth() / 2, garySprites:getHeight() / 2)
     elseif gary.health <= 0 then
         if destroy_gary_fixture == false then
             gary.fixture:destroy()

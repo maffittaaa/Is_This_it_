@@ -1,7 +1,10 @@
 sprites = {}
 
 function LoadSprites()
-    sprites.gary = love.graphics.newImage("Sprites/gary.png")
+    sprites.gary_idle = love.graphics.newImage("Sprites/gary_idle.png")
+    sprites.gary_left = love.graphics.newImage("Sprites/gary_left.png")
+    sprites.gary_right = love.graphics.newImage("Sprites/gary_right.png")
+    sprites.gary_behind = love.graphics.newImage("Sprites/gary_behind.png")
     sprites.sword = love.graphics.newImage("Sprites/sword.png")
     sprites.sword_right = love.graphics.newImage("Sprites/sword_right.png")
     sprites.sword_up = love.graphics.newImage("Sprites/sword_up.png")
