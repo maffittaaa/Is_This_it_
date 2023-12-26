@@ -93,7 +93,7 @@ function love.keypressed(e)
         end
     end
 
-    if e == "space" and variable == false then
+    if e == "space" and walking == false then
         CompanionPath()
     end
 end
@@ -251,7 +251,7 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.5)
 end
 
 function BeginContact(fixtureA, fixtureB)

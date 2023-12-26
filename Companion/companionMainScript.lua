@@ -15,7 +15,7 @@ local finish = Vector( mapSize, mapSize )
 
 local clickedTile = nil
 local deltaTime = 0
-variable = false
+walking = false
 local i = 1
 local companionPath = {}
 local p = 2 --p de path (que path é que o companion irá fazer)
@@ -109,18 +109,47 @@ end
 function UpdateCompanion(dt)
     UpdateCompanionBody(dt)
 
-    deltaTime = deltaTime + dt
     local destino
     local chosenPath
+
+    deltaTime = deltaTime + dt
     chosenPath = math.random(100)
 
-    if deltaTime > 0.1 and variable == true then
+    if deltaTime > 0.3 and walking == true and companion.lostGary == false then
         destino = Luafinding(start, finish, map ):GetPath()[i]
+
+        local last = false
+
+        if destino == Luafinding(start, finish, map ):GetPath()[#Luafinding(start, finish, map ):GetPath()] then
+            last = true
+        end
+
+    
+
         companion.position = vector.sub(destino * tileSize, vector.new(tileSize/2, tileSize/2))
-        --companion.body:applyForce()
-        companion.body:setPosition(companion.position.x, companion.position.y)
+        local companionRealPosition = vector.new(companion.body:getPosition())
+        local destinoDistance = vector.magnitude(vector.sub(companion.position, companionRealPosition))
+        local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
+        local force = vector.mult(normForce, 100)
+
+        if i == 1 then
+            companion.body:setLinearVelocity(force.x, force.y)
+            i = i + 1
+        elseif destinoDistance > 0 then
+            companion.body:setLinearVelocity(force.x, force.y)
+            i = i + 1
+        elseif last == true then
+            if destinoDistance <= 3 then
+                i = i + 1
+                companion.body:setLinearVelocity(0, 0)
+                last = false
+            elseif destinoDistance > 3 then
+                companion.body:setLinearVelocity(force.x, force.y)
+            end
+        end
+
         deltaTime = 0
-        i = i + 1
+        
         if i > #Luafinding(start, finish, map):GetPath() then
             i = 1
             start = finish
@@ -216,13 +245,13 @@ function UpdateCompanion(dt)
             PrintTable(start)
             PrintTable(finish)
             deltaTime = 0
-            variable = false
+            walking = false
         end
     end
 end
 
 function CompanionPath()
-    variable = true
+    walking = true
     companion.position = vector.new(start.x, start.y)
 end
 

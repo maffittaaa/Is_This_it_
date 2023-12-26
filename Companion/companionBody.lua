@@ -6,6 +6,7 @@ function LoadCompanionBody(world, position)
     companion.fixture = love.physics.newFixture(companion.body, companion.shape, 1)
     companion.lostGary = false
     companion.body:setFixedRotation(true)
+    companion.fixture:setSensor(true)
     companion.position = vector2.new(companion.body:getPosition())
     companion.type = "companion"
     companion.fixture:setUserData(companion)
@@ -18,7 +19,9 @@ function UpdateCompanionBody(dt)
 
     if distanceToGary > width then
         companion.lostGary = true
+        companion.body:setLinearVelocity(0, 0)
     elseif distanceToGary > height then
+        companion.body:setLinearVelocity(0, 0)
         companion.lostGary = true
     end
 
@@ -29,5 +32,5 @@ end
 
 function DrawCompanionBody()
     love.graphics.setColor(0, 0, 1)
-    love.graphics.circle("fill", companion.position.x, companion.position.y, 20)
+    love.graphics.circle("fill", companion.body:getX(), companion.body:getY(), 20)
 end
