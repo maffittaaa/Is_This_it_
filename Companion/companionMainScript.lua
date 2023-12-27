@@ -119,7 +119,7 @@ function UpdateCompanion(dt)
     chosenPath = math.random(100)
     companionRealPosition = vector.new(companion.body:getPosition())
 
-    if deltaTime > 0.3 and walking == true and companion.lostGary == false then
+    if deltaTime > 0.33 and walking == true and companion.lostGary == false then
         destino = Luafinding(start, finish, map ):GetPath()[i]
 
         
@@ -131,7 +131,7 @@ function UpdateCompanion(dt)
 
         companion.position = vector.sub(destino * tileSize, vector.new(tileSize/2, tileSize/2))
 
-        local destinoDistance = vector.magnitude(vector.sub((destino.x - 0.5) * tileSize, companionRealPosition))
+        local destinoDistance = vector.magnitude(vector.sub(companion.position, companionRealPosition))
 
         local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
         local force = vector.mult(normForce, 100)
