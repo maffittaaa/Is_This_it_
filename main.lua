@@ -3,7 +3,7 @@ require "vector"
 require "MainCharacter/gary"
 require "Ghosts/ghost"
 require "MainCharacter/healthbar"
-require "sprites"
+require "Sprites/sprites"
 require "MainCharacter/gary_sword"
 require "MainCharacter/lives"
 require "Valkyries/valkyrie"
@@ -11,6 +11,12 @@ require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
 Camera = require "Camera/Camera"
+Vector = require ("Companion/vector")
+profile = require ("Companion/profile")
+Luafinding = require ("Companion/luafinding")
+require "Companion/companionMainScript"
+require "Companion/map"
+require "Companion/companionBody"
 
 local world
 local message
@@ -34,58 +40,62 @@ function love.keypressed(e)
         end
     end
 
-    -- --Cheats
-    -- if e == "tab" then
-    --     if drawCheats == true then
-    --         drawCheats = false
-    --         return
-    --     elseif drawCheats == false then
-    --         drawCheats = true
-    --     end
-    -- end
+    --Cheats
+    if e == "tab" then
+        if drawCheats == true then
+            drawCheats = false
+            return
+        elseif drawCheats == false then
+            drawCheats = true
+        end
+    end
 
-    -- if e == "q" then
-    --     if player_velocity < 1000 then
-    --         player_velocity = player_velocity + 250
-    --     elseif player_velocity >= 1000 then
-    --         player_velocity = 250
-    --     end
-    -- end
+    if e == "q" then
+        if player_velocity < 1000 then
+            player_velocity = player_velocity + 250
+        elseif player_velocity >= 1000 then
+            player_velocity = 250
+        end
+    end
 
-    -- if e == "p" then
-    --     local strategicPositions = {}
-    --     strategicPositions[1] = { x = 3349, y = 1152 }
-    --     strategicPositions[2] = { x = 2497, y = 2791 }
-    --     strategicPositions[3] = { x = 6482, y = 4538 }
-    --     strategicPositions[4] = { x = 900, y = 1000 }
+    if e == "p" then
+        local strategicPositions = {}
+        strategicPositions[1] = { x = 3349, y = 1152 }
+        strategicPositions[2] = { x = 2497, y = 2791 }
+        strategicPositions[3] = { x = 6482, y = 4538 }
+        strategicPositions[4] = { x = 900, y = 1000 }
 
-    --     gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
+        gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
 
-    --     k = k + 1
+        k = k + 1
 
-    --     if k > 4 then
-    --         k = 1
-    --     end
-    -- end
+        if k > 4 then
+            k = 1
+        end
+    end
 
-    -- if e == "f" then
-    --     if onoff == true then
-    --         gary.fixture:setSensor(false)
-    --         onoff = false
-    --         return
-    --     elseif onoff == false then
-    --         gary.fixture:setSensor(true)
-    --         onoff = true
-    --     end
-    -- end
+    if e == "f" then
+        if onoff == true then
+            gary.fixture:setSensor(false)
+            onoff = false
+            return
+        elseif onoff == false then
+            gary.fixture:setSensor(true)
+            onoff = true
+        end
+    end
 
-    -- if e == "+" then
-    --     if invencible == false then
-    --         invencible = true
-    --     elseif invencible == true then
-    --         invencible = false
-    --     end
-    -- end
+    if e == "+" then
+        if invencible == false then
+            invencible = true
+        elseif invencible == true then
+            invencible = false
+        end
+    end
+
+    if e == "space" and walking == false then
+        --CompanionPath()
+    end
 end
 
 function love.load()
@@ -98,7 +108,7 @@ function love.load()
     width = love.graphics.getWidth()
 
     message = CreateMessage(
-    "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
+        "Cheat Codes \n [q] = quick/change velocity \n [f] = fixture/deactivate player fixture \n [p] = position/change position \n [+] = more/invencible mode")
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
@@ -132,15 +142,17 @@ function love.load()
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
+
     ghosts[1] = LoadGhost(world, posicoes[3].x, posicoes[3].y, 1)
     ghosts[2] = LoadGhost(world, posicoes[4].x, posicoes[4].y, 2)
     ghosts[3] = LoadGhost(world, posicoes[5].x, posicoes[5].y, 3)
     ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
     ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
-    LoadValquiria(world, valkeries_quantity)
 
+    LoadValquiria(world, valkeries_quantity)
     LoadHealthBars()
     LoadCollectibles(world)
+    LoadCompanion(world)
 
     -- make a table where the colitions will be stored --
     walls = {}
@@ -239,7 +251,7 @@ function love.load()
         end
     end
 
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.5)
 end
 
 function BeginContact(fixtureA, fixtureB)
@@ -263,12 +275,12 @@ function love.update(dt)
     camera:setFollowLead(0)
 
     camera:setFollowStyle('TOPDOWN')
-    
+
     if timer_camera > 1 then
         camera:setFollowStyle('LOCKON')
     end
 
-    
+    UpdateCompanion(dt)
     UpdateHealthBars()
     UpdateGary(dt)
     UpdateGaryAttack(dt)
@@ -290,7 +302,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Arvores"])
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
-    
+
     if collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
@@ -301,8 +313,7 @@ function love.draw()
 
     DrawGary()
     DrawHealthBars()
-
-
+    DrawCompanion()
     DrawGaryAttack()
     DrawGhost()
     DrawValquiria(valkeries_quantity)
@@ -312,16 +323,14 @@ function love.draw()
 
     DrawCollectibles()
 
-
-
-    -- if drawCheats == true then
-    --     love.graphics.setColor(1, 1, 1)
-    --     love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
-    --     love.graphics.setColor(0, 0, 0)
-    --     love.graphics.setFont(love.graphics.newFont(12))
-    --     love.graphics.print(message.message, camera.x - 730, camera.y - 25)
-    --     love.graphics.setColor(1, 1, 1)
-    -- end
+    if drawCheats == true then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(12))
+        love.graphics.print(message.message, camera.x - 730, camera.y - 25)
+        love.graphics.setColor(1, 1, 1)
+    end
 
     camera:detach()
     camera:draw() -- Must call this to use camera:fade!

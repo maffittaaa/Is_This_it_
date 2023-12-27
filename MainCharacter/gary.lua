@@ -9,11 +9,32 @@ local trigger_door_mas = false
 timer_camera = 0
 local repeatOnce = true
 
-player_velocity = 250
+player_velocity = 200
 
 function LoadGary(world, x, y)
     gary.body = love.physics.newBody(world, x, y, "dynamic")
-    gary.shape = love.physics.newRectangleShape(sprites.gary:getWidth() - 25, sprites.gary:getHeight() - 10)
+
+    gary.idle = {}
+    for i = 1, 5, 1 do
+        gary.idle[i] = love.graphics.newImage("Sprites/gary_idle_" .. i .. ".png")
+        gary.shape = love.physics.newRectangleShape(gary.idle[i]:getWidth(), gary.idle[i]:getHeight())
+    end
+    
+    gary.right = {}
+    for i = 1, 5, 1 do
+        gary.right[i] = love.graphics.newImage("Sprites/gary_right_" .. i .. ".png")
+    end
+    
+    gary.left = {}
+    for i = 1, 5, 1 do
+        gary.left[i] = love.graphics.newImage("Sprites/gary_left_" .. i .. ".png")
+    end
+
+    gary.up = {}
+    for i = 1, 5, 1 do
+        gary.up[i] = love.graphics.newImage("Sprites/gary_up_" .. i .. ".png")
+    end
+    
     gary.fixture = love.physics.newFixture(gary.body, gary.shape, 1)
     gary.maxvelocity = 200
     gary.fixture:setFriction(1)
@@ -21,6 +42,8 @@ function LoadGary(world, x, y)
     gary.fixture:setCategory(2)
     gary.fixture:setMask(2)
     gary.health = 5
+    gary.animation_frame = 1
+    gary.animation_timer = 0
     gary.knockX = 0
     gary.knockY = 0
     gary.type = "player"
@@ -28,7 +51,6 @@ function LoadGary(world, x, y)
 end
 
 function UpdateGary(dt)
-
     gary.position = vector2.new(gary.body:getPosition())
 
     if repeatOnce == true then
@@ -68,22 +90,54 @@ function UpdateGary(dt)
 
 
 
-    local garyVelocity = vector2.new(0, 0)
+    garyVelocity = vector2.new(0, 0)
 
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + player_velocity
+        gary.animation_timer = gary.animation_timer + dt
+        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+            if gary.animation_frame > 4 then
+                gary.animation_frame = 1
+            end
+            gary.animation_timer = 0 -- reset the time counter
+        end
     end
 
     if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         garyVelocity.x = garyVelocity.x - player_velocity
+        gary.animation_timer = gary.animation_timer + dt
+        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+            if gary.animation_frame > 4 then
+                gary.animation_frame = 1
+            end -- animation loop
+            gary.animation_timer = 0 -- reset the time counter
+        end
     end
 
     if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
         garyVelocity.y = garyVelocity.y - player_velocity
+        gary.animation_timer = gary.animation_timer + dt
+        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+            if gary.animation_frame > 4 then
+                gary.animation_frame = 1
+            end -- animation loop
+            gary.animation_timer = 0 -- reset the time counter
+        end
     end
 
     if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
         garyVelocity.y = garyVelocity.y + player_velocity
+        gary.animation_timer = gary.animation_timer + dt
+        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+            if gary.animation_frame > 4 then
+                gary.animation_frame = 1
+            end -- animation loop
+            gary.animation_timer = 0 -- reset the time counter
+        end
     end
     GaryKnock(dt)
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
@@ -91,15 +145,19 @@ end
 
 function DrawGary()
     if gary.health > 0 then
+        local garySprites = gary.idle[gary.animation_frame]
         local velx, vely = gary.body:getLinearVelocity()
-        if velx >= 0 then
-            love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
-                1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
-                --love.graphics.polygon("line", gary.body:getWorldPoints(gary.shape:getPoints()))
-        else
-            love.graphics.draw(sprites.gary, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
-                -1, 1, sprites.gary:getWidth() / 2, sprites.gary:getHeight() / 2)
+        if velx > 0 then
+            garySprites = gary.right[gary.animation_frame]
+        elseif velx < 0 then
+            garySprites = gary.left[gary.animation_frame]
+        elseif vely >= 0 then
+            garySprites = gary.idle[gary.animation_frame]
+        elseif vely < 0 then
+            garySprites = gary.up[gary.animation_frame]
         end
+        love.graphics.draw(garySprites, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
+            1, 1, garySprites:getWidth() / 2, garySprites:getHeight() / 2)
     elseif gary.health <= 0 then
         if destroy_gary_fixture == false then
             gary.fixture:destroy()
@@ -122,11 +180,11 @@ function GaryKnock(dt)
     end
 end
 
-function PushGaryBack(id)
-    garyDiretion = vector2.sub(gary.position, vector2.new(ghosts[id].body:getPosition()))
-    garyDiretion = vector2.norm(garyDiretion)
+function PushGaryBack(i)
+    local garyDirection = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
+    garyDirection = vector2.norm(garyDirection)
 
-    local force = vector2.mult(garyDiretion, force)
+    local force = vector2.mult(garyDirection, force)
     gary.knockX = force.x
     gary.knockY = force.y
 end
@@ -138,7 +196,7 @@ end
 function BeginContactGary(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerCbn" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door = true
         end
@@ -146,7 +204,7 @@ function BeginContactGary(fixtureA, fixtureB)
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "triggerMas" then
         if collectible_key.counter == 1 then
-            camera:fade(1, {0, 0, 0, 1})
+            camera:fade(1, { 0, 0, 0, 1 })
             repeatOnce = true
             trigger_door_mas = true
         end
