@@ -20,6 +20,10 @@ local i = 1
 local companionPath = {}
 local p = 2 --p de path (que path é que o companion irá fazer)
 
+local destino
+local companionRealPosition
+
+
 local function updatePath()
     pathAstar = Luafinding( start, finish, map ):GetPath()
 end
@@ -109,26 +113,26 @@ end
 function UpdateCompanion(dt)
     UpdateCompanionBody(dt)
 
-    local destino
     local chosenPath
 
     deltaTime = deltaTime + dt
     chosenPath = math.random(100)
+    companionRealPosition = vector.new(companion.body:getPosition())
 
     if deltaTime > 0.3 and walking == true and companion.lostGary == false then
         destino = Luafinding(start, finish, map ):GetPath()[i]
 
+        
         local last = false
 
         if destino == Luafinding(start, finish, map ):GetPath()[#Luafinding(start, finish, map ):GetPath()] then
             last = true
         end
 
-    
-
         companion.position = vector.sub(destino * tileSize, vector.new(tileSize/2, tileSize/2))
-        local companionRealPosition = vector.new(companion.body:getPosition())
-        local destinoDistance = vector.magnitude(vector.sub(companion.position, companionRealPosition))
+
+        local destinoDistance = vector.magnitude(vector.sub((destino.x - 0.5) * tileSize, companionRealPosition))
+
         local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
         local force = vector.mult(normForce, 100)
 
@@ -301,7 +305,11 @@ function DrawCompanion() --Aidraw()
         end
         love.graphics.setColor( 0, 0, 0 )
     end
+
     DrawCompanionBody()
+    if destino then
+        love.graphics.circle( "fill", (destino.x - 0.5) * tileSize, (destino.y - 0.5 ) * tileSize, 5)
+    end
     -- love.graphics.setColor(0, 0, 1)
     -- love.graphics.circle("fill", companion.position.x, companion.position.y, 20)
 end
