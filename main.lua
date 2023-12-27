@@ -94,7 +94,7 @@ function love.keypressed(e)
     end
 
     if e == "space" and walking == false then
-        --CompanionPath()
+        CompanionPath()
     end
 end
 

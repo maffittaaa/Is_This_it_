@@ -120,14 +120,8 @@ function UpdateCompanion(dt)
     companionRealPosition = vector.new(companion.body:getPosition())
 
     if deltaTime > 0.33 and walking == true and companion.lostGary == false then
-        destino = Luafinding(start, finish, map ):GetPath()[i]
-
         
-        local last = false
-
-        if destino == Luafinding(start, finish, map ):GetPath()[#Luafinding(start, finish, map ):GetPath()] then
-            last = true
-        end
+        destino = Luafinding(start, finish, map ):GetPath()[i]
 
         companion.position = vector.sub(destino * tileSize, vector.new(tileSize/2, tileSize/2))
 
@@ -136,20 +130,17 @@ function UpdateCompanion(dt)
         local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
         local force = vector.mult(normForce, 100)
 
-        if i == 1 then
-            companion.body:setLinearVelocity(force.x, force.y)
-            i = i + 1
-        elseif destinoDistance > 0 then
-            companion.body:setLinearVelocity(force.x, force.y)
-            i = i + 1
-        elseif last == true then
-            if destinoDistance <= 3 then
-                i = i + 1
+        --print()
+        if i == #Luafinding(start, finish, map ):GetPath() then
+            if destinoDistance < 15 then
                 companion.body:setLinearVelocity(0, 0)
-                last = false
-            elseif destinoDistance > 3 then
+                i = i + 1  
+            elseif i <= #Luafinding(start, finish, map ):GetPath() then
                 companion.body:setLinearVelocity(force.x, force.y)
             end
+        else
+            companion.body:setLinearVelocity(force.x, force.y)
+            i = i + 1
         end
 
         deltaTime = 0
