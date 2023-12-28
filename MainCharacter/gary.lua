@@ -97,7 +97,7 @@ function UpdateGary(dt)
         gary.animation_timer = gary.animation_timer + dt
         if gary.animation_timer > 0.1 then -- when time gets to 0.1
             gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
-            if gary.animation_frame > 4 then
+            if gary.animation_frame > 5 then
                 gary.animation_frame = 1
             end
             gary.animation_timer = 0 -- reset the time counter

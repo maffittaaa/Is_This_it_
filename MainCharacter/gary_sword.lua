@@ -31,6 +31,7 @@ end
 
 
 function DrawGaryAttack()
+    love.graphics.setColor(1, 1, 1)
     if gary_sword.body:isActive() and gary.health <= 5 and gary.health > 0 then
         local swordSprites = sprites.sword_right
         local velx, vely = gary.body:getLinearVelocity()

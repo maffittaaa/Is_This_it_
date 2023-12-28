@@ -10,7 +10,7 @@ local mapSize = 240
 local tileSize = 32
 
 local pathAstar = nil
-local start = Vector( 1, 1 )
+local start = Vector(1, 1)
 local finish = Vector( mapSize, mapSize )
 
 local clickedTile = nil
@@ -132,9 +132,9 @@ function UpdateCompanion(dt)
 
         --print()
         if i == #Luafinding(start, finish, map ):GetPath() then
-            if destinoDistance < 15 then
+            if destinoDistance < 16 then
                 companion.body:setLinearVelocity(0, 0)
-                i = i + 1  
+                i = i + 1
             elseif i <= #Luafinding(start, finish, map ):GetPath() then
                 companion.body:setLinearVelocity(force.x, force.y)
             end
