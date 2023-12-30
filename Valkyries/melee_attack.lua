@@ -41,7 +41,7 @@ end
 function ProcessSwordOnPlayer(gary, sword)
     if sword.timer <= 0 then
         gary.health = gary.health - 1
-        PushGaryBack(sword.id)
+        PushGaryBackValkyries(sword.id)
         sword.timer = 1
     end
 end

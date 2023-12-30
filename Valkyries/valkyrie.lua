@@ -6,7 +6,33 @@ function LoadValquiria(world, quantity)
     valkyrie = {}
 
     valkyrie.body = love.physics.newBody(world, posicoes[i].x, posicoes[i].y, "dynamic")
-    valkyrie.shape = love.physics.newRectangleShape(sprites.valkyrie:getWidth(), sprites.valkyrie:getHeight())
+
+    valkyrie.idle = {}
+    for i = 1, 5, 1 do
+      valkyrie.idle[i] = love.graphics.newImage("Sprites/valkyrie_idle_" .. i .. ".png")
+    end
+    
+    valkyrie.right = {}
+    for i = 1, 4, 1 do
+      valkyrie.right[i] = love.graphics.newImage("Sprites/valkyrie_right_" .. i .. ".png")
+    end
+    
+    valkyrie.left = {}
+    for i = 1, 4, 1 do
+      valkyrie.left[i] = love.graphics.newImage("Sprites/valkyrie_left_" .. i .. ".png")
+    end
+
+    valkyrie.chasing_right = {}
+    for i = 1, 4, 1 do
+      valkyrie.chasing_right[i] = love.graphics.newImage("Sprites/valkyrie_chasing_right_" .. i .. ".png")
+    end
+
+    valkyrie.chasing_left = {}
+    for i = 1, 4, 1 do
+      valkyrie.chasing_left[i] = love.graphics.newImage("Sprites/valkyrie_chasing_left_" .. i .. ".png")
+    end
+
+    valkyrie.shape = love.physics.newRectangleShape(30, 60)
     valkyrie.fixture = love.physics.newFixture(valkyrie.body, valkyrie.shape, 1)
     valkyrie.maxvelocity = 200
     valkyrie.isMeleeing = false
@@ -19,6 +45,8 @@ function LoadValquiria(world, quantity)
     valkyrie.fixture:setFriction(10)
     valkyrie.body:setFixedRotation(true)
     valkyrie.position = vector2.new(valkyrie.body:getPosition())
+    valkyrie.animation_frame = 1
+    valkyrie.animation_timer = 0
     valkyrie.health = 7
     valkyrie.type = "valkyrie"
     valkyrie.fixture:setUserData(valkyrie)
@@ -126,14 +154,48 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         end
       end
     end
+    valkyrie.animation_timer = valkyrie.animation_timer + dt
+    if valkyrie.animation_timer > 0.1 then -- when time gets to 0.1
+      valkyrie.animation_frame = valkyrie.animation_frame + 1 -- increases the anim. index
+        if valkyrie.animation_frame > 4 then
+          valkyrie.animation_frame = 1
+        end -- animation loop
+        valkyrie.animation_timer = 0 -- reset the time counter
+    end
   end
 end
 
 function DrawValquiria(quantity)
   for i = 1, quantity, 1 do
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(sprites.valkyrie, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
-      1, 1, sprites.valkyrie:getWidth() / 2, sprites.valkyrie:getHeight() / 2)
+    -- if valkyries[i].patroling == true then
+    --   if valkyries[i].is_forward_backwards == 1 then
+    --     local valkyriesSprites = valkyries[i].right[valkyries[i].animation_frame]
+    --     love.graphics.setColor(1, 1, 1)
+    --     love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+    --         1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+    --   elseif valkyries[i].is_forward_backwards == -1 then
+    --     local valkyriesSprites = valkyries[i].left[valkyries[i].animation_frame]
+    --     love.graphics.setColor(1, 1, 1)
+    --     love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+    --         1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+    --   end
+    -- end
+    -- if valkyries[i].patroling == false and valkyries[i].isChasing == true then
+    --   if valkyries[i].is_forward_backwards == 1 then
+    --     local valkyriesSprites = valkyries[i].chasing_right[valkyries[i].animation_frame]
+    --     love.graphics.setColor(1, 1, 1)
+    --     love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+    --         1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+    --   elseif valkyries[i].is_forward_backwards == -1 then
+    --     local valkyriesSprites = valkyries[i].chasing_left[valkyries[i].animation_frame]
+    --     love.graphics.setColor(1, 1, 1)
+    --     love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+    --         1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+    --   end
+    -- end
+    -- love.graphics.draw(sprites.valkyrie, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
+    --   1, 1, sprites.valkyrie:getWidth() / 2, sprites.valkyrie:getHeight() / 2)
     love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(),
       valkyries[i].meleeRange.shape:getRadius())
     love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),

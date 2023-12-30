@@ -1,5 +1,5 @@
 gary = {}
-local force = 500
+local absolute_force = 500
 
 destroy_gary_fixture = false
 local inCabin = false
@@ -169,22 +169,31 @@ end
 
 function GaryKnock(dt)
     if gary.knockX > 0 then
-        gary.knockX = gary.knockX - dt * force
-    elseif gary.knockY < 0 then
-        gary.knockX = gary.knockX + dt * force
+        gary.knockX = gary.knockX - dt * absolute_force
+    elseif gary.knockX < 0 then
+        gary.knockX = gary.knockX + dt * absolute_force
     end
     if gary.knockY > 0 then
-        gary.knockY = gary.knockY - dt * force
+        gary.knockY = gary.knockY - dt * absolute_force
     elseif gary.knockY < 0 then
-        gary.knockY = gary.knockY + dt * force
+        gary.knockY = gary.knockY + dt * absolute_force
     end
 end
 
-function PushGaryBack(i)
+function PushGaryBackGhosts(i)
     local garyDirection = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
     garyDirection = vector2.norm(garyDirection)
 
-    local force = vector2.mult(garyDirection, force)
+    local force = vector2.mult(garyDirection, absolute_force)
+    gary.knockX = force.x
+    gary.knockY = force.y
+end
+
+function PushGaryBackValkyries(i)
+    local garyDirection = vector2.sub(gary.position, vector2.new(valkyries[i].body:getPosition()))
+    garyDirection = vector2.norm(garyDirection)
+
+    local force = vector2.mult(garyDirection, absolute_force)
     gary.knockX = force.x
     gary.knockY = force.y
 end
