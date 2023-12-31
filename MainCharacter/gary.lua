@@ -19,12 +19,12 @@ function LoadGary(world, x, y)
         gary.idle[i] = love.graphics.newImage("Sprites/gary_idle_" .. i .. ".png")
         gary.shape = love.physics.newRectangleShape(gary.idle[i]:getWidth(), gary.idle[i]:getHeight())
     end
-    
+
     gary.right = {}
     for i = 1, 5, 1 do
         gary.right[i] = love.graphics.newImage("Sprites/gary_right_" .. i .. ".png")
     end
-    
+
     gary.left = {}
     for i = 1, 5, 1 do
         gary.left[i] = love.graphics.newImage("Sprites/gary_left_" .. i .. ".png")
@@ -34,7 +34,7 @@ function LoadGary(world, x, y)
     for i = 1, 5, 1 do
         gary.up[i] = love.graphics.newImage("Sprites/gary_up_" .. i .. ".png")
     end
-    
+
     gary.fixture = love.physics.newFixture(gary.body, gary.shape, 1)
     gary.maxvelocity = 200
     gary.fixture:setFriction(1)
@@ -95,7 +95,7 @@ function UpdateGary(dt)
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+        if gary.animation_timer > 0.1 then                  -- when time gets to 0.1
             gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
             if gary.animation_frame > 5 then
                 gary.animation_frame = 1
@@ -107,11 +107,11 @@ function UpdateGary(dt)
     if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         garyVelocity.x = garyVelocity.x - player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then -- when time gets to 0.1
+        if gary.animation_timer > 0.1 then                  -- when time gets to 0.1
             gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
             if gary.animation_frame > 4 then
                 gary.animation_frame = 1
-            end -- animation loop
+            end                      -- animation loop
             gary.animation_timer = 0 -- reset the time counter
         end
     end
@@ -119,24 +119,24 @@ function UpdateGary(dt)
     if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
         garyVelocity.y = garyVelocity.y - player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then -- when time gets to 0.1
-            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+        if gary.animation_timer > 0.1 then
+            gary.animation_frame = gary.animation_frame + 1
             if gary.animation_frame > 4 then
                 gary.animation_frame = 1
-            end -- animation loop
-            gary.animation_timer = 0 -- reset the time counter
+            end
+            gary.animation_timer = 0
         end
     end
 
     if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
         garyVelocity.y = garyVelocity.y + player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then -- when time gets to 0.1
-            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+        if gary.animation_timer > 0.1 then
+            gary.animation_frame = gary.animation_frame + 1
             if gary.animation_frame > 4 then
                 gary.animation_frame = 1
-            end -- animation loop
-            gary.animation_timer = 0 -- reset the time counter
+            end
+            gary.animation_timer = 0
         end
     end
     GaryKnock(dt)

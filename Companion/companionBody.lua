@@ -61,16 +61,13 @@ function DrawCompanionBody()
     love.graphics.setColor(1, 1, 1)
     local companionSprites = companion.idle[companion.animation_frame]
     local velx, vely = companion.body:getLinearVelocity()
-    print(companion.body:getLinearVelocity())
     if velx > 0 then
         companionSprites = companion.right[companion.animation_frame]
     elseif velx < 0 then
         companionSprites = companion.left[companion.animation_frame]
     elseif vely > 0 and velx < 0 then
-        print("aaaaaaaaaaaaaaa")
         companionSprites = companion.idle[companion.animation_frame]
     end
-    -- print (companion.idle[companion.animation_frame])
     love.graphics.draw(companionSprites, companion.body:getX(), companion.body:getY(), companion.body:getAngle(),
-    1, 1, companionSprites:getWidth() / 2, companionSprites:getHeight() / 2)
+        1, 1, companionSprites:getWidth() / 2, companionSprites:getHeight() / 2)
 end

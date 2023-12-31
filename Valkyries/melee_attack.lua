@@ -1,27 +1,26 @@
 require "Valkyries/valkyrie"
-require "MainCharacter/gary"
+
 
 function CreateSword(world, i)
-    local sword = {}
-    sword.body = love.physics.newBody(world, valkyrie.body:getX() - 60, valkyrie.body:getY(), "dynamic")
-    sword.shape = love.physics.newRectangleShape(sprites.sword_right:getWidth(),
-        sprites.sword_right:getHeight())
-    sword.fixture = love.physics.newFixture(sword.body, sword.shape, 2)
-    sword.body:setFixedRotation(true)
-    sword.valkyrie = valkyrie
-    sword.id = i
-    sword.type = "melee weapon valkyrie"
-    sword.fixture:setSensor(true)
-    sword.fixture:setUserData(sword)
-    sword.timer = 0
-    return sword
+    local trigger = {}
+    trigger.body = love.physics.newBody(world, valkyrie.body:getX() - 30, valkyrie.body:getY(), "static")
+    trigger.shape = love.physics.newRectangleShape(40, 70)
+    trigger.fixture = love.physics.newFixture(trigger.body, trigger.shape, 2)
+    trigger.valkyrie = valkyrie
+    trigger.id = i
+    trigger.fixture:setSensor(true)
+    trigger.type = "melee weapon valkyrie"
+    trigger.fixture:setUserData(trigger) -- trigger de lado
+    trigger.timer = 0
+    return trigger
 end
 
 function UpdateValkyrieSword(world, dt)
     for i, valkyrie in ipairs(valkyries) do
-        if valkyrie.isMeleeing == true and valkyrie.health > 0 then
+        if valkyrie.isMeleeing == true and valkyrie.health > 0 and valkyrie.animation_timer_a > 0.1 then
+            sword = CreateSword(world, i)
             valkyrie.sword.position = vector2.new(valkyrie.body:getPosition())
-            valkyrie.sword.body:setPosition(valkyrie.position.x - 60, valkyrie.position.y)
+            valkyrie.sword.body:setPosition(valkyrie.position.x - 30, valkyrie.position.y)
         end
         if valkyrie.sword.timer > 0 then
             valkyrie.sword.timer = valkyrie.sword.timer - dt
@@ -31,24 +30,22 @@ end
 
 function DrawValkyrieSword()
     for key, valkyrie in ipairs(valkyries) do
-        if valkyrie.health > 0 and valkyrie.isMeleeing == true then
-            love.graphics.draw(sprites.sword, valkyrie.body:getX() - 60, valkyrie.body:getY(),
-                valkyrie.body:getAngle(), 1, 1, sprites.sword_right:getWidth() / 2, sprites.sword_right:getHeight() / 2)
+        if valkyrie.health > 0 and valkyrie.isMeleeing == true and valkyrie.animation_frame_a == 3 then
+            love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
         end
     end
 end
 
-function ProcessSwordOnPlayer(gary, sword)
-    if sword.timer <= 0 then
+function ProcessSwordOnPlayer(gary, trigger)
+    if trigger.timer <= 0 then
         gary.health = gary.health - 1
-        PushGaryBackValkyries(sword.id)
-        sword.timer = 1
+        PushGaryBackValkyries(trigger.id)
+        trigger.timer = 1
     end
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)
     if invencible == false then
-        
         if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "melee weapon valkyrie" then
             if valkyries[fixtureB:getUserData().id].isMeleeing == true then
                 ProcessSwordOnPlayer(fixtureA:getUserData(), fixtureB:getUserData())
