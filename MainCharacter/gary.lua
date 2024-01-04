@@ -155,6 +155,7 @@ function DrawGary()
     if gary.health > 0 then
         local garySprites = gary.idle[gary.animation_frame]
         local velx, vely = gary.body:getLinearVelocity()
+        print(velx, vely)
         if velx > 0 then
             garySprites = gary.right[gary.animation_frame]
         elseif velx < 0 then
@@ -170,15 +171,32 @@ function DrawGary()
 end
 
 function GaryKnock(dt)
+    local newKnock = gary.knockX
+
     if gary.knockX > 0 then
-        gary.knockX = gary.knockX - dt * absolute_force
+        newKnock = gary.knockX - dt * absolute_force
     elseif gary.knockX < 0 then
-        gary.knockX = gary.knockX + dt * absolute_force
+        newKnock = gary.knockX + dt * absolute_force
     end
+
+    if gary.knockX * newKnock > 0 then
+        gary.knockX = newKnock
+    else
+        gary.knockX = 0
+    end
+
+    newKnock = gary.knockY
+
     if gary.knockY > 0 then
-        gary.knockY = gary.knockY - dt * absolute_force
+        newKnock = gary.knockY - dt * absolute_force
     elseif gary.knockY < 0 then
-        gary.knockY = gary.knockY + dt * absolute_force
+        newKnock = gary.knockY + dt * absolute_force
+    end
+
+    if gary.knockY * newKnock > 0 then
+        gary.knockY = newKnock
+    else
+        gary.knockY = 0
     end
 end
 
@@ -191,8 +209,8 @@ function PushGaryBackGhosts(i)
     gary.knockY = force.y
 end
 
-function PushGaryBackValkyries(i)
-    local garyDirection = vector2.sub(gary.position, vector2.new(valkyries[i].body:getPosition()))
+function PushGaryBackValkyries(valkyrie)
+    local garyDirection = vector2.sub(gary.position, vector2.new(valkyrie.body:getPosition()))
     garyDirection = vector2.norm(garyDirection)
 
     local force = vector2.mult(garyDirection, absolute_force)

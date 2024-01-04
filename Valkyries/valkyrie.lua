@@ -88,7 +88,7 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
     valkyrie.rangedAttack.parent = i
 
-    valkyrie.sword = CreateSword(world, valkyrie.meleeRange.parent)
+    valkyrie.trigger = CreateSword(world, valkyrie)
 
     table.insert(valkyries, i, valkyrie)
   end
@@ -193,6 +193,10 @@ end
 function DrawValquiria(quantity)
   for i = 1, quantity, 1 do
     love.graphics.setColor(1, 1, 1)
+    love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(),
+    valkyries[i].meleeRange.shape:getRadius())
+    love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),
+    valkyries[i].rangedAttack.shape:getRadius())
     if valkyries[i].patroling == true then
       if valkyries[i].is_forward_backwards == 1 then
         local valkyriesSprites = valkyries[i].patrolling_right[valkyries[i].animation_frame_b]
@@ -253,17 +257,6 @@ function DrawValquiria(quantity)
         love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
           valkyries[i].body:getAngle(), 1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
       end
-      -- -- love.graphics.draw(sprites.valkyrie, valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].body:getAngle(),
-      -- --   1, 1, sprites.valkyrie:getWidth() / 2, sprites.valkyrie:getHeight() / 2)
-      love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(),
-        valkyries[i].meleeRange.shape:getRadius())
-      love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),
-        valkyries[i].rangedAttack.shape:getRadius())
-
-      -- if valkyries[i].isChasing == false and valkyries[i].lastPposition ~= nil and valkyries[i].patroling == false then
-      --   love.graphics.line(valkyries[i].body:getX(), valkyries[i].body:getY(), valkyries[i].lastPposition.x,
-      --     valkyries[i].lastPposition.y)
-      -- end
     end
   end
 end

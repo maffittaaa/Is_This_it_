@@ -317,12 +317,12 @@ function love.draw()
     DrawCompanion()
     DrawGaryAttack()
     DrawGhost()
+    DrawCollectibles()
     DrawValquiria(valkeries_quantity)
     DrawValkyrieAttack()
     DrawValkyrieSword()
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
 
-    DrawCollectibles()
     DrawHearts()
 
     if drawCheats == true then
