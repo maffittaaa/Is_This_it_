@@ -38,7 +38,7 @@ end
 
 function ProcessSwordOnPlayer(gary, trigger)
     if trigger.timer <= 0 then
-        gary.health = gary.health - 1
+        gary.health = gary.health - 0.5
         PushGaryBackValkyries(trigger.id)
         trigger.timer = 1
     end

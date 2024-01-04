@@ -10,6 +10,7 @@ require "Valkyries/valkyrie"
 require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
+require "UI/lives"
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
 profile = require("Companion/profile")
@@ -322,6 +323,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
 
     DrawCollectibles()
+    DrawHearts()
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
@@ -330,8 +332,6 @@ function love.draw()
         love.graphics.setFont(love.graphics.newFont(12))
         love.graphics.print(message.message, camera.x - 730, camera.y - 25)
         love.graphics.setColor(1, 1, 1)
-        -- love.graphics.draw(sprites.diary, camera.x + 160, camera.y - 50, 0, 4 , 3)
-
     end
 
     camera:detach()
