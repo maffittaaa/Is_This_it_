@@ -257,15 +257,11 @@ function love.mousepressed( x, y, button )
         local hoveredTile = Vector( math.floor( x / tileSize ) + 1, math.floor( y / tileSize ) + 1 )
         if not clickedTile then
             clickedTile = hoveredTile
-            companion.position = vector.new(x, y)
             return
         end
 
-        start = clickedTile
-        finish = hoveredTile
-        
-        PrintTable(start)
-        PrintTable(finish)
+        PrintTable(clickedTile)
+        PrintTable(hoveredTile)
 
         clickedTile = nil
         hoveredTile = nil

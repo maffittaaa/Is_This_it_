@@ -53,6 +53,10 @@ end
 function UpdateGary(dt)
     gary.position = vector2.new(gary.body:getPosition())
 
+    if invencible then
+        gary.health = 5
+    end
+
     if repeatOnce == true then
         timer_camera = timer_camera + dt
 

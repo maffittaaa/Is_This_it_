@@ -42,12 +42,7 @@ function love.keypressed(e)
 
     --Cheats
     if e == "tab" then
-        if drawCheats == true then
-            drawCheats = false
-            return
-        elseif drawCheats == false then
-            drawCheats = true
-        end
+      drawCheats = not drawCheats
     end
 
     if e == "q" then
@@ -86,11 +81,7 @@ function love.keypressed(e)
     end
 
     if e == "+" then
-        if invencible == false then
-            invencible = true
-        elseif invencible == true then
-            invencible = false
-        end
+      invencible = not invencible
     end
 
     if e == "space" and walking == false then

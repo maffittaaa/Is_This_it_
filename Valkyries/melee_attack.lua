@@ -45,17 +45,15 @@ function ProcessSwordOnPlayer(gary, trigger)
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)
-    if invencible == false then
-        if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "melee weapon valkyrie" then
-            if valkyries[fixtureB:getUserData().id].isMeleeing == true then
-                ProcessSwordOnPlayer(fixtureA:getUserData(), fixtureB:getUserData())
-            end
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "melee weapon valkyrie" then
+        if valkyries[fixtureB:getUserData().id].isMeleeing == true then
+            ProcessSwordOnPlayer(fixtureA:getUserData(), fixtureB:getUserData())
         end
+    end
 
-        if fixtureA:getUserData().type == "melee weapon valkyrie" and fixtureB:getUserData().type == "player" then
-            if valkyries[fixtureA:getUserData().id].isMeleeing == true then
-                ProcessSwordOnPlayer(fixtureB:getUserData(), fixtureA:getUserData())
-            end
+    if fixtureA:getUserData().type == "melee weapon valkyrie" and fixtureB:getUserData().type == "player" then
+        if valkyries[fixtureA:getUserData().id].isMeleeing == true then
+            ProcessSwordOnPlayer(fixtureB:getUserData(), fixtureA:getUserData())
         end
     end
 end
