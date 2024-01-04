@@ -22,6 +22,12 @@ function UpdateHealthBars()
     end
 
     healthbar.gary = vector2.new(gary.body:getX() - 35, gary.body:getY() - 60)
+    for i = #healthbar, 1, -1 do
+        local num = healthbar[i]
+        if num == 1 and num == 2 then
+            table.remove(healthbar, i)
+        end
+    end
 end
 
 function DrawHealthBars()

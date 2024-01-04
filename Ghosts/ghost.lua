@@ -102,9 +102,9 @@ function UpdateGhost(dt, world)
                     ghosts[i].is_forward_backwards = 1
                 end
 
-                
+
                 ghosts[i].ghostx_patrolling = ghosts[i].ghostx_patrolling + (dt * 200 * ghosts[i].is_forward_backwards)
-                
+
                 if posicoes[i + 2].y - 5 < ghosts[i].body:getY() and ghosts[i].body:getY() < posicoes[i + 2].y + 5 then
                     ghosts[i].body:setPosition(ghosts[i].position.x, posicoes[i + 2].y)
                 elseif ghosts[i].body:getY() > posicoes[i + 2].y then
@@ -112,7 +112,7 @@ function UpdateGhost(dt, world)
                 elseif ghosts[i].body:getY() < posicoes[i + 2].y then
                     ghosts[i].body:setLinearVelocity(0, 200)
                 end
-                
+
                 ghosts[i].body:setPosition(ghosts[i].ghostx_patrolling, ghosts[i].body:getY())
             elseif ghosts[i].garyInSight == true then
                 --check again if gary in sight
@@ -150,12 +150,11 @@ function UpdateGhost(dt, world)
                     garyDiretion = vector2.norm(garyDiretion)
                     local force = vector2.mult(garyDiretion, 200)
                     ghosts[i].body:setLinearVelocity(force.x, force.y)
-                    
                 end
             end
 
             ghosts[i].animation_timer = ghosts[i].animation_timer + dt
-            if ghosts[i].animation_timer > 0.1 then -- when time gets to 0.1
+            if ghosts[i].animation_timer > 0.1 then                       -- when time gets to 0.1
                 ghosts[i].animation_frame = ghosts[i].animation_frame + 1 -- increases the anim. index
                 if ghosts[i].animation_frame > 4 then
                     ghosts[i].animation_frame = 1
@@ -164,8 +163,6 @@ function UpdateGhost(dt, world)
             end
 
             if ghosts[i].health <= 0 then
-                ghosts[i].isChasing = false
-                ghosts[i].patroling = false
                 ghosts[i].fixture:destroy()
                 ghosts[i].trigger.fixture:destroy()
                 ghosts[i].body:destroy()
@@ -184,30 +181,35 @@ function DrawGhost()
                     if ghosts[i].is_forward_backwards == 1 then
                         local ghostsSprites = ghosts[i].right[ghosts[i].animation_frame]
                         love.graphics.setColor(1, 1, 1)
-                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(), ghosts[i].body:getAngle(),
+                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(),
+                            ghosts[i].body:getAngle(),
                             1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
                     elseif ghosts[i].is_forward_backwards == -1 then
                         local ghostsSprites = ghosts[i].left[ghosts[i].animation_frame]
                         love.graphics.setColor(1, 1, 1)
-                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(), ghosts[i].body:getAngle(),
+                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(),
+                            ghosts[i].body:getAngle(),
                             1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
                     end
                 end
                 if ghosts[i].patroling == false and ghosts[i].isChasing == true then
                     if ghosts[i].is_forward_backwards == 1 then
                         local ghostsSprites = ghosts[i].chasing_right[ghosts[i].animation_frame]
-                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(), ghosts[i].body:getAngle(),
-                        1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
+                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(),
+                            ghosts[i].body:getAngle(),
+                            1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
                     elseif ghosts[i].is_forward_backwards == -1 then
                         local ghostsSprites = ghosts[i].chasing_left[ghosts[i].animation_frame]
-                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(), ghosts[i].body:getAngle(),
-                        1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
+                        love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(),
+                            ghosts[i].body:getAngle(),
+                            1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
                     end
                 end
                 if ghosts[i].garyInSight == true and ghosts[i].patroling == false and ghosts[i].isChasing == false then
                     local ghostsSprites = ghosts[i].gary_in_sight[ghosts[i].animation_frame]
                     love.graphics.setColor(1, 1, 1)
-                    love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(), ghosts[i].body:getAngle(),
+                    love.graphics.draw(ghostsSprites, ghosts[i].body:getX(), ghosts[i].body:getY(),
+                        ghosts[i].body:getAngle(),
                         1, 1, ghostsSprites:getWidth() / 2, ghostsSprites:getHeight() / 2)
                 end
 
@@ -224,7 +226,7 @@ function BeginContactGhost(fixtureA, fixtureB)
         ghost = fixtureB:getUserData()
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown time to chase again
-            gary.health = gary.health - 1
+            gary.health = gary.health - 0.5
             PushGaryBackGhosts(fixtureB:getUserData().id)
             if gary.health <= 0 then
                 ghost.isChasing = false
@@ -236,7 +238,7 @@ function BeginContactGhost(fixtureA, fixtureB)
         ghost = fixtureA:getUserData()
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown tipe to chase again
-            gary.health = gary.health - 1
+            gary.health = gary.health - 0.5
             PushGaryBack(fixtureA:getUserData().id)
             if gary.health <= 0 then
                 ghost.isChasing = false
@@ -248,7 +250,7 @@ function BeginContactGhost(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
         ghost = fixtureA:getUserData()
         if ghost.health <= 4 and ghost.health > 0 then
-            ghost.health = ghost.health - 1
+            ghost.health = ghost.health - 0.5
 
             if ghost.health <= 0 then
                 ghost.isChasing = false
@@ -257,7 +259,7 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
         if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
             ghost = fixtureB:getUserData()
-            ghost.health = ghost.health - 1
+            ghost.health = ghost.health - 0.5
             if ghost.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = false

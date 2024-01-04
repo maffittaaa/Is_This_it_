@@ -10,7 +10,7 @@ function CreateSword(world, i)
     trigger.id = i
     trigger.fixture:setSensor(true)
     trigger.type = "melee weapon valkyrie"
-    trigger.fixture:setUserData(trigger) -- trigger de lado
+    trigger.fixture:setUserData(trigger)
     trigger.timer = 0
     return trigger
 end
@@ -38,7 +38,7 @@ end
 
 function ProcessSwordOnPlayer(gary, trigger)
     if trigger.timer <= 0 then
-        gary.health = gary.health - 1
+        gary.health = gary.health - 0.5
         PushGaryBackValkyries(trigger.id)
         trigger.timer = 1
     end

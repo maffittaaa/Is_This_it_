@@ -99,24 +99,24 @@ function UpdateGary(dt)
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         garyVelocity.x = garyVelocity.x + player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then                  -- when time gets to 0.1
-            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+        if gary.animation_timer > 0.1 then
+            gary.animation_frame = gary.animation_frame + 1
             if gary.animation_frame > 5 then
                 gary.animation_frame = 1
             end
-            gary.animation_timer = 0 -- reset the time counter
+            gary.animation_timer = 0
         end
     end
 
     if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         garyVelocity.x = garyVelocity.x - player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then                  -- when time gets to 0.1
-            gary.animation_frame = gary.animation_frame + 1 -- increases the anim. index
+        if gary.animation_timer > 0.1 then 
+            gary.animation_frame = gary.animation_frame + 1
             if gary.animation_frame > 4 then
                 gary.animation_frame = 1
-            end                      -- animation loop
-            gary.animation_timer = 0 -- reset the time counter
+            end
+            gary.animation_timer = 0
         end
     end
 
@@ -145,6 +145,14 @@ function UpdateGary(dt)
     end
     GaryKnock(dt)
     gary.body:setLinearVelocity(gary.knockX + garyVelocity.x, gary.knockY + garyVelocity.y)
+
+    if gary.health <= 0 then
+        if destroy_gary_fixture == false then
+            gary.fixture:destroy()
+            destroy_gary_fixture = true
+        end
+        gary.body:setLinearVelocity(0, 0)
+    end
 end
 
 function DrawGary()
@@ -162,12 +170,6 @@ function DrawGary()
         end
         love.graphics.draw(garySprites, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
             1, 1, garySprites:getWidth() / 2, garySprites:getHeight() / 2)
-    elseif gary.health <= 0 then
-        if destroy_gary_fixture == false then
-            gary.fixture:destroy()
-            destroy_gary_fixture = true
-        end
-        gary.body:setLinearVelocity(0, 0)
     end
 end
 

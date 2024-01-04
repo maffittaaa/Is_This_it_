@@ -5,11 +5,12 @@ require "Ghosts/ghost"
 require "MainCharacter/healthbar"
 require "Sprites/sprites"
 require "MainCharacter/gary_sword"
-require "MainCharacter/lives"
+require "MainCharacter/collectibles"
 require "Valkyries/valkyrie"
 require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
+require "UI/lives"
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
 profile = require("Companion/profile")
@@ -313,6 +314,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
 
     DrawCollectibles()
+    DrawHearts()
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
