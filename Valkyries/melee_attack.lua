@@ -10,7 +10,7 @@ function CreateSword(world, i)
     trigger.id = i
     trigger.fixture:setSensor(true)
     trigger.type = "melee weapon valkyrie"
-    trigger.fixture:setUserData(trigger) -- trigger de lado
+    trigger.fixture:setUserData(trigger)
     trigger.timer = 0
     return trigger
 end

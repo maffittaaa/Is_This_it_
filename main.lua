@@ -5,7 +5,7 @@ require "Ghosts/ghost"
 require "MainCharacter/healthbar"
 require "Sprites/sprites"
 require "MainCharacter/gary_sword"
-require "MainCharacter/lives"
+require "MainCharacter/collectibles"
 require "Valkyries/valkyrie"
 require "Valkyries/arrow"
 require "Valkyries/melee_attack"
@@ -330,6 +330,8 @@ function love.draw()
         love.graphics.setFont(love.graphics.newFont(12))
         love.graphics.print(message.message, camera.x - 730, camera.y - 25)
         love.graphics.setColor(1, 1, 1)
+        -- love.graphics.draw(sprites.diary, camera.x + 160, camera.y - 50, 0, 4 , 3)
+
     end
 
     camera:detach()

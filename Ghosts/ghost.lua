@@ -164,8 +164,6 @@ function UpdateGhost(dt, world)
             end
 
             if ghosts[i].health <= 0 then
-                ghosts[i].isChasing = false
-                ghosts[i].patroling = false
                 ghosts[i].fixture:destroy()
                 ghosts[i].trigger.fixture:destroy()
                 ghosts[i].body:destroy()
