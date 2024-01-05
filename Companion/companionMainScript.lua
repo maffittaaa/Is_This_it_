@@ -287,20 +287,20 @@ function love.mousepressed( x, y, button )
 end
 
 function DrawCompanion() --Aidraw()
-    for x = 1, mapSize do -- iterates through the matrix and draw the elements
-        for y = 1, mapSize do
-            local fillStyle = "line"
+    -- for x = 1, mapSize do -- iterates through the matrix and draw the elements
+    --     for y = 1, mapSize do
+    --         local fillStyle = "line"
 
-            if map[x][y] == false then
-                fillStyle = "fill"
-                love.graphics.setColor(1, 0, 0)
-                love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
-            else
-                love.graphics.setColor(1, 1, 1)
-                love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
-            end
-        end
-    end
+    --         if map[x][y] == false then
+    --             fillStyle = "fill"
+    --             love.graphics.setColor(1, 0, 0)
+    --             love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
+    --         else
+    --             love.graphics.setColor(1, 1, 1)
+    --             love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
+    --         end
+    --     end
+    -- end
 
     if pathAstar then
         love.graphics.setColor( 0, 0.8, 0 )
