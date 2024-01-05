@@ -87,9 +87,9 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.type = "RangedAttack"
     valkyrie.rangedAttack.fixture:setUserData(valkyrie.rangedAttack)
     valkyrie.rangedAttack.parent = i
-
+    
     valkyrie.trigger = CreateSword(world, valkyrie)
-
+    
     table.insert(valkyries, i, valkyrie)
   end
 end
@@ -101,46 +101,46 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
 
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
-
+    
     valkyries[i].meleeRange.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
     valkyries[i].rangedAttack.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
-
+    
     valkyries[i].range = vector2.mag(vector2.sub(valkyries[i].position, playerPosition))
-
+    
     if valkyries[i].patroling == true then
       --If not in Sight, Patrol
       valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
-
+      
       if valkyries[i].valkyriex_patrolling >= posicoes[i + 7].x then
         valkyries[i].is_forward_backwards = -1
       elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
         valkyries[i].is_forward_backwards = 1
       end
-
+      
       if valkyries[i].valkyriex_patrolling < posicoes[i + 7].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
         valkyries[i].fixture:setSensor(true)
       end
-
+      
       valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling +
           (dt * 200 * valkyries[i].is_forward_backwards)
-
-      if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
+          
+          if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
         valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
       elseif valkyries[i].body:getY() > posicoes[i].y then
         valkyries[i].body:setLinearVelocity(0, -200)
       elseif valkyries[i].body:getY() < posicoes[i].y then
         valkyries[i].body:setLinearVelocity(0, 200)
       end
-
+      
       valkyries[i].body:setPosition(valkyries[i].valkyriex_patrolling, valkyries[i].body:getY())
     elseif valkyries[i].playerInSight == true then
       if valkyries[i].isRanging == true then
         valkyries[i].fixture:setSensor(true)
-
+        
         --stop velocity, while in rangedAttack
         time = 0
         valkyries[i].lastPposition = playerPosition
-
+        
         if valkyries[i].isMeleeing == true then
           local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
           playerDiretion = vector2.norm(playerDiretion)
@@ -152,10 +152,10 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
         --if not meleeAttacking, do rangedAttack
       elseif valkyries[i].isRanging == false then
         --go to last location of player
-
+        
         local lastPos = vector2.mag(vector2.sub(valkyries[i].position, valkyries[i].lastPposition))
-
-
+        
+        
         if lastPos < 1 then
           time = time + dt
           valkyries[i].body:setLinearVelocity(0, 0)
@@ -176,6 +176,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
     end
   end
 end
+
 
 function DrawValquiria(quantity)
   for i = 1, quantity, 1 do
