@@ -97,7 +97,7 @@ end
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
 
   UpdateAnimations(dt, quantity)
-  
+
   for i = 1, quantity, 1 do
 
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
