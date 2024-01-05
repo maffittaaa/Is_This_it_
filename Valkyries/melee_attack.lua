@@ -19,13 +19,10 @@ end
 function UpdateValkyrieSword(world, dt)
     for i, valkyrie in ipairs(valkyries) do
         if valkyrie.isMeleeing and valkyrie.health > 0 then
-            --sword = CreateSword(world, i)
             local valkyriePosition = vector2.new(valkyrie.body:getPosition())
             valkyrie.trigger.body:setPosition(valkyriePosition.x - 30, valkyriePosition.y)
-           -- if valkyrie.sword.timer > 0 then
-           --     valkyrie.sword.timer = valkyrie.sword.timer - dt
                 if valkyrie.animation_frame_a == 3 then
-                    valkyrie.trigger.body:setActive(true)
+                    valkyrie.trigger.body:setActive(true) -- set the trigger active in the last frame
                 else
                     valkyrie.trigger.body:setActive(false)
                 end
@@ -37,7 +34,7 @@ end
 
 function DrawValkyrieSword()
     for key, valkyrie in ipairs(valkyries) do
-        if valkyrie.health > 0 and valkyrie.isMeleeing == true then
+        if valkyrie.health > 0 and valkyrie.isMeleeing == true and valkyrie.trigger.body:isActive() then
             love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
         end
     end
