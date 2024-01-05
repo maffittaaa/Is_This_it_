@@ -118,8 +118,10 @@ function UpdateGhost(dt, world)
                 --check again if gary in sight
                 if ghosts[i].range > 300 then
                     ghosts[i].isChasing = false
+                    ghosts[i].fixture:setSensor(true)
                 else
                     ghosts[i].isChasing = true
+                    ghosts[i].fixture:setSensor(false)
                 end
 
                 if ghosts[i].isChasing == false then

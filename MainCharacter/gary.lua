@@ -159,7 +159,7 @@ function DrawGary()
     if gary.health > 0 then
         local garySprites = gary.idle[gary.animation_frame]
         local velx, vely = gary.body:getLinearVelocity()
-        print(velx, vely)
+        --print(velx, vely)
         if velx > 0 then
             garySprites = gary.right[gary.animation_frame]
         elseif velx < 0 then

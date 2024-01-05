@@ -36,14 +36,28 @@ local timesToRun = 100
 function LoadMap()
     mapData = originalData
 
+    local walkablePath = {
+        84
+    }
+    
     for x = 1, #mapData, 1 do
         map[x] = {}
         for y = 1, 240, 1 do
             map[x][y] = mapData[(y - 1) * 240 + (x%240)]
-            if map[x][y] ~= 0 then
-                map[x][y] = true
-            elseif map[x][y] == 0 then
-                map[x][y] = false
+            v = 1
+            while v > 0 do
+                if map[x][y] == walkablePath[v] then
+                    map[x][y] = true
+                    v = 0
+                
+                elseif map[x][y] ~= walkablePath[v] then
+                    v = v + 1
+
+                    if v > #walkablePath then
+                        map[x][y] = false
+                        v = 0
+                    end
+                end
             end
         end
     end
@@ -90,7 +104,7 @@ function LoadCompanion(world) --AiLoad()
     companionPath[2] = Vector(112, 42)
     companionPath[3] = Vector(137, 46)
     companionPath[4] = Vector(55, 68)
-    companionPath[5] = Vector(73, 143)
+    companionPath[5] = Vector(72, 143)
     companionPath[6] = Vector(144, 127)
     companionPath[7] = Vector(153, 147)
     companionPath[8] = Vector(189, 104)
@@ -119,7 +133,7 @@ function UpdateCompanion(dt)
     chosenPath = math.random(100)
     companionRealPosition = vector.new(companion.body:getPosition())
 
-    if deltaTime > 0.33 and walking == true and companion.lostGary == false then
+    if deltaTime > 0.22 and walking == true and companion.lostGary == false then
         
         destino = Luafinding(start, finish, map ):GetPath()[i]
 
@@ -128,7 +142,7 @@ function UpdateCompanion(dt)
         local destinoDistance = vector.magnitude(vector.sub(companion.position, companionRealPosition))
 
         local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
-        local force = vector.mult(normForce, 100)
+        local force = vector.mult(normForce, 150)
 
         --print()
         if i == #Luafinding(start, finish, map ):GetPath() then
@@ -233,7 +247,7 @@ function UpdateCompanion(dt)
 
             end
 
-            print(chosenPath)
+            print(p)
 
             finish = companionPath[p]
 
@@ -243,6 +257,8 @@ function UpdateCompanion(dt)
             walking = false
         end
     end
+
+    updatePath()
 end
 
 function CompanionPath()
@@ -271,19 +287,20 @@ function love.mousepressed( x, y, button )
 end
 
 function DrawCompanion() --Aidraw()
-    -- for x = 1, mapSize do -- iterates through the matrix and draw the elements
-    --     for y = 1, mapSize do
-    --         local fillStyle = "line"
+    for x = 1, mapSize do -- iterates through the matrix and draw the elements
+        for y = 1, mapSize do
+            local fillStyle = "line"
 
-    --         if map[x][y] == false then
-    --             fillStyle = "fill"
-    --             love.graphics.setColor(1, 0, 0)
-    --         else
-    --             love.graphics.setColor(1, 1, 1)
-    --             love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
-    --         end
-    --     end
-    -- end
+            if map[x][y] == false then
+                fillStyle = "fill"
+                love.graphics.setColor(1, 0, 0)
+                love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
+            else
+                love.graphics.setColor(1, 1, 1)
+                love.graphics.rectangle(fillStyle, (x - 1) * tileSize, (y - 1) * tileSize, tileSize, tileSize)
+            end
+        end
+    end
 
     if pathAstar then
         love.graphics.setColor( 0, 0.8, 0 )
@@ -291,6 +308,10 @@ function DrawCompanion() --Aidraw()
             love.graphics.circle( "fill", ( v.x - 0.5) * tileSize, ( v.y - 0.5 ) * tileSize, 5)
         end
         love.graphics.setColor( 0, 0, 0 )
+    end
+
+    for i = 1, #companionPath, 1 do
+        love.graphics.circle( "fill", (companionPath[i].x - 0.5) * tileSize, (companionPath[i].y - 0.5 ) * tileSize, 5)
     end
 
     DrawCompanionBody()
