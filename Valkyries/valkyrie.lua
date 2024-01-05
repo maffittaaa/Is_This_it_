@@ -95,28 +95,11 @@ function LoadValquiria(world, quantity)
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
-  for i = 1, quantity, 1 do
-    -- if i == 2 then
-      print("Playin anim - ", i , " - " , valkyries[i].animation_frame_a , " | " , valkyries[i].animation_timer_a)
-      valkyries[i].animation_timer_a = valkyries[i].animation_timer_a + dt -- animations with 3 frames
-      if valkyries[i].animation_timer_a > 0.1 then
-         valkyries[i].animation_frame_a =  valkyries[i].animation_frame_a + 1
-        if valkyries[i].animation_frame_a > 3 then
-          valkyries[i].animation_frame_a = 1
-        end
-        valkyries[i].animation_timer_a = 0
-      end
-  
-      valkyries[i].animation_timer_b = valkyries[i].animation_timer_b + dt -- animations with 4 or 5 frames
-      if valkyries[i].animation_timer_b > 0.1 then
-        valkyries[i].animation_frame_b = valkyries[i].animation_frame_b + 1
-        if valkyries[i].animation_frame_b > 4 or valkyries[i].animation_frame_b > 5 then
-          valkyries[i].animation_frame_b = 1
-        end
-        valkyries[i].animation_timer_b = 0
-      end
 
-    -- end
+  UpdateAnimations(dt, quantity)
+  
+  for i = 1, quantity, 1 do
+
     valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
 
     valkyries[i].meleeRange.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
@@ -245,7 +228,7 @@ function DrawValquiria(quantity)
           valkyries[i].body:getAngle(),
           1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
       end
-      --player in sight (Insight of what?)
+      --player in sight animation
   elseif valkyries[i].patroling == false and valkyries[i].isRanging == false and valkyries[i].isMeleeing == false and valkyries[i].playerInSight == true then
       if valkyries[i].is_forward_backwards == 1 then
         local valkyriesSprites = valkyries[i].chasing_right[valkyries[i].animation_frame_b]
@@ -313,6 +296,28 @@ function EndContactValkyrie(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
       valkyries[fixtureA:getUserData().parent].isRanging = false
       valkyries[fixtureA:getUserData().parent].isMeleeing = false
+    end
+  end
+end
+
+function UpdateAnimations(dt, quantity)
+  for i = 1, quantity, 1 do
+    valkyries[i].animation_timer_a = valkyries[i].animation_timer_a + dt -- animations with 3 frames
+    if valkyries[i].animation_timer_a > 0.1 then
+        valkyries[i].animation_frame_a =  valkyries[i].animation_frame_a + 1
+      if valkyries[i].animation_frame_a > 3 then
+        valkyries[i].animation_frame_a = 1
+      end
+      valkyries[i].animation_timer_a = 0
+    end
+
+    valkyries[i].animation_timer_b = valkyries[i].animation_timer_b + dt -- animations with 4 or 5 frames
+    if valkyries[i].animation_timer_b > 0.1 then
+      valkyries[i].animation_frame_b = valkyries[i].animation_frame_b + 1
+      if valkyries[i].animation_frame_b > 4 or valkyries[i].animation_frame_b > 5 then
+        valkyries[i].animation_frame_b = 1
+      end
+      valkyries[i].animation_timer_b = 0
     end
   end
 end

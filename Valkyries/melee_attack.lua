@@ -21,7 +21,7 @@ function UpdateValkyrieSword(world, dt)
         if valkyrie.isMeleeing and valkyrie.health > 0 then
             local valkyriePosition = vector2.new(valkyrie.body:getPosition())
             valkyrie.trigger.body:setPosition(valkyriePosition.x - 30, valkyriePosition.y)
-                if valkyrie.animation_frame_a == 3 then
+            if valkyrie.animation_frame_a == 3 then
                     valkyrie.trigger.body:setActive(true) -- set the trigger active in the last frame
                 else
                     valkyrie.trigger.body:setActive(false)
