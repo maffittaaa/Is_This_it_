@@ -28,11 +28,15 @@ drawCheats = true
 posicoes = {}
 ghosts = {}
 
+local flashTimer = 0
+
+flashing = false
+flashingSpeed = math.random(2, 4)
+
 function love.keypressed(e)
     if e == 'escape' then
         love.event.quit()
     end
-
     if e == 'e' then
         if gary_sword.body:isActive() then
             gary_sword.body:setActive(false)
@@ -243,6 +247,28 @@ function love.load()
         end
     end
 
+    bigDoorMas = {}
+
+    if gameMap.layers['BigDoorMasmorra'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['BigDoorMasmorra'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local bigDoor = {}
+                bigDoor.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                bigDoor.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                bigDoor.fixture = love.physics.newFixture(bigDoor.body, bigDoor.shape, 1)
+                bigDoor.type = "bigDoor"
+                bigDoor.fixture:setSensor(false)
+                bigDoor.fixture:setUserData(bigDoor)
+                table.insert(bigDoorMas, bigDoor)
+            end
+        end
+    end
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end
 
@@ -281,6 +307,8 @@ function love.update(dt)
     UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
     UpdateCollectibles(dt)
+
+    flashTimer = flashTimer + dt
 end
 
 function love.draw()
@@ -291,30 +319,52 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["Rio"])
     gameMap:drawLayer(gameMap.layers["Path"])
     gameMap:drawLayer(gameMap.layers["BUshes"])
-    gameMap:drawLayer(gameMap.layers["Arvores"])
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
 
     if collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
+        for i = 1, #bigDoorMas, 1 do
+            bigDoorMas[i].fixture:setSensor(true)
+        end
     else
         gameMap:drawLayer(gameMap.layers["MasmorraClosed"])
         gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
     end
 
+    DrawCollectibles()
     DrawGary()
     DrawHealthBars()
     DrawCompanion()
     DrawGaryAttack()
     DrawGhost()
-    DrawCollectibles()
     DrawValquiria(valkeries_quantity)
     DrawValkyrieAttack()
     DrawValkyrieSword()
+    gameMap:drawLayer(gameMap.layers["Arvores"])
+    gameMap:drawLayer(gameMap.layers["Lampadas"])
+
+    flashing = FlashEffect()
+
+    if flashing == true then
+        local a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
+        love.graphics.setColor(1, 1, 1, a)
+        gameMap:drawLayer(gameMap.layers["LampadasEfeito1"])
+        love.graphics.setColor(1, 1, 1)
+    end
+    if flashing == false then
+        local a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
+        love.graphics.setColor(1, 1, 1, a)
+        gameMap:drawLayer(gameMap.layers["LampadasEfeito2"])
+        love.graphics.setColor(1, 1, 1)
+    end
+    
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
+    gameMap:drawLayer(gameMap.layers["MasmorraTeto"])
 
     DrawHearts()
+    DrawUiCollectibles()
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
@@ -327,4 +377,17 @@ function love.draw()
 
     camera:detach()
     camera:draw() -- Must call this to use camera:fade!
+end
+
+function FlashEffect()
+    flashingSpeed = math.random(2,4)
+    
+    if flashTimer > 2 and flashTimer < 4 then
+        return true
+    end
+
+    if flashTimer >= 4 then
+        flashTimer = 0
+    end
+    return false
 end

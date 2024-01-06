@@ -41,6 +41,9 @@ function DrawCollectibles()
             collectible_lifes.life1.body:getAngle(),
             1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2)
     end
+end
+
+function DrawUiCollectibles()
     if message ~= nil then
         love.graphics.setColor(1, 1, 1)
         love.graphics.draw(sprites.inventory, camera.x - 50, camera.y - 400, 0, 2, 2)
