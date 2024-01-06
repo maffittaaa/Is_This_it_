@@ -95,7 +95,7 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setMode(1920, 1080)
+    love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
@@ -318,10 +318,10 @@ function love.draw()
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(sprites.inventory, camera.x - 750, camera.y - 60, 0, 4, 3)
+        love.graphics.draw(sprites.inventory, camera.x - (width/2 * 0.8), camera.y - 60, 0, 4, 3)
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(12))
-        love.graphics.print(message.message, camera.x - 730, camera.y - 25)
+        love.graphics.print(message.message, camera.x - (width/2 * 0.78), camera.y - 25)
         love.graphics.setColor(1, 1, 1)
     end
 
