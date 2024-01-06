@@ -241,7 +241,7 @@ function BeginContactGhost(fixtureA, fixtureB)
         if ghost.isChasing == true and ghost.garyInSight == true then
             ghost.timer = 1 -- cooldown tipe to chase again
             gary.health = gary.health - 0.5
-            PushGaryBack(fixtureA:getUserData().id)
+            PushGaryBackGhosts(fixtureA:getUserData().id)
             if gary.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = true

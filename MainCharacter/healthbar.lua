@@ -40,10 +40,10 @@ function DrawHealthBars()
 
     for i = 1, #ghosts, 1 do
         if ghosts[i].health <= 4 and ghosts[i].health > 0 then
-            -- love.graphics.setColor(1, 1, 1)
-            -- love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 70, 10)
-            -- love.graphics.setColor(1, 0, 0)
-            -- love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 70, 10)
+            love.graphics.setColor(1, 0, 0)
+            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
         else
             for i = #healthbar, 1, -1 do
                 local num = healthbar[i]
