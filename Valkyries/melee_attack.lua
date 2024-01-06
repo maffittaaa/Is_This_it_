@@ -35,7 +35,7 @@ end
 function DrawValkyrieSword()
     for key, valkyrie in ipairs(valkyries) do
         if valkyrie.health > 0 and valkyrie.isMeleeing == true and valkyrie.trigger.body:isActive() then
-            love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
+            --love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
         end
     end
 end

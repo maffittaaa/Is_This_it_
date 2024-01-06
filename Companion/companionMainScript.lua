@@ -302,22 +302,22 @@ function DrawCompanion() --Aidraw()
     --     end
     -- end
 
-    if pathAstar then
-        love.graphics.setColor( 0, 0.8, 0 )
-        for _, v in ipairs( pathAstar ) do
-            love.graphics.circle( "fill", ( v.x - 0.5) * tileSize, ( v.y - 0.5 ) * tileSize, 5)
-        end
-        love.graphics.setColor( 0, 0, 0 )
-    end
+    -- if pathAstar then
+    --     love.graphics.setColor( 0, 0.8, 0 )
+    --     for _, v in ipairs( pathAstar ) do
+    --         love.graphics.circle( "fill", ( v.x - 0.5) * tileSize, ( v.y - 0.5 ) * tileSize, 5)
+    --     end
+    --     love.graphics.setColor( 0, 0, 0 )
+    -- end
 
-    for i = 1, #companionPath, 1 do
-        love.graphics.circle( "fill", (companionPath[i].x - 0.5) * tileSize, (companionPath[i].y - 0.5 ) * tileSize, 5)
-    end
+    -- for i = 1, #companionPath, 1 do
+    --     love.graphics.circle( "fill", (companionPath[i].x - 0.5) * tileSize, (companionPath[i].y - 0.5 ) * tileSize, 5)
+    -- end
 
     DrawCompanionBody()
-    if destino then
-        love.graphics.circle( "fill", (destino.x - 0.5) * tileSize, (destino.y - 0.5 ) * tileSize, 5)
-    end
+    -- if destino then
+    --     love.graphics.circle( "fill", (destino.x - 0.5) * tileSize, (destino.y - 0.5 ) * tileSize, 5)
+    -- end
     -- love.graphics.setColor(0, 0, 1)
     -- love.graphics.circle("fill", companion.position.x, companion.position.y, 20)
 end

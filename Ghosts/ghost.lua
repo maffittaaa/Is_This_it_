@@ -216,8 +216,8 @@ function DrawGhost()
                 end
 
                 love.graphics.setColor(1, 1, 1)
-                love.graphics.circle("line", ghosts[i].ghostRange.body:getX(), ghosts[i].ghostRange.body:getY(),
-                    ghosts[i].ghostRange.shape:getRadius())
+                --love.graphics.circle("line", ghosts[i].ghostRange.body:getX(), ghosts[i].ghostRange.body:getY(),
+                    --ghosts[i].ghostRange.shape:getRadius())
             end
         end
     end

@@ -181,10 +181,8 @@ end
 function DrawValquiria(quantity)
   for i = 1, quantity, 1 do
     love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(),
-    valkyries[i].meleeRange.shape:getRadius())
-    love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(),
-    valkyries[i].rangedAttack.shape:getRadius())
+    --love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(), valkyries[i].meleeRange.shape:getRadius())
+    --love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(), valkyries[i].rangedAttack.shape:getRadius())
 
     --patrolling animation
     if valkyries[i].patroling == true then
