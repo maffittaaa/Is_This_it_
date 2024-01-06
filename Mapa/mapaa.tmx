@@ -5332,7 +5332,7 @@
   <object id="3321" x="6656" y="992" width="32" height="64"/>
   <object id="3322" x="6688" y="992" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="15" name="TriggerMasmorra">
+ <objectgroup id="15" name="TriggerMasmorra" visible="0">
   <object id="3126" x="6432" y="4352" width="64" height="64"/>
   <object id="3127" x="1296" y="7200" width="128" height="32"/>
  </objectgroup>

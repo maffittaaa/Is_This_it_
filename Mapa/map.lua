@@ -25079,7 +25079,7 @@ return {
       id = 15,
       name = "TriggerMasmorra",
       class = "",
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
