@@ -271,6 +271,20 @@ function BeginContactValkyrie(fixtureA, fixtureB)
       valkyries[fixtureA:getUserData().parent].patroling = false
       valkyries[fixtureA:getUserData().parent].isRanging = true
     end
+
+    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "valkyrie" then
+        valkyrie = fixtureB:getUserData()
+        if valkyries[i].health <= 4 and valkyries[i].health > 0 then
+            valkyries[i].health = valkyries[i].health - 0.5
+        end
+    end
+
+    if fixtureA:getUserData().type == "valkyrie" and fixtureB:getUserData().type == "melee weapon" then
+      valkyrie = fixtureB:getUserData()
+      if valkyries[i].health <= 4 and valkyries[i].health > 0 then
+          valkyries[i].health = valkyries[i].health - 0.5
+      end
+    end
   end
 end
 

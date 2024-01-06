@@ -269,7 +269,7 @@ function love.load()
             end
         end
     end
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end
 
 function BeginContact(fixtureA, fixtureB)

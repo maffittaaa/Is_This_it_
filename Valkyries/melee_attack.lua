@@ -41,10 +41,8 @@ function DrawValkyrieSword()
 end
 
 function ProcessSwordOnPlayer(gary, trigger)
-   -- if trigger.timer <= 0 then
         gary.health = gary.health - 0.5
         PushGaryBackValkyries(trigger.valkyrie)
-   -- end
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)
