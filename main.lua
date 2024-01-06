@@ -269,7 +269,7 @@ function love.load()
             end
         end
     end
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
 end
 
 function BeginContact(fixtureA, fixtureB)
@@ -359,7 +359,7 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers["LampadasEfeito2"])
         love.graphics.setColor(1, 1, 1)
     end
-    
+
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
     gameMap:drawLayer(gameMap.layers["MasmorraTeto"])
 
