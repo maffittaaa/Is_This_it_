@@ -3,6 +3,7 @@ local buttons = {}
 local mainMenuBackground = love.graphics.newImage("Mapa/Assets/Main_Menu_Background.png")
 local StarsBackground = love.graphics.newImage("Mapa/Assets/Stars_Background.png")
 local rotation = 0
+
 function NewButton(text,fn)   
    font = love.graphics.newFont(24)
     return {text = text, fn = fn, now = false, last = false
@@ -10,7 +11,6 @@ function NewButton(text,fn)
 end
 
 function LoadMainMenu()
-
     table.insert(buttons,NewButton("", 
     function()
         gameState = Restarting
@@ -19,6 +19,10 @@ function LoadMainMenu()
         function()
             love.event.quit(0)
         end))
+
+    src1 = love.audio.newSource("MainFiles/Sounds/Ambient/MainMenu.wav", "stream")
+    src1:setVolume(0.9) -- 90% of ordinary volume
+    src1:play()
 end
 
 function RestartingGame(world)
@@ -27,7 +31,7 @@ function RestartingGame(world)
 end
 
 function UpdateMainMenu(dt)
-    rotation = rotation + (dt*0.1)
+    rotation = rotation + (dt*0.05)
 end
 
 function DrawMainMenu()

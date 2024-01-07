@@ -27,23 +27,25 @@ require "Companion/companionMainScript"
 require "Companion/map"
 require "Companion/companionBody"
 require "Ghosts.loadEnemies"
-require "mainFiles.mainFunctions"
+require "MainFiles.mainFunctions"
 require "Mapa.LoadMap"
 require "Menus.mainMenu"
 require "Menus.inGameMenu"
 require "Menus.deadMenu"
 require "Menus.winMenu"
+require "MainFiles.soundManager"
 --require "Ghosts.mapaGhostAi"
 --require "Ghosts.ghostsAiScript"
 
-
 MainMenu = 1
-InGameMenu = 3
 GamePlay = 2
+InGameMenu = 3
 Loading = 4
 DeadMenu = 5
 WinMenu = 6
 Restarting = 7
+Dungeon = 8
+
 local world
 
 function love.load()
@@ -63,6 +65,8 @@ function love.load()
     LoadInGameMenu()
     LoadDeadMenu()
     LoadWinMenu()
+    LoadSounds()
+
 end
 
 function love.update(dt)
@@ -80,6 +84,8 @@ function love.update(dt)
     elseif gameState == WinMenu then
 
     end
+
+    UpdateSounds(dt)
 end
 
 function love.draw()

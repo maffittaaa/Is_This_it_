@@ -27,6 +27,7 @@ function KeyPressed(e)
     if e == 'r' then
         drawOpenDiary = not drawOpenDiary
     end
+    
     if e == '1' then
         currentPage = 1 -- page 1 and 2 of the diary
     end
