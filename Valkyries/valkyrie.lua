@@ -91,81 +91,101 @@ function LoadValquiria(world, x, y, i)
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
-  UpdateAnimations(dt, quantity)
-
+  
   for i = 1, quantity, 1 do
+    if valkyries[i] ~= nil then
+      UpdateAnimations(dt, quantity, i)
 
-    valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
-    
-    valkyries[i].meleeRange.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
-    valkyries[i].rangedAttack.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
-    
-    valkyries[i].range = vector2.mag(vector2.sub(valkyries[i].position, playerPosition))
-    
-    if valkyries[i].patroling == true then
-      --If not in Sight, Patrol
-      valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
-      if valkyries[i].valkyriex_patrolling >= posicoes[i + quantity].x then
-        valkyries[i].is_forward_backwards = -1
-      elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
-        valkyries[i].is_forward_backwards = 1
-      end
+      valkyries[i].position = vector2.new(valkyries[i].body:getPosition())
       
-      if valkyries[i].valkyriex_patrolling < posicoes[i + quantity].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
-        valkyries[i].fixture:setSensor(true)
-      end
+      valkyries[i].meleeRange.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
+      valkyries[i].rangedAttack.body:setPosition(valkyries[i].body:getX(), valkyries[i].body:getY())
       
-      valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling +
-          (dt * 200 * valkyries[i].is_forward_backwards)
-          
-          if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
-        valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
-      elseif valkyries[i].body:getY() > posicoes[i].y then
-        valkyries[i].body:setLinearVelocity(0, -200)
-      elseif valkyries[i].body:getY() < posicoes[i].y then
-        valkyries[i].body:setLinearVelocity(0, 200)
-      end
+      valkyries[i].range = vector2.mag(vector2.sub(valkyries[i].position, playerPosition))
       
-      valkyries[i].body:setPosition(valkyries[i].valkyriex_patrolling, valkyries[i].body:getY())
-    elseif valkyries[i].playerInSight == true then
-      if valkyries[i].isRanging == true then
-        valkyries[i].fixture:setSensor(true)
-        
-        --stop velocity, while in rangedAttack
-        time = 0
-        valkyries[i].lastPposition = playerPosition
-        
-        if valkyries[i].isMeleeing == true then
-          local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
-          playerDiretion = vector2.norm(playerDiretion)
-          local force = vector2.mult(playerDiretion, 200)
-          valkyries[i].body:setLinearVelocity(force.x, force.y)
-          return
+      if valkyries[i].patroling == true then
+        --If not in Sight, Patrol
+        valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
+        print(i + quantity)
+        if valkyries[i].valkyriex_patrolling >= posicoes[i + quantity].x then
+          valkyries[i].is_forward_backwards = -1
+        elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
+          valkyries[i].is_forward_backwards = 1
         end
-        valkyries[i].body:setLinearVelocity(0, 0)
-        --if not meleeAttacking, do rangedAttack
-      elseif valkyries[i].isRanging == false then
-        --go to last location of player
         
-        local lastPos = vector2.mag(vector2.sub(valkyries[i].position, valkyries[i].lastPposition))
+        if valkyries[i].valkyriex_patrolling < posicoes[i + quantity].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
+          valkyries[i].fixture:setSensor(true)
+        end
         
+        valkyries[i].valkyriex_patrolling = valkyries[i].valkyriex_patrolling +
+            (dt * 200 * valkyries[i].is_forward_backwards)
+            
+            if posicoes[i].y - 5 < valkyries[i].body:getY() and valkyries[i].body:getY() < posicoes[i].y + 5 then
+          valkyries[i].body:setPosition(valkyries[i].position.x, posicoes[i].y)
+        elseif valkyries[i].body:getY() > posicoes[i].y then
+          valkyries[i].body:setLinearVelocity(0, -200)
+        elseif valkyries[i].body:getY() < posicoes[i].y then
+          valkyries[i].body:setLinearVelocity(0, 200)
+        end
         
-        if lastPos < 1 then
-          time = time + dt
-          valkyries[i].body:setLinearVelocity(0, 0)
-          if time > 2 then
-            valkyries[i].patroling = true
-            valkyries[i].playerInSight = false
-            time = 0
+        valkyries[i].body:setPosition(valkyries[i].valkyriex_patrolling, valkyries[i].body:getY())
+      elseif valkyries[i].playerInSight == true then
+        if valkyries[i].isRanging == true then
+          valkyries[i].fixture:setSensor(true)
+          
+          --stop velocity, while in rangedAttack
+          time = 0
+          valkyries[i].lastPposition = playerPosition
+          
+          if valkyries[i].isMeleeing == true then
+            local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
+            playerDiretion = vector2.norm(playerDiretion)
+            local force = vector2.mult(playerDiretion, 200)
+            valkyries[i].body:setLinearVelocity(force.x, force.y)
             return
           end
-          return
-        elseif lastPos > 1 then
-          local playerDiretion = vector2.sub(valkyries[i].lastPposition, vector2.new(valkyries[i].body:getPosition()))
-          playerDiretion = vector2.norm(playerDiretion)
-          local force = vector2.mult(playerDiretion, 200)
-          valkyries[i].body:setLinearVelocity(force.x, force.y)
+          valkyries[i].body:setLinearVelocity(0, 0)
+          --if not meleeAttacking, do rangedAttack
+        elseif valkyries[i].isRanging == false then
+          --go to last location of player
+          
+          local lastPos = vector2.mag(vector2.sub(valkyries[i].position, valkyries[i].lastPposition))
+          
+          
+          if lastPos < 1 then
+            time = time + dt
+            valkyries[i].body:setLinearVelocity(0, 0)
+            if time > 2 then
+              valkyries[i].patroling = true
+              valkyries[i].playerInSight = false
+              time = 0
+              return
+            end
+            return
+          elseif lastPos > 1 then
+            local playerDiretion = vector2.sub(valkyries[i].lastPposition, vector2.new(valkyries[i].body:getPosition()))
+            playerDiretion = vector2.norm(playerDiretion)
+            local force = vector2.mult(playerDiretion, 200)
+            valkyries[i].body:setLinearVelocity(force.x, force.y)
+          end
         end
+      end
+
+      if valkyries[i].health <= 0 then
+        valkyries[i].fixture:destroy()
+        print("aaaaa")
+        valkyries[i].trigger.fixture:destroy()
+        print("bbbbbb")
+        valkyries[i].body:destroy()
+        print("cccccc")
+        valkyries[i].trigger.body:destroy()
+        print("ddddddd")
+        table.remove(valkyries, valkyries[i].id)
+        print("eeeee")
+        table.remove(posicoes, i)
+        print("ffffff")
+        table.remove(posicoes, i + quantity)
+        print("gggggg")
       end
     end
   end
@@ -177,64 +197,67 @@ function DrawValquiria(quantity)
     love.graphics.setColor(1, 1, 1)
     --love.graphics.circle("line", valkyries[i].meleeRange.body:getX(), valkyries[i].meleeRange.body:getY(), valkyries[i].meleeRange.shape:getRadius())
     --love.graphics.circle("line", valkyries[i].rangedAttack.body:getX(), valkyries[i].rangedAttack.body:getY(), valkyries[i].rangedAttack.shape:getRadius())
-
-    --patrolling animation
-    if valkyries[i].patroling == true then
-      if valkyries[i].is_forward_backwards == 1 then
-        local valkyriesSprites = valkyries[i].patrolling_right[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      elseif valkyries[i].is_forward_backwards == -1 then
-        local valkyriesSprites = valkyries[i].patrolling_left[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      end
-    -- meleeing animation
-  elseif valkyries[i].isMeleeing == true then      
-      if valkyries[i].is_forward_backwards == 1 then
-        local valkyriesSprites = valkyries[i].meleeing_right[valkyries[i].animation_frame_a]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-        valkyries[i].body:getAngle(), 1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      elseif valkyries[i].is_forward_backwards == -1 then --
-        local valkyriesSprites = valkyries[i].meleeing_left[valkyries[i].animation_frame_a]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(), 1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      end
-    --ranging animation
-  elseif valkyries[i].isRanging == true then
-      if valkyries[i].is_forward_backwards == 1 then
-        local valkyriesSprites = valkyries[i].ranging_right[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      elseif valkyries[i].is_forward_backwards == -1 then
-        local valkyriesSprites = valkyries[i].ranging_left[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      end
-      --player in sight animation
-  elseif valkyries[i].patroling == false and valkyries[i].isRanging == false and valkyries[i].isMeleeing == false and valkyries[i].playerInSight == true then
-      if valkyries[i].is_forward_backwards == 1 then
-        local valkyriesSprites = valkyries[i].chasing_right[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
-      elseif valkyries[i].is_forward_backwards == -1 then
-        local valkyriesSprites = valkyries[i].chasing_left[valkyries[i].animation_frame_b]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
-          valkyries[i].body:getAngle(),
-          1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+    if valkyries[i] ~= nil then
+      if valkyries[i].health <= 7 and valkyries[i].health > 0 then
+      --patrolling animation
+        if valkyries[i].patroling == true then
+          if valkyries[i].is_forward_backwards == 1 then
+            local valkyriesSprites = valkyries[i].patrolling_right[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          elseif valkyries[i].is_forward_backwards == -1 then
+            local valkyriesSprites = valkyries[i].patrolling_left[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          end
+        -- meleeing animation
+        elseif valkyries[i].isMeleeing == true then      
+          if valkyries[i].is_forward_backwards == 1 then
+            local valkyriesSprites = valkyries[i].meleeing_right[valkyries[i].animation_frame_a]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+            valkyries[i].body:getAngle(), 1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          elseif valkyries[i].is_forward_backwards == -1 then --
+            local valkyriesSprites = valkyries[i].meleeing_left[valkyries[i].animation_frame_a]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(), 1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          end
+        --ranging animation
+        elseif valkyries[i].isRanging == true then
+          if valkyries[i].is_forward_backwards == 1 then
+            local valkyriesSprites = valkyries[i].ranging_right[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          elseif valkyries[i].is_forward_backwards == -1 then
+            local valkyriesSprites = valkyries[i].ranging_left[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          end
+          --player in sight animation
+        elseif valkyries[i].patroling == false and valkyries[i].isRanging == false and valkyries[i].isMeleeing == false and valkyries[i].playerInSight == true then
+          if valkyries[i].is_forward_backwards == 1 then
+            local valkyriesSprites = valkyries[i].chasing_right[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          elseif valkyries[i].is_forward_backwards == -1 then
+            local valkyriesSprites = valkyries[i].chasing_left[valkyries[i].animation_frame_b]
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(valkyriesSprites, valkyries[i].body:getX(), valkyries[i].body:getY(),
+              valkyries[i].body:getAngle(),
+              1, 1, valkyriesSprites:getWidth() / 2, valkyriesSprites:getHeight() / 2)
+          end
+        end
       end
     end
   end
@@ -266,17 +289,18 @@ function BeginContactValkyrie(fixtureA, fixtureB)
       valkyries[fixtureA:getUserData().parent].isRanging = true
     end
 
+    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "valkyrie" then
         valkyrie = fixtureB:getUserData()
-        if valkyries[i].health <= 4 and valkyries[i].health > 0 then
+        if valkyries[i].health <= 7 and valkyries[i].health > 0 then
             valkyries[i].health = valkyries[i].health - 0.5
         end
     end
 
     if fixtureA:getUserData().type == "valkyrie" and fixtureB:getUserData().type == "melee weapon" then
-      valkyrie = fixtureB:getUserData()
-      if valkyries[i].health <= 4 and valkyries[i].health > 0 then
-          valkyries[i].health = valkyries[i].health - 0.5
+      valkyrie = fixtureA:getUserData()
+      if valkyrie.health <= 7 and valkyrie.health > 0 then
+          valkyrie.health = valkyrie.health - 0.5
       end
     end
   end
@@ -285,46 +309,52 @@ end
 function EndContactValkyrie(fixtureA, fixtureB)
   for i = 1, valkeries_quantity, 1 do
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      valkyries[fixtureB:getUserData().parent].isMeleeing = false
-      valkyries[fixtureB:getUserData().parent].isRanging = true
+      if valkyries[i].health > 0 then
+        valkyries[fixtureB:getUserData().parent].isMeleeing = false
+        valkyries[fixtureB:getUserData().parent].isRanging = true
+      end
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      valkyries[fixtureB:getUserData().parent].playerInSight = true
-      valkyries[fixtureB:getUserData().parent].isRanging = false
-      valkyries[fixtureB:getUserData().parent].isMeleeing = false
+      if valkyries[i].health > 0 then
+        valkyries[fixtureB:getUserData().parent].playerInSight = true
+        valkyries[fixtureB:getUserData().parent].isRanging = false
+        valkyries[fixtureB:getUserData().parent].isMeleeing = false
+      end
     end
 
     if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      valkyries[fixtureA:getUserData().parent].isMeleeing = false
-      valkyries[fixtureA:getUserData().parent].isRanging = true
+      if valkyries[i].health > 0 then
+        valkyries[fixtureA:getUserData().parent].isMeleeing = false
+        valkyries[fixtureA:getUserData().parent].isRanging = true
+      end
     end
 
     if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      valkyries[fixtureA:getUserData().parent].isRanging = false
-      valkyries[fixtureA:getUserData().parent].isMeleeing = false
+      if valkyries[i].health > 0 then
+        valkyries[fixtureA:getUserData().parent].isRanging = false
+        valkyries[fixtureA:getUserData().parent].isMeleeing = false
+      end
     end
   end
 end
 
-function UpdateAnimations(dt, quantity)
-  for i = 1, quantity, 1 do
-    valkyries[i].animation_timer_a = valkyries[i].animation_timer_a + dt -- animations with 3 frames
-    if valkyries[i].animation_timer_a > 0.1 then
-        valkyries[i].animation_frame_a =  valkyries[i].animation_frame_a + 1
-      if valkyries[i].animation_frame_a > 3 then
-        valkyries[i].animation_frame_a = 1
-      end
-      valkyries[i].animation_timer_a = 0
+function UpdateAnimations(dt, quantity, i)
+  valkyries[i].animation_timer_a = valkyries[i].animation_timer_a + dt -- animations with 3 frames
+  if valkyries[i].animation_timer_a > 0.1 then
+      valkyries[i].animation_frame_a =  valkyries[i].animation_frame_a + 1
+    if valkyries[i].animation_frame_a > 3 then
+      valkyries[i].animation_frame_a = 1
     end
+    valkyries[i].animation_timer_a = 0
+  end
 
-    valkyries[i].animation_timer_b = valkyries[i].animation_timer_b + dt -- animations with 4 or 5 frames
-    if valkyries[i].animation_timer_b > 0.1 then
-      valkyries[i].animation_frame_b = valkyries[i].animation_frame_b + 1
-      if valkyries[i].animation_frame_b > 4 or valkyries[i].animation_frame_b > 5 then
-        valkyries[i].animation_frame_b = 1
-      end
-      valkyries[i].animation_timer_b = 0
+  valkyries[i].animation_timer_b = valkyries[i].animation_timer_b + dt -- animations with 4 or 5 frames
+  if valkyries[i].animation_timer_b > 0.1 then
+    valkyries[i].animation_frame_b = valkyries[i].animation_frame_b + 1
+    if valkyries[i].animation_frame_b > 4 or valkyries[i].animation_frame_b > 5 then
+      valkyries[i].animation_frame_b = 1
     end
+    valkyries[i].animation_timer_b = 0
   end
 end

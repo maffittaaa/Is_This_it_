@@ -9,6 +9,12 @@ enemysPosicoesFinais = {}
 ghosts = {}
 valkyries = {}
 
+drawOpenDiary = false
+nextPage = false
+forward = false
+almost_the_end = false
+the_end = false
+
 local flashTimer = 0
 flashing = false
 flashingSpeed = math.random(2, 4)
@@ -21,6 +27,42 @@ function KeyPressed(e)
             gary_sword.body:setActive(true)
         end
     end
+
+    if e == 'r' then
+        drawOpenDiary = not drawOpenDiary
+    end
+    if e == '1' then
+        nextPage = false
+        forward = false
+        almost_the_end = false
+        the_end = false
+    end
+
+    if e == '3' then
+        nextPage = true
+        forward = false
+        almost_the_end = false
+        the_end = false
+    end
+    if e == '5' then
+        nextPage = false
+        forward = true
+        almost_the_end = false
+        the_end = false
+    end
+    if e == '7' then
+        nextPage = false
+        forward = false
+        almost_the_end = true
+        the_end = false
+    end
+    if e == '9' then
+        nextPage = false
+        forward = false
+        almost_the_end = false
+        the_end = true
+    end
+
 
     --Cheats
     if e == "tab" then
@@ -187,6 +229,7 @@ function DrawMain()
     gameMap:drawLayer(gameMap.layers["MasmorraTeto"])
 
     DrawHearts()
+    DrawDiary()
     DrawUiCollectibles()
 
     if drawCheats == true then
@@ -196,6 +239,19 @@ function DrawMain()
         love.graphics.setFont(love.graphics.newFont(12))
         love.graphics.print(message.message, camera.x - (width/2 * 0.78), camera.y - 25)
         love.graphics.setColor(1, 1, 1)
+    end
+
+    if drawOpenDiary == true then
+        DrawFirstPage()
+        DrawSecondPage()
+        DrawThirdPage()
+        DrawForthPage()
+        DrawFifthPage()
+        DrawSixthPage()
+        DrawSeventhPage()
+        DrawPageEight()
+        DrawPageNine()
+        DrawPageTen()
     end
 
     if gary.health <= 0 then

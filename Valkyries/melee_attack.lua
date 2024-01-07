@@ -7,7 +7,6 @@ function CreateSword(world, valkyrie)
     trigger.shape = love.physics.newRectangleShape(40, 70)
     trigger.fixture = love.physics.newFixture(trigger.body, trigger.shape, 2)
     trigger.valkyrie = valkyrie
-    --trigger.id = i
     trigger.body:setActive(false)
     trigger.fixture:setSensor(true)
     trigger.type = "melee weapon valkyrie"
@@ -35,7 +34,7 @@ end
 function DrawValkyrieSword()
     for key, valkyrie in ipairs(valkyries) do
         if valkyrie.health > 0 and valkyrie.isMeleeing == true and valkyrie.trigger.body:isActive() then
-            --love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
+            love.graphics.rectangle("line", valkyrie.body:getX() - 30, valkyrie.body:getY(), 40, 50)
         end
     end
 end

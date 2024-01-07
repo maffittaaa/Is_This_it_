@@ -16,6 +16,11 @@ require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
 require "UI/lives"
+require"UI/diary"
+Camera = require "Camera/Camera"
+Vector = require("Companion/vector")
+profile = require("Companion/profile")
+Luafinding = require("Companion/luafinding")
 require "Companion/companionMainScript"
 require "Companion/map"
 require "Companion/companionBody"
@@ -46,8 +51,8 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setMode(1920, 1080)
-    --love.window.setFullscreen(true)
+    -- love.window.setMode(1920, 1080)
+    love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
