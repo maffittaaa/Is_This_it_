@@ -18,6 +18,7 @@ Luafinding = require("Companion/luafinding")
 require "Companion/companionMainScript"
 require "Companion/map"
 require "Companion/companionBody"
+require "Ghosts.loadEnemies"
 
 local world
 local message
@@ -25,8 +26,10 @@ local k = 1
 local onoff = true
 invencible = false
 drawCheats = true
-posicoes = {}
+enemysPosicoesIniciais = {}
+enemysPosicoesFinais = {}
 ghosts = {}
+valkyries = {}
 
 local flashTimer = 0
 
@@ -99,7 +102,8 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setFullscreen(true)
+    love.window.setMode(1920, 1080)
+    --love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
@@ -108,47 +112,19 @@ function love.load()
 
     sti = require "Mapa/sti"
     gameMap = sti("Mapa/map.lua")
+
     --Call "load" function of every script
 
-    --valquirias first Patroling Position
-    posicoes[1] = { x = 3464, y = 1782 }
-    posicoes[2] = { x = 2960, y = 3138 }
 
-    --ghosts first Patroling Position
-    posicoes[3] = { x = 3561, y = 1643 }
-    posicoes[4] = { x = 3633, y = 1526 }
-    posicoes[5] = { x = 2919, y = 2968 }
-    posicoes[6] = { x = 3142, y = 2796 }
-    posicoes[7] = { x = 3194, y = 2710 }
-
-    --valquirias final Patroling Position
-    posicoes[8] = { x = 4149, y = 1782 }
-    posicoes[9] = { x = 3373, y = 3138 }
-
-    --ghosts final Patroling Position
-    posicoes[10] = { x = 4149, y = 1643 }
-    posicoes[11] = { x = 4174, y = 1526 }
-    posicoes[12] = { x = 3574, y = 2968 }
-    posicoes[13] = { x = 3747, y = 2796 }
-    posicoes[14] = { x = 3645, y = 2710 }
-
-    valkeries_quantity = 2
-
-
+    LoadAllEnmenies(world)
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
-
-    ghosts[1] = LoadGhost(world, posicoes[3].x, posicoes[3].y, 1)
-    ghosts[2] = LoadGhost(world, posicoes[4].x, posicoes[4].y, 2)
-    ghosts[3] = LoadGhost(world, posicoes[5].x, posicoes[5].y, 3)
-    ghosts[4] = LoadGhost(world, posicoes[6].x, posicoes[6].y, 4)
-    ghosts[5] = LoadGhost(world, posicoes[7].x, posicoes[7].y, 5)
-
-    LoadValquiria(world, valkeries_quantity)
     LoadHealthBars()
     LoadCollectibles(world)
     LoadCompanion(world)
+
+    valkeries_quantity = #valkyries
 
     -- make a table where the colitions will be stored --
     walls = {}
@@ -269,7 +245,7 @@ function love.load()
             end
         end
     end
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.2)
 end
 
 function BeginContact(fixtureA, fixtureB)
@@ -302,9 +278,9 @@ function love.update(dt)
     UpdateHealthBars()
     UpdateGary(dt)
     UpdateGaryAttack(dt)
-    UpdateGhost(dt, world)
+    UpdateGhost(dt, ghostsPos)
     UpdateValkyrieRangedAttack(world, dt)
-    UpdateValquiria(dt, GetPlayerPosition(), posicoes, valkeries_quantity)
+    UpdateValquiria(dt, GetPlayerPosition(), valkyriesPos, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
     UpdateCollectibles(dt)
 

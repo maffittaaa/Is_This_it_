@@ -7,7 +7,6 @@ local i
 
 function LoadGhost(world, x, y, i)
     local ghost = {}
-
     ghost.body = love.physics.newBody(world, x, y, "dynamic")
 
     ghost.left = {}
@@ -69,7 +68,7 @@ function LoadGhost(world, x, y, i)
     return ghost
 end
 
-function UpdateGhost(dt, world)
+function UpdateGhost(dt, posicoes)
     for i = 1, #ghosts, 1 do
         if ghosts[i] ~= nil then
             ghosts[i].position = vector2.new(ghosts[i].body:getPosition())
@@ -96,20 +95,20 @@ function UpdateGhost(dt, world)
                 --If not in Sight, Patrol
                 ghosts[i].ghostx_patrolling = ghosts[i].body:getX()
 
-                if ghosts[i].ghostx_patrolling >= posicoes[i + 9].x then
+                if ghosts[i].ghostx_patrolling >= posicoes[i + #ghosts].x then
                     ghosts[i].is_forward_backwards = -1
-                elseif ghosts[i].ghostx_patrolling <= posicoes[i + 2].x then
+                elseif ghosts[i].ghostx_patrolling <= posicoes[i].x then
                     ghosts[i].is_forward_backwards = 1
                 end
 
 
                 ghosts[i].ghostx_patrolling = ghosts[i].ghostx_patrolling + (dt * 200 * ghosts[i].is_forward_backwards)
 
-                if posicoes[i + 2].y - 5 < ghosts[i].body:getY() and ghosts[i].body:getY() < posicoes[i + 2].y + 5 then
-                    ghosts[i].body:setPosition(ghosts[i].position.x, posicoes[i + 2].y)
-                elseif ghosts[i].body:getY() > posicoes[i + 2].y then
+                if posicoes[i].y - 5 < ghosts[i].body:getY() and ghosts[i].body:getY() < posicoes[i].y + #ghosts then
+                    ghosts[i].body:setPosition(ghosts[i].position.x, posicoes[i ].y)
+                elseif ghosts[i].body:getY() > posicoes[i].y then
                     ghosts[i].body:setLinearVelocity(0, -200)
-                elseif ghosts[i].body:getY() < posicoes[i + 2].y then
+                elseif ghosts[i].body:getY() < posicoes[i].y then
                     ghosts[i].body:setLinearVelocity(0, 200)
                 end
 
@@ -248,7 +247,7 @@ function BeginContactGhost(fixtureA, fixtureB)
             end
         end
     end
-    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
+    -- print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
         ghost = fixtureA:getUserData()
         if ghost.health <= 4 and ghost.health > 0 then

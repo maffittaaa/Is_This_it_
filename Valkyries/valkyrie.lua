@@ -1,11 +1,9 @@
-valkyries = {}
 local time = 0
 
-function LoadValquiria(world, quantity)
-  for i = 1, quantity, 1 do
-    valkyrie = {}
+function LoadValquiria(world, x, y, i)
+    local valkyrie = {}
 
-    valkyrie.body = love.physics.newBody(world, posicoes[i].x, posicoes[i].y, "dynamic")
+    valkyrie.body = love.physics.newBody(world, x, y, "dynamic")
 
     valkyrie.patrolling_right = {}
     for i = 1, 4, 1 do
@@ -89,13 +87,10 @@ function LoadValquiria(world, quantity)
     valkyrie.rangedAttack.parent = i
     
     valkyrie.trigger = CreateSword(world, valkyrie)
-    
-    table.insert(valkyries, i, valkyrie)
-  end
+    return valkyrie
 end
 
 function UpdateValquiria(dt, playerPosition, posicoes, quantity)
-
   UpdateAnimations(dt, quantity)
 
   for i = 1, quantity, 1 do
@@ -110,14 +105,13 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
     if valkyries[i].patroling == true then
       --If not in Sight, Patrol
       valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
-      
-      if valkyries[i].valkyriex_patrolling >= posicoes[i + 7].x then
+      if valkyries[i].valkyriex_patrolling >= posicoes[i + quantity].x then
         valkyries[i].is_forward_backwards = -1
       elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
         valkyries[i].is_forward_backwards = 1
       end
       
-      if valkyries[i].valkyriex_patrolling < posicoes[i + 7].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
+      if valkyries[i].valkyriex_patrolling < posicoes[i + quantity].x and valkyries[i].valkyriex_patrolling > posicoes[i].x then
         valkyries[i].fixture:setSensor(true)
       end
       

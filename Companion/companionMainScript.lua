@@ -247,12 +247,8 @@ function UpdateCompanion(dt)
 
             end
 
-            print(p)
-
             finish = companionPath[p]
-
-            PrintTable(start)
-            PrintTable(finish)
+            
             deltaTime = 0
             walking = false
         end
