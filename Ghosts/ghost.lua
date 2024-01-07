@@ -105,7 +105,7 @@ function UpdateGhost(dt, posicoes)
                 ghosts[i].ghostx_patrolling = ghosts[i].ghostx_patrolling + (dt * 200 * ghosts[i].is_forward_backwards)
 
                 if posicoes[i].y - 5 < ghosts[i].body:getY() and ghosts[i].body:getY() < posicoes[i].y + #ghosts then
-                    ghosts[i].body:setPosition(ghosts[i].position.x, posicoes[i ].y)
+                    ghosts[i].body:setPosition(ghosts[i].position.x, posicoes[i].y)
                 elseif ghosts[i].body:getY() > posicoes[i].y then
                     ghosts[i].body:setLinearVelocity(0, -200)
                 elseif ghosts[i].body:getY() < posicoes[i].y then

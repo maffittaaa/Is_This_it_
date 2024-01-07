@@ -24,7 +24,7 @@ local destino
 local companionRealPosition
 
 
-local function updatePath()
+function updatePath()
     pathAstar = Luafinding( start, finish, map ):GetPath()
 end
 
@@ -262,7 +262,7 @@ function CompanionPath()
     companion.position = vector.new(start.x, start.y)
 end
 
-function love.mousepressed( x, y, button )
+function MousePressed( x, y, button )
     if button == 1 then
         x, y = camera:toWorldCoords(x, y)
 

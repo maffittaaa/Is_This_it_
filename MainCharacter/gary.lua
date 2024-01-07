@@ -14,6 +14,14 @@ player_velocity = 200
 inDarkSide = false
 
 function LoadGary(world, x, y)
+    inDarkSide = false
+    destroy_gary_fixture = false
+    timer_camera = 0
+    trigger_door_mas = false
+    trigger_door = false
+    inMasmorra = false
+    inCabin = false
+
     gary.body = love.physics.newBody(world, x, y, "dynamic")
 
     gary.idle = {}
@@ -155,8 +163,6 @@ function UpdateGary(dt)
         end
         gary.body:setLinearVelocity(0, 0)
     end
-
-    print(inDarkSide)
 end
 
 function DrawGary()

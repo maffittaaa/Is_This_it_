@@ -127,5 +127,5 @@ function LoadAllEnmenies(world)
     for i = 1, #valkyriesPos/2, 1 do
         valkyries[i] = LoadValquiria(world, valkyriesPos[i].x, valkyriesPos[i].y, i)
     end
-
+    valkeries_quantity = #valkyries
 end
