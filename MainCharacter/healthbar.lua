@@ -5,7 +5,13 @@ function LoadHealthBars()
     for i = 1, #ghosts, 1 do
         healthbar.ghost[i] = vector2.new(ghosts[i].body:getX(), ghosts[i].body:getY() + 60)
     end
+
     healthbar.gary = vector2.new(gary.body:getX(), gary.body:getY() + 60)
+
+    healthbar.valkyrie = {}
+    for i = 1, #valkyries, 1 do
+        healthbar.valkyrie[i] = vector2.new(valkyries[i].body:getX(), valkyries[i].body:getY() + 60)
+    end
 end
 
 function UpdateHealthBars()
@@ -28,6 +34,18 @@ function UpdateHealthBars()
             table.remove(healthbar, i)
         end
     end
+
+    for i = 1, #valkyries, 1 do
+        healthbar.valkyrie[i] = vector2.new(valkyries[i].body:getX() - 65, valkyries[i].body:getY() - 100)
+    end
+
+    for i = #healthbar, 1, -1 do
+        local num = healthbar[i]
+        if num == 1 and num == 2 then
+            table.remove(healthbar, i)
+            print("healthbar on", healthbar[i])
+        end
+    end
 end
 
 function DrawHealthBars()
@@ -40,8 +58,6 @@ function DrawHealthBars()
 
     for i = 1, #ghosts, 1 do
         if ghosts[i].health <= 4 and ghosts[i].health > 0 then
-            love.graphics.setColor(1, 1, 1)
-            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 70, 10)
             love.graphics.setColor(1, 0, 0)
             love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
         else
@@ -54,5 +70,21 @@ function DrawHealthBars()
             end
         end
     end
+
+    for i = 1, #valkyries, 1 do
+        if valkyries[i].health <= 7 and ghosts[i].health > 0 then
+            love.graphics.setColor(1, 0, 0)
+            love.graphics.rectangle("fill", healthbar.valkyrie[i].x, healthbar.valkyrie[i].y, 17.5 * valkyries[i].health, 4)
+        else
+            for i = #healthbar, 1, -1 do
+                local num = healthbar[i]
+                if num == 1 and num == 2 then
+                    table.remove(healthbar, i)
+                    print("healthbar on", healthbar[i])
+                end
+            end
+        end
+    end
+
     love.graphics.setColor(1, 1, 1)
 end

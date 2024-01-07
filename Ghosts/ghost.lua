@@ -258,12 +258,14 @@ function BeginContactGhost(fixtureA, fixtureB)
                 ghost.patroling = false
             end
         end
-        if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
+    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
             ghost = fixtureB:getUserData()
-            ghost.health = ghost.health - 0.5
-            if ghost.health <= 0 then
-                ghost.isChasing = false
-                ghost.patroling = false
+            if ghost.health <= 4 and ghost.health > 0 then
+                ghost.health = ghost.health - 0.5
+                if ghost.health <= 0 then
+                    ghost.isChasing = false
+                    ghost.patroling = false
+                end
             end
         end
     end
