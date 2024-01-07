@@ -31,6 +31,7 @@ function KeyPressed(e)
     if e == 'r' then
         drawOpenDiary = not drawOpenDiary
     end
+    
     if e == '1' then
         nextPage = false
         forward = false

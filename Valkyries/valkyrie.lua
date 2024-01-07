@@ -106,7 +106,6 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       if valkyries[i].patroling == true then
         --If not in Sight, Patrol
         valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
-        print(i + quantity)
         if valkyries[i].valkyriex_patrolling >= posicoes[i + quantity].x then
           valkyries[i].is_forward_backwards = -1
         elseif valkyries[i].valkyriex_patrolling <= posicoes[i].x then
@@ -173,20 +172,13 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
 
       if valkyries[i].health <= 0 then
         valkyries[i].fixture:destroy()
-        print("aaaaa")
         valkyries[i].trigger.fixture:destroy()
-        print("bbbbbb")
         valkyries[i].body:destroy()
-        print("cccccc")
         valkyries[i].trigger.body:destroy()
-        print("ddddddd")
         table.remove(valkyries, valkyries[i].id)
-        print("eeeee")
         table.remove(posicoes, i)
-        print("ffffff")
         table.remove(posicoes, i + quantity)
-        print("gggggg")
-      end
+        end
     end
   end
 end
@@ -289,7 +281,7 @@ function BeginContactValkyrie(fixtureA, fixtureB)
       valkyries[fixtureA:getUserData().parent].isRanging = true
     end
 
-    print(fixtureA:getUserData().type, fixtureB:getUserData().type)
+    --print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "valkyrie" then
         valkyrie = fixtureB:getUserData()
         if valkyries[i].health <= 7 and valkyries[i].health > 0 then
