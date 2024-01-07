@@ -11,6 +11,8 @@ local repeatOnce = true
 
 player_velocity = 200
 
+inDarkSide = false
+
 function LoadGary(world, x, y)
     gary.body = love.physics.newBody(world, x, y, "dynamic")
 
@@ -153,6 +155,8 @@ function UpdateGary(dt)
         end
         gary.body:setLinearVelocity(0, 0)
     end
+
+    print(inDarkSide)
 end
 
 function DrawGary()
@@ -241,5 +245,13 @@ function BeginContactGary(fixtureA, fixtureB)
             repeatOnce = true
             trigger_door_mas = true
         end
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "collBright" then
+        inDarkSide = false
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "collDark" then
+        inDarkSide = true
     end
 end

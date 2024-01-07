@@ -81,14 +81,15 @@ function UpdateGhost(dt, posicoes)
                 ghosts[i].timer = ghosts[i].timer - dt
             end
 
-            if destroy_gary_fixture == true then
+            if destroy_gary_fixture == true or inDarkSide == false then
                 ghosts[i].patroling = true
                 ghosts[i].garyInSight = false
             end
 
             if ghosts[i].patroling == true then
                 --Check if Gary in sight
-                if ghosts[i].range < 300 then
+                ghosts[i].fixture:setSensor(true)
+                if ghosts[i].range < 300 and inDarkSide == true then
                     ghosts[i].garyInSight = true
                     ghosts[i].patroling = false
                 end
@@ -100,7 +101,6 @@ function UpdateGhost(dt, posicoes)
                 elseif ghosts[i].ghostx_patrolling <= posicoes[i].x then
                     ghosts[i].is_forward_backwards = 1
                 end
-
 
                 ghosts[i].ghostx_patrolling = ghosts[i].ghostx_patrolling + (dt * 200 * ghosts[i].is_forward_backwards)
 
@@ -169,6 +169,8 @@ function UpdateGhost(dt, posicoes)
                 ghosts[i].body:destroy()
                 ghosts[i].trigger.body:destroy()
                 table.remove(ghosts, ghosts[i].id)
+                table.remove(posicoes, i)
+                table.remove(posicoes, i + #ghosts)
             end
         end
     end

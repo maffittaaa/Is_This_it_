@@ -245,7 +245,53 @@ function love.load()
             end
         end
     end
-    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 0.3)
+
+    darkSide = {}
+
+    if gameMap.layers['DarkSide'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['DarkSide'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local coll = {}
+                coll.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                coll.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                coll.fixture = love.physics.newFixture(coll.body, coll.shape, 1)
+                coll.type = "collDark"
+                coll.fixture:setSensor(true)
+                coll.fixture:setUserData(coll)
+                table.insert(darkSide, coll)
+            end
+        end
+    end
+
+    brightSide = {}
+
+    if gameMap.layers['BrightSide'] then
+        -- iterate for every colition shapes you made in tiled --
+
+        for i, obj in pairs(gameMap.layers['BrightSide'].objects) do
+            -- check what type of shape it is --
+            -- check for each rectangle shape --
+            if obj.shape == "rectangle" then
+                -- the center of the colition box will be on the top left of where it is suposed to be --
+                -- so i added its width devided by 2 on the x pos and did the same for its y pos with height here --
+                local coll = {}
+                coll.body = love.physics.newBody(world, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
+                coll.shape = love.physics.newRectangleShape(obj.width, obj.height)
+                coll.fixture = love.physics.newFixture(coll.body, coll.shape, 1)
+                coll.type = "collBright"
+                coll.fixture:setSensor(true)
+                coll.fixture:setUserData(coll)
+                table.insert(brightSide, coll)
+            end
+        end
+    end
+    camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end
 
 function BeginContact(fixtureA, fixtureB)

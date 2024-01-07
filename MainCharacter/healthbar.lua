@@ -57,15 +57,17 @@ function DrawHealthBars()
     end
 
     for i = 1, #ghosts, 1 do
-        if ghosts[i].health <= 4 and ghosts[i].health > 0 then
-            love.graphics.setColor(1, 0, 0)
-            love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
-        else
-            for i = #healthbar, 1, -1 do
-                local num = healthbar[i]
-                if num == 1 and num == 2 then
-                    table.remove(healthbar, i)
-                    print("healthbar on", healthbar[i])
+        if inDarkSide == true then
+            if ghosts[i].health <= 4 and ghosts[i].health > 0 then
+                love.graphics.setColor(1, 0, 0)
+                love.graphics.rectangle("fill", healthbar.ghost[i].x, healthbar.ghost[i].y, 17.5 * ghosts[i].health, 4)
+            else
+                for i = #healthbar, 1, -1 do
+                    local num = healthbar[i]
+                    if num == 1 and num == 2 then
+                        table.remove(healthbar, i)
+                        print("healthbar on", healthbar[i])
+                    end
                 end
             end
         end
