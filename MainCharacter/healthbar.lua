@@ -23,7 +23,6 @@ function UpdateHealthBars()
         local num = healthbar[i]
         if num == 1 and num == 2 then
             table.remove(healthbar, i)
-            print("healthbar on", healthbar[i])
         end
     end
 
@@ -43,7 +42,6 @@ function UpdateHealthBars()
         local num = healthbar[i]
         if num == 1 and num == 2 then
             table.remove(healthbar, i)
-            print("healthbar on", healthbar[i])
         end
     end
 end
@@ -65,8 +63,7 @@ function DrawHealthBars()
                 for i = #healthbar, 1, -1 do
                     local num = healthbar[i]
                     if num == 1 and num == 2 then
-                        table.remove(healthbar, i)
-                        print("healthbar on", healthbar[i])
+                        table.remove(healthbar, i)   
                     end
                 end
             end
@@ -82,7 +79,6 @@ function DrawHealthBars()
                 local num = healthbar[i]
                 if num == 1 and num == 2 then
                     table.remove(healthbar, i)
-                    print("healthbar on", healthbar[i])
                 end
             end
         end

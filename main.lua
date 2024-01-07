@@ -11,6 +11,7 @@ require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
 require "UI/lives"
+require"UI/diary"
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
 profile = require("Companion/profile")
@@ -30,6 +31,11 @@ enemysPosicoesIniciais = {}
 enemysPosicoesFinais = {}
 ghosts = {}
 valkyries = {}
+drawOpenDiary = false
+nextPage = false
+forward = false
+almost_the_end = false
+the_end = false
 
 local flashTimer = 0
 
@@ -46,6 +52,21 @@ function love.keypressed(e)
         else
             gary_sword.body:setActive(true)
         end
+    end
+    if e == 'r' then
+        drawOpenDiary = not drawOpenDiary
+    end
+    if e == '3' then
+        nextPage = true
+    end
+    if e == '5' then
+        forward = true
+    end
+    if e == '7' then
+        almost_the_end = true
+    end
+    if e == '9' then
+        the_end = true
     end
 
     --Cheats
@@ -102,8 +123,8 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    love.window.setMode(1920, 1080)
-    --love.window.setFullscreen(true)
+    -- love.window.setMode(1920, 1080)
+    love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
@@ -386,6 +407,7 @@ function love.draw()
     gameMap:drawLayer(gameMap.layers["MasmorraTeto"])
 
     DrawHearts()
+    DrawDiary()
     DrawUiCollectibles()
 
     if drawCheats == true then
@@ -395,6 +417,19 @@ function love.draw()
         love.graphics.setFont(love.graphics.newFont(12))
         love.graphics.print(message.message, camera.x - (width/2 * 0.78), camera.y - 25)
         love.graphics.setColor(1, 1, 1)
+    end
+    
+    if drawOpenDiary == true then
+        DrawFirstPage()
+        DrawSecondPage()
+        DrawThirdPage()
+        DrawForthPage()
+        DrawFifthPage()
+        DrawSixthPage()
+        DrawSeventhPage()
+        DrawPageEight()
+        DrawPageNine()
+        DrawPageTen()
     end
 
     camera:detach()
