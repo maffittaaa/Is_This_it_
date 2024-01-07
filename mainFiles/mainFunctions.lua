@@ -10,10 +10,6 @@ ghosts = {}
 valkyries = {}
 
 drawOpenDiary = false
-nextPage = false
-forward = false
-almost_the_end = false
-the_end = false
 
 local flashTimer = 0
 flashing = false
@@ -33,41 +29,28 @@ function KeyPressed(e)
     end
     
     if e == '1' then
-        nextPage = false
-        forward = false
-        almost_the_end = false
-        the_end = false
+        currentPage = 1 -- page 1 and 2 of the diary
     end
 
     if e == '3' then
-        nextPage = true
-        forward = false
-        almost_the_end = false
-        the_end = false
-    end
-    if e == '5' then
-        nextPage = false
-        forward = true
-        almost_the_end = false
-        the_end = false
-    end
-    if e == '7' then
-        nextPage = false
-        forward = false
-        almost_the_end = true
-        the_end = false
-    end
-    if e == '9' then
-        nextPage = false
-        forward = false
-        almost_the_end = false
-        the_end = true
+        currentPage = 3 -- page 3 and 4 of the diary
     end
 
+    if e == '5' then
+        currentPage = 5 -- page 5 and 6 of the diary
+    end
+
+    if e == '7' then
+        currentPage = 7 -- page 7 and 8 of the diary
+    end
+
+    if e == '9' then
+        currentPage = 9 -- page 9 and 10 of the diary
+    end
 
     --Cheats
     if e == "tab" then
-      drawCheats = not drawCheats
+        drawCheats = not drawCheats
     end
 
     if e == "q" then
@@ -106,7 +89,7 @@ function KeyPressed(e)
     end
 
     if e == "+" then
-      invencible = not invencible
+        invencible = not invencible
     end
 
     if e == "space" and walking == false then
@@ -235,10 +218,10 @@ function DrawMain()
 
     if drawCheats == true then
         love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(sprites.inventory, camera.x - (width/2 * 0.8), camera.y - 60, 0, 4, 3)
+        love.graphics.draw(sprites.inventory, camera.x - (width / 2 * 0.8), camera.y - 60, 0, 4, 3)
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(12))
-        love.graphics.print(message.message, camera.x - (width/2 * 0.78), camera.y - 25)
+        love.graphics.print(message.message, camera.x - (width / 2 * 0.78), camera.y - 25)
         love.graphics.setColor(1, 1, 1)
     end
 
@@ -264,8 +247,8 @@ function DrawMain()
 end
 
 function FlashEffect()
-    flashingSpeed = math.random(2,4)
-    
+    flashingSpeed = math.random(2, 4)
+
     if flashTimer > 2 and flashTimer < 4 then
         return true
     end
