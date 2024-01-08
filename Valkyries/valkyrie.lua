@@ -91,7 +91,7 @@ function LoadValquiria(world, x, y, i)
   return valkyrie
 end
 
-function UpdateValquiria(dt, playerPosition, posicoes, quantity, world)
+function UpdateValquiria(dt, playerPosition, posicoes, quantity)
   for i = 1, quantity, 1 do
     if valkyries[i] ~= nil then
       UpdateAnimations(dt, quantity, i)
@@ -173,9 +173,10 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity, world)
       if valkyries[i].health <= 0 then
         valkyries[i].fixture:destroy()
         valkyries[i].trigger.fixture:destroy()
-        world:DestroyBody(valkyries[i].body)
-        valkyries[i].body:destroy()
-        valkyries[i].trigger.body:destroy()
+        valkyries[i].meleeRange.fixture:destroy()
+        valkyries[i].rangedAttack.fixture:destroy()
+        -- valkyries[i].body:destroy()
+        -- valkyries[i].trigger.body:destroy()
         table.remove(valkyries, i)
         table.remove(posicoes, i)
         table.remove(posicoes, i + quantity)
@@ -262,70 +263,68 @@ function GetValquiriaPosition(quantity)
 end
 
 function BeginContactValkyrie(fixtureA, fixtureB)
-  for i = 1, valkeries_quantity, 1 do
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      valkyries[fixtureB:getUserData().parent].isMeleeing = true
-      valkyries[fixtureB:getUserData().parent].isRanging = true
-    elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      valkyries[fixtureB:getUserData().parent].playerInSight = true
-      valkyries[fixtureB:getUserData().parent].isRanging = true
-      valkyries[fixtureB:getUserData().parent].patroling = false
-    end
+  if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+    valkyries[fixtureB:getUserData().parent].isMeleeing = true
+    valkyries[fixtureB:getUserData().parent].isRanging = true
+  elseif fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+    valkyries[fixtureB:getUserData().parent].playerInSight = true
+    valkyries[fixtureB:getUserData().parent].isRanging = true
+    valkyries[fixtureB:getUserData().parent].patroling = false
+  end
 
-    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      valkyries[fixtureA:getUserData().parent].isRanging = true
-      valkyries[fixtureA:getUserData().parent].isMeleeing = true
-    elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      valkyries[fixtureA:getUserData().parent].playerInSight = true
-      valkyries[fixtureA:getUserData().parent].patroling = false
-      valkyries[fixtureA:getUserData().parent].isRanging = true
-    end
+  if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+    valkyries[fixtureA:getUserData().parent].isRanging = true
+    valkyries[fixtureA:getUserData().parent].isMeleeing = true
+  elseif fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+    valkyries[fixtureA:getUserData().parent].playerInSight = true
+    valkyries[fixtureA:getUserData().parent].patroling = false
+    valkyries[fixtureA:getUserData().parent].isRanging = true
+  end
 
-    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "valkyrie" then
-      valkyrie = fixtureB:getUserData()
-      if valkyries[i].health <= 7 and valkyries[i].health > 0 then
-        valkyries[i].health = valkyries[i].health - 0.5
-      end
+  if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "valkyrie" then
+    valkyrie = fixtureB:getUserData()
+    if valkyries[i].health <= 7 and valkyries[i].health > 0 then
+      valkyries[i].health = valkyries[i].health - 0.5
     end
+  end
 
-    if fixtureA:getUserData().type == "valkyrie" and fixtureB:getUserData().type == "melee weapon" then
-      valkyrie = fixtureA:getUserData()
-      if valkyrie.health <= 7 and valkyrie.health > 0 then
-        valkyrie.health = valkyrie.health - 0.5
-      end
+  if fixtureA:getUserData().type == "valkyrie" and fixtureB:getUserData().type == "melee weapon" then
+    valkyrie = fixtureA:getUserData()
+    if valkyrie.health <= 7 and valkyrie.health > 0 then
+      valkyrie.health = valkyrie.health - 0.5
     end
   end
 end
 
 function EndContactValkyrie(fixtureA, fixtureB)
-  for i = 1, valkeries_quantity, 1 do
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
-      if valkyries[i].health > 0 then
-        valkyries[fixtureB:getUserData().parent].isMeleeing = false
-        valkyries[fixtureB:getUserData().parent].isRanging = true
-      end
+  if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "MelleAttack" then
+    i = fixtureB:getUserData().parent
+    if valkyries[i].health > 0 then
+      valkyries[fixtureB:getUserData().parent].isMeleeing = false
+      valkyries[fixtureB:getUserData().parent].isRanging = true
     end
+  end
 
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
-      if valkyries[i].health > 0 then
-        valkyries[fixtureB:getUserData().parent].playerInSight = true
-        valkyries[fixtureB:getUserData().parent].isRanging = false
-        valkyries[fixtureB:getUserData().parent].isMeleeing = false
-      end
+  if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "RangedAttack" then
+    i = fixtureB:getUserData().parent
+    if valkyries[i].health > 0 then
+      valkyries[fixtureB:getUserData().parent].playerInSight = true
+      valkyries[fixtureB:getUserData().parent].isRanging = false
+      valkyries[fixtureB:getUserData().parent].isMeleeing = false
     end
+  end
 
-    if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
-      if valkyries[i].health > 0 then
-        valkyries[fixtureA:getUserData().parent].isMeleeing = false
-        valkyries[fixtureA:getUserData().parent].isRanging = true
-      end
+  if fixtureA:getUserData().type == "MelleAttack" and fixtureB:getUserData().type == "player" then
+    if valkyries[i].health > 0 then
+      valkyries[fixtureA:getUserData().parent].isMeleeing = false
+      valkyries[fixtureA:getUserData().parent].isRanging = true
     end
+  end
 
-    if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
-      if valkyries[i].health > 0 then
-        valkyries[fixtureA:getUserData().parent].isRanging = false
-        valkyries[fixtureA:getUserData().parent].isMeleeing = false
-      end
+  if fixtureA:getUserData().type == "RangedAttack" and fixtureB:getUserData().type == "player" then
+    if valkyries[i].health > 0 then
+      valkyries[fixtureA:getUserData().parent].isRanging = false
+      valkyries[fixtureA:getUserData().parent].isMeleeing = false
     end
   end
 end
