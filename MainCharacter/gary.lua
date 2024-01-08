@@ -206,7 +206,7 @@ function UpdateGary(dt)
             
             magValkGary = distance - magValkGary
             vol = magValkGary/distance
-    
+            
             if not sourceEffect[sound]:isPlaying() then
                 PlaySound(nil, vol, Voice1)
             end
