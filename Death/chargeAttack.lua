@@ -6,14 +6,14 @@ local isCharging = false
 local chargeTime = 2 -- time that death needs to lock player position to charge to that point
 local charge = false
 local facingRight = true
+local facingLeft = false
 
 function UpdateChargeAttack(dt)
     death.position = vector2.new(death.body:getPosition())
     death.range = vector2.mag(vector2.sub(death.position, gary.position))
 
-    -- À procura do jogador
+    --looking for player
     if isCharging == false and charge == false then
-        print("DeathRange: ", death.range);
         if death.range < 300 then
             death.garyInSight = true
             isCharging = true
@@ -21,9 +21,8 @@ function UpdateChargeAttack(dt)
         end
     end
 
-    -- Jogador entrou em range, portanto vamos carregar o ataque  💩
+    --started charging the attack because player in sight
     if isCharging == true and chargeTime > 0 then
-        print("Loading Charge (seconds to attack): ", chargeTime)
         chargeTime = chargeTime - dt
         if chargeTime <= 0 then
             chargeTime = 2
@@ -45,12 +44,11 @@ function UpdateChargeAttack(dt)
         local deathPosition = vector2.new(death.body:getPosition())
         local deathRange = vector2.mag(vector2.sub(deathPosition, lastPlayerPosition))
         facingRight = RightSide(lastPlayerPosition.x, deathPosition.x)
-
-        print("Charging! Range to destination: ", deathRange)
+        facingLeft = LeftSide(-(lastPlayerPosition.x), -(deathPosition.x))
+        facingLeft = true
 
         if deathRange < 1 then
             charge = false
-            -- stop attack (1 threshold for stop charge)
             death.body:setLinearVelocity(0, 0)
         end
     end
@@ -60,12 +58,16 @@ function RightSide(playerPositionX, enemyPositionX)
     return playerPositionX > enemyPositionX
 end
 
+function LeftSide(playerPositionX, enemyPositionX)
+    return playerPositionX < enemyPositionX
+end
+
 function DrawChargeAttack()
     if charge then
         deathSprites = death.idle[death.animation_frame]
     elseif facingRight then
         deathSprites = death.right[death.animation_frame]
-    else
+    elseif facingLeft and not facingRight then
         deathSprites = death.left[death.animation_frame]
     end
 
