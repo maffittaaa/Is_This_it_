@@ -13,6 +13,8 @@ player_velocity = 200
 
 inDarkSide = false
 
+local magGhostGary = 1
+
 function LoadGary(world, x, y)
     inDarkSide = false
     destroy_gary_fixture = false
@@ -61,13 +63,19 @@ function LoadGary(world, x, y)
 
 
     PlaySound(1, 0, nil, 1)
-    PlaySound(2, 0, nil, 1)
-    PlaySound(3, 0, nil, 1)
+    for i = 1, #ghosts, 1 do
+        PlaySound(2, 0, nil, 1)
+    end
+    for i = 1, #ghosts, 1 do
+        PlaySound(3, 0, nil, 1)
+    end
 end
+
 
 function UpdateGary(dt)
     
     gary.position = vector2.new(gary.body:getPosition())
+
 
     if invencible then
         gary.health = 5
@@ -185,7 +193,6 @@ function UpdateGary(dt)
         magDeathGary = distance - magDeathGary
         vol = magDeathGary/distance
 
-        
         if not sourceEffect[sound]:isPlaying() then
             PlaySound(nil, vol, sound)
         end
@@ -194,6 +201,49 @@ function UpdateGary(dt)
         if sourceEffect[sound]:isPlaying() then
             StopSound(sound)
         end
+    end
+
+    for i = 1, #ghosts, 1 do
+        magGhostGary = vector.magnitude(vector.sub(gary.position, ghosts[i].position))
+        local distance = 500
+        local Voice1 = 1 + i
+        local Voice2 = 1 + #ghosts + i
+
+        if inDarkSide == false then
+            if magGhostGary < distance then
+                local vol
+    
+                magGhostGary = distance - magGhostGary
+                vol = magGhostGary / distance
+    
+                if not sourceEffect[Voice1]:isPlaying() then
+                    PlaySound(nil, vol, Voice1)
+                end
+                ChangeVol(vol, Voice1)
+            elseif magGhostGary > distance then
+                if sourceEffect[Voice1]:isPlaying() then
+                    StopSound(Voice1)
+                end
+            end
+
+        elseif inDarkSide == true then
+            if magGhostGary < distance then
+                local vol
+    
+                magGhostGary = distance - magGhostGary
+                vol = magGhostGary / distance
+    
+                if  not sourceEffect[Voice2]:isPlaying() then
+                    PlaySound(nil, vol, Voice2)
+                end
+                ChangeVol(vol, Voice2)
+            elseif magGhostGary > distance then
+                if sourceEffect[Voice2]:isPlaying() then
+                    StopSound(Voice2)
+                end
+            end
+        end
+        
     end
 end
 
@@ -213,6 +263,10 @@ function DrawGary()
         love.graphics.draw(garySprites, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
             1, 1, garySprites:getWidth() / 2, garySprites:getHeight() / 2)
     end
+
+
+    love.graphics.circle("line", ghosts[1].body:getX(), ghosts[1].body:getY(), magGhostGary)
+
 end
 
 function GaryKnock(dt)
