@@ -144,7 +144,6 @@ function UpdateCompanion(dt)
         local normForce = vector.normalize(vector.sub(companion.position, companionRealPosition))
         local force = vector.mult(normForce, 150)
 
-        --print()
         if i == #Luafinding(start, finish, map ):GetPath() then
             if destinoDistance < 16 then
                 companion.body:setLinearVelocity(0, 0)

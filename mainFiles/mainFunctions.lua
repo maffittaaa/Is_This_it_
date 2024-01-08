@@ -13,6 +13,7 @@ drawOpenDiary = false
 
 local flashTimer = 0
 flashing = false
+change = false
 flashingSpeed = math.random(2, 4)
 
 function KeyPressed(e)
@@ -116,6 +117,19 @@ function LoadMain(world)
     --LoadGhostsAi()
     LoadMainMap(world)
 
+    PlaySound(1, 0, nil, 1)
+    for i = 1, #ghosts, 1 do
+        PlaySound(2, 0, nil, 1)
+    end
+    for i = 1, #ghosts, 1 do
+        PlaySound(3, 0, nil, 1)
+    end
+    for i = 1, #valkyries, 1 do
+        PlaySound(4, 0, nil, 1)
+    end
+
+    PlaySound(5, 0, nil, 1)
+
     --Loading Camera
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end
@@ -135,6 +149,7 @@ end
 
 function UpdateMain(dt, world)
     camera:update(dt)
+    
     camera:follow(gary.body:getX(), gary.body:getY())
     camera:setFollowLerp(0.2)
     camera:setFollowLead(0)
@@ -179,7 +194,6 @@ function DrawMain()
         gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
     end
 
-    print(collectiblePages.counter)
     if collectiblePages.counter >= 4 and collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         for i = 1, #bigDoorMas, 1 do
@@ -210,10 +224,11 @@ function DrawMain()
     love.graphics.setColor(1, 1, 1, a)
 
     if flashing == true then
-        gameMap:drawLayer(gameMap.layers["LampadasEfeito1"])
-    end
-    if flashing == false then
-        gameMap:drawLayer(gameMap.layers["LampadasEfeito2"])
+        if change == false then
+            gameMap:drawLayer(gameMap.layers["LampadasEfeito1"])
+        elseif change == true then
+            gameMap:drawLayer(gameMap.layers["LampadasEfeito2"])
+        end
     end
 
     love.graphics.setColor(1, 1, 1)
@@ -273,6 +288,7 @@ function FlashEffect()
     end
 
     if flashTimer >= 4 then
+        change = not change
         flashTimer = 0
     end
     return false

@@ -87,6 +87,7 @@ function LoadValquiria(world, x, y, i)
   valkyrie.rangedAttack.parent = i
 
   valkyrie.trigger = CreateSword(world, valkyrie)
+  
   return valkyrie
 end
 
