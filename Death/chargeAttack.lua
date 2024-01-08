@@ -17,14 +17,12 @@ function UpdateChargeAttack(dt)
     end
 
     if death.garyInSight then
-        print("charging:", isCharging)
         if isCharging == false then
             chargeTimer = 0
             isCharging = true
             canCharge = false
         else
             chargeTimer = chargeTimer + dt
-            print("chargeTimer:", chargeTimer)
             if chargeTimer < chargeTime then
                 local playerDirection = vector2.sub(gary.position, vector2.new(death.body:getPosition()))
                 playerDirection = vector2.norm(playerDirection)
@@ -36,7 +34,6 @@ function UpdateChargeAttack(dt)
                 local force = vector2.mult(playerDirection, 200)
 
                 local lastPlayerSeen = vector2.mag(vector2.sub(death.position, lastPlayerPosition))
-                print(lastPlayerSeen)
                 if lastPlayerSeen > 100 then
                     death.body:setAngle(math.atan2(force.y, force.x))
                     death.body:setLinearVelocity(force.x, force.y)

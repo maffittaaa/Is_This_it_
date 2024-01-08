@@ -20,10 +20,6 @@ require "MainCharacter/message"
 require "UI/lives"
 require "UI/diary"
 require "UI/inventory"
-Camera = require "Camera/Camera"
-Vector = require("Companion/vector")
-profile = require("Companion/profile")
-Luafinding = require("Companion/luafinding")
 require "Companion/companionMainScript"
 require "Companion/map"
 require "Companion/companionBody"

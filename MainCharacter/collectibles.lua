@@ -80,7 +80,7 @@ function DrawCollectibles()
         love.graphics.draw(sprites.life, collectible_lifes.life1.body:getX(), collectible_lifes.life1.body:getY(),
             collectible_lifes.life1.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2)
     end
-    if collectiblePages.counter == 0 and collectiblePages.counter <= 4 then -- if no page collected, draw all 4
+    if collectiblePages.counter == 0 then -- if no page collected, draw all 4
         love.graphics.draw(sprites.missingPages, collectiblePages.page1.body:getX(), collectiblePages.page1.body:getY(),
             collectiblePages.page1.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
@@ -93,7 +93,7 @@ function DrawCollectibles()
         love.graphics.draw(sprites.missingPages, collectiblePages.page4.body:getX(), collectiblePages.page4.body:getY(),
             collectiblePages.page4.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
-    elseif collectiblePages.counter == 1 and collectiblePages.counter <= 4 then -- if one page collected, draw just 3
+    elseif collectiblePages.counter == 1 then -- if one page collected, draw just 3
         love.graphics.draw(sprites.missingPages, collectiblePages.page2.body:getX(), collectiblePages.page2.body:getY(),
             collectiblePages.page2.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
@@ -103,14 +103,14 @@ function DrawCollectibles()
         love.graphics.draw(sprites.missingPages, collectiblePages.page4.body:getX(), collectiblePages.page4.body:getY(),
             collectiblePages.page4.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
-    elseif collectiblePages.counter == 2 and collectiblePages.counter <= 4 then -- if two pages collected, draw just 2
+    elseif collectiblePages.counter == 2 then -- if two pages collected, draw just 2
         love.graphics.draw(sprites.missingPages, collectiblePages.page3.body:getX(), collectiblePages.page3.body:getY(),
             collectiblePages.page3.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
         love.graphics.draw(sprites.missingPages, collectiblePages.page4.body:getX(), collectiblePages.page4.body:getY(),
             collectiblePages.page4.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)
-    elseif collectiblePages.counter == 3 and collectiblePages.counter <= 4 then -- if three pages collected, draw just 1
+    elseif collectiblePages.counter == 3 then -- if three pages collected, draw just 1
         love.graphics.draw(sprites.missingPages, collectiblePages.page4.body:getX(), collectiblePages.page4.body:getY(),
             collectiblePages.page4.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
             sprites.missingPages:getHeight() / 2)

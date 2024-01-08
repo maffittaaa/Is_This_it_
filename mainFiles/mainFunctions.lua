@@ -157,6 +157,7 @@ function UpdateMain(dt, world)
     UpdateCollectibles(dt)
     UpdateDeath(dt)
     UpdateChargeAttack(dt)
+    UpdateInventory()
 
     flashTimer = flashTimer + dt
 end
@@ -172,15 +173,20 @@ function DrawMain()
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
 
-    if collectible_key.counter == 1 and collectiblePages.counter == 4 then
-        gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
+    if collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
+    else
+        gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
+    end
+
+    print(collectiblePages.counter)
+    if collectiblePages.counter >= 4 and collectible_key.counter == 1 then
+        gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         for i = 1, #bigDoorMas, 1 do
             bigDoorMas[i].fixture:setSensor(true)
         end
     else
         gameMap:drawLayer(gameMap.layers["MasmorraClosed"])
-        gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
     end
 
     DrawCollectibles()
@@ -198,7 +204,7 @@ function DrawMain()
     gameMap:drawLayer(gameMap.layers["Arvores"])
     gameMap:drawLayer(gameMap.layers["Lampadas"])
 
-    
+
     flashing = FlashEffect()
     a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
     love.graphics.setColor(1, 1, 1, a)

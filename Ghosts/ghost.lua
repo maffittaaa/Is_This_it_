@@ -152,7 +152,6 @@ function UpdateGhost(dt, posicoes)
                     garyDiretion = vector2.norm(garyDiretion)
                     local force = vector2.mult(garyDiretion, 200)
                     ghosts[i].body:setLinearVelocity(force.x, force.y)
-
                 end
             end
 
@@ -183,32 +182,28 @@ function UpdateGhost(dt, posicoes)
 
         if magGhostGary < distance then
             local vol
-            
+
             magGhostGary = distance - magGhostGary
-            vol = magGhostGary/distance
+            vol = magGhostGary / distance
 
             if not sourceEffect[2]:isPlaying() or not sourceEffect[3]:isPlaying() then
                 if inDarkSide == true then
 
-                elseif inDarkSide == false then 
+                elseif inDarkSide == false then
 
                 end
             end
 
             if inDarkSide == true then
                 ChangeVol(vol, 2)
-            elseif inDarkSide == false then 
+            elseif inDarkSide == false then
                 ChangeVol(vol, 3)
             end
-
-            print(vol)
-            
         elseif magGhostGary > distance then
             if sourceEffect[2]:isPlaying() or sourceEffect[3]:isPlaying() then
-
                 if inDarkSide == true then
 
-                elseif inDarkSide == false then 
+                elseif inDarkSide == false then
 
                 end
             end

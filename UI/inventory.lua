@@ -1,10 +1,33 @@
+inventorySprites = {}
+
+function UpdateInventory()
+    local inventoryRectangleSprite = love.graphics.newImage("Sprites/inventoryRectangle.png")
+    local inventoryWithKey = love.graphics.newImage("Sprites/inventoryWithKey.png")
+    if collectible_key.counter == 1 then
+        inventorySprites[1] = inventoryWithKey
+        inventorySprites[2] = inventoryRectangleSprite
+        inventorySprites[3] = inventoryRectangleSprite
+        inventorySprites[4] = inventoryRectangleSprite
+        inventorySprites[5] = inventoryRectangleSprite
+    else
+        inventorySprites[1] = inventoryRectangleSprite
+        inventorySprites[2] = inventoryRectangleSprite
+        inventorySprites[3] = inventoryRectangleSprite
+        inventorySprites[4] = inventoryRectangleSprite
+        inventorySprites[5] = inventoryRectangleSprite
+    end
+
+    if collectiblePages.counter == 2 then
+
+    end
+end
+
 function DrawInventory()
-    inventorySprites = {}
-    local posX = camera.x + 580
-    for i = 1, 5, 1 do
-        local inventorySprite = love.graphics.newImage("Sprites/inventoryRectangle.png")
-        inventorySprites[i] = inventorySprite
-        love.graphics.draw(inventorySprites[i], camera.x + 580, camera.y + 350)
-        posX = posX - 50
+    local posX = 0.6 - (4 * 0.08)
+
+    for i = 1, #inventorySprites, 1 do
+        print(inventorySprites[i])
+        love.graphics.draw(inventorySprites[i], camera.x + (width / 2 * posX), camera.y + (height / 2 * 0.65))
+        posX = posX + 0.08
     end
 end
