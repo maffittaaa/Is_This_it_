@@ -16,11 +16,8 @@ require "Valkyries/arrow"
 require "Valkyries/melee_attack"
 require "MainCharacter/message"
 require "UI/lives"
-require"UI/diary"
-Camera = require "Camera/Camera"
-Vector = require("Companion/vector")
-profile = require("Companion/profile")
-Luafinding = require("Companion/luafinding")
+require "UI/diary"
+
 require "Companion/companionMainScript"
 require "Companion/map"
 require "Companion/companionBody"

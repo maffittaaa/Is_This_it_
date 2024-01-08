@@ -194,20 +194,20 @@ function DrawMain()
     gameMap:drawLayer(gameMap.layers["Arvores"])
     gameMap:drawLayer(gameMap.layers["Lampadas"])
 
+    
     flashing = FlashEffect()
+    a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
+    love.graphics.setColor(1, 1, 1, a)
 
     if flashing == true then
-        local a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
-        love.graphics.setColor(1, 1, 1, a)
         gameMap:drawLayer(gameMap.layers["LampadasEfeito1"])
-        love.graphics.setColor(1, 1, 1)
     end
     if flashing == false then
-        local a = math.abs(math.cos(love.timer.getTime() * flashingSpeed % 2 * math.pi))
-        love.graphics.setColor(1, 1, 1, a)
         gameMap:drawLayer(gameMap.layers["LampadasEfeito2"])
-        love.graphics.setColor(1, 1, 1)
     end
+
+    love.graphics.setColor(1, 1, 1)
+
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinAbovePlayer"])
     gameMap:drawLayer(gameMap.layers["MasmorraTeto"])
