@@ -30,6 +30,7 @@ function LoadCollectibles(world)
         sprites.missingPages:getHeight())
     collectiblePages.page1.fixture = love.physics.newFixture(collectiblePages.page1.body, collectiblePages.page1
         .shape, 2)
+    collectiblePages.page1.collected = false
     collectiblePages.page1.fixture:setSensor(true)
     collectiblePages.page1.type = "page1"
     collectiblePages.page1.fixture:setUserData(collectiblePages.page1)
@@ -39,6 +40,7 @@ function LoadCollectibles(world)
         sprites.missingPages:getHeight())
     collectiblePages.page2.fixture = love.physics.newFixture(collectiblePages.page2.body, collectiblePages.page2
         .shape, 2)
+    collectiblePages.page2.collected = false
     collectiblePages.page2.fixture:setSensor(true)
     collectiblePages.page2.type = "page2"
     collectiblePages.page2.fixture:setUserData(collectiblePages.page2)
@@ -48,6 +50,7 @@ function LoadCollectibles(world)
         sprites.missingPages:getHeight())
     collectiblePages.page3.fixture = love.physics.newFixture(collectiblePages.page3.body, collectiblePages.page3
         .shape, 2)
+    collectiblePages.page3.collected = false
     collectiblePages.page3.fixture:setSensor(true)
     collectiblePages.page3.type = "page3"
     collectiblePages.page3.fixture:setUserData(collectiblePages.page3)
@@ -57,6 +60,7 @@ function LoadCollectibles(world)
         sprites.missingPages:getHeight())
     collectiblePages.page4.fixture = love.physics.newFixture(collectiblePages.page4.body, collectiblePages.page4
         .shape, 2)
+    collectiblePages.page4.collected = false
     collectiblePages.page4.fixture:setSensor(true)
     collectiblePages.page4.type = "page4"
     collectiblePages.page4.fixture:setUserData(collectiblePages.page4)
@@ -164,55 +168,67 @@ function BeginContactCollectibles(fixtureA, fixtureB)
 
     --collision for collectibles(pages)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "page1" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureB:getUserData().collected == false then
+            fixtureB:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
+        -- if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
+        --     message = CreateMessage("inventory: 1 \nmissing page")
+        --     collectiblePages.counter = collectiblePages.counter + 1
+        -- end
     end
 
     if fixtureA:getUserData().type == "page1" and fixtureB:getUserData().type == "player" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureA:getUserData().collected == false then
+            fixtureA:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "page2" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureB:getUserData().collected == false then
+            fixtureB:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
 
     if fixtureA:getUserData().type == "page2" and fixtureB:getUserData().type == "player" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureA:getUserData().collected == false then
+            fixtureA:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
 
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "page3" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureB:getUserData().collected == false then
+            fixtureB:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
     if fixtureA:getUserData().type == "page3" and fixtureB:getUserData().type == "player" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: \nmissing page")
+        if fixtureA:getUserData().collected == false then
+            fixtureA:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "page4" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureB:getUserData().collected == false then
+            fixtureB:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
     if fixtureA:getUserData().type == "page4" and fixtureB:getUserData().type == "player" then
-        if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-            message = CreateMessage("inventory: 1 \nmissing page")
+        if fixtureA:getUserData().collected == false then
+            fixtureA:getUserData().collected = true
             collectiblePages.counter = collectiblePages.counter + 1
+            message = CreateMessage("inventory: 1 \nmissing page")
         end
     end
 end

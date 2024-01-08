@@ -52,8 +52,8 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- -- love.window.setMode(1920, 1080)
-    love.window.setFullscreen(true)
+    love.window.setMode(1920, 1080)
+    -- love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
 
