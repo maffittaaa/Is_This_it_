@@ -197,7 +197,7 @@ function UpdateGary(dt)
     for i = 1, #valkyries, 1 do
         magValkGary = vector.magnitude(vector.sub(gary.position, valkyries[i].position))
         local distance = 500
-        local Voice1 = (#sourceEffect - #valkyries) + i
+        local Voice1 = (#sourceEffect - #valkyries - 1 - 1) + i
 
         if magValkGary < distance then
             local vol
@@ -205,10 +205,10 @@ function UpdateGary(dt)
             magValkGary = distance - magValkGary
             vol = magValkGary/distance
             
-            if not sourceEffect[sound]:isPlaying() then
+            if not sourceEffect[Voice1]:isPlaying() then
                 PlaySound(nil, vol, Voice1)
             end
-            ChangeVol(vol, sound)
+            ChangeVol(vol, Voice1)
         elseif magValkGary > distance then
             if sourceEffect[Voice1]:isPlaying() then
                 StopSound(Voice1)
