@@ -6,8 +6,39 @@ local ambientSounds = {
     "MainFiles/Sounds/Ambient/DarkSide.wav",
     "MainFiles/Sounds/Ambient/Dungeon2.wav",
     "MainFiles/Sounds/Ambient/Lights.wav",
-    "MainFiles/Sounds/Ambient/GaryDead.wav"
+    "MainFiles/Sounds/Ambient/GaryDead.wav",
+    "MainFiles/Sounds/Ambient/CabinWood.wav",
+    "MainFiles/Sounds/Ambient/CabinWood2.wav"
 }
+
+local effectSounds = {
+    "MainFiles/Sounds/Effects/Death.wav"
+}
+
+sourceEffect = {}
+
+function PlaySound(sound, vol, i, new)
+    if new ~= nil then
+        local chosen = new + #sourceEffect
+        table.insert(sourceEffect, love.audio.newSource(effectSounds[sound], "stream"))
+        sourceEffect[chosen]:setVolume(vol)
+        love.audio.play(sourceEffect[chosen])
+    elseif new == nil then
+        sourceEffect[i]:setVolume(vol)
+        love.audio.play(sourceEffect[i])
+    end
+end
+
+function ChangeVol(vol, i)
+    sourceEffect[i]:setVolume(vol)
+end
+
+function StopSound(i)
+    if sourceEffect[i] ~= nil then
+        love.audio.stop(sourceEffect[i])
+    end
+end
+
 local source
 local source2
 local ambient = 1
@@ -35,8 +66,6 @@ function UpdateSounds(dt)
     if CheckGS[1] ~= gameState or CheckGS[2] ~= inDarkSide or CheckGS[3] ~= inMasmorra or CheckGS[4] ~= inCabin then
 		love.audio.pause()
 
-        source:setVolume(0.3)
-
         if gameState == MainMenu then
             ambient = 1
         elseif gameState == GamePlay and inCabin == true then
@@ -56,12 +85,17 @@ function UpdateSounds(dt)
 
         source = love.audio.newSource(ambientSounds[ambient], "stream")
 
+        if ambient == 3 then
+            source:setVolume(0.7)
+        end
+        source:setVolume(0.3)
+
         source2:setVolume(0.2)
 
         if gameState == MainMenu then
             ambient = 4
         elseif gameState == GamePlay and inCabin == true then
-            ambient = 1
+            ambient = 9
         elseif gameState == GamePlay and inDarkSide == false then
             ambient = 1
         elseif gameState == GamePlay and inMasmorra == true then
@@ -96,7 +130,7 @@ function UpdateSounds(dt)
 
     if not source:isPlaying() then
 
-        source:setVolume(0.3)
+        source:setVolume(0.2)
 
         if gameState == MainMenu then
             ambient = 1
@@ -106,7 +140,6 @@ function UpdateSounds(dt)
             ambient = 2
         elseif gameState == GamePlay and inMasmorra == true then
             ambient = 3
-            source:setVolume(0.7)
         elseif gameState == GamePlay and inDarkSide == true then
             ambient = 5
         elseif gameState == DeadMenu then
@@ -116,6 +149,10 @@ function UpdateSounds(dt)
         end
 
         source = love.audio.newSource(ambientSounds[ambient], "stream")
+        
+        if ambient == 3 then
+            source:setVolume(0.7)
+        end
 
         if ambient ~= 8 then
             love.audio.play(source)
@@ -128,12 +165,15 @@ function UpdateSounds(dt)
         if gameState == MainMenu then
             ambient = 4
         elseif gameState == GamePlay and inCabin == true then
-            ambient = 1
+            if ambient == 9 then
+                ambient = 10
+            else
+                ambient = 9
+            end
         elseif gameState == GamePlay and inDarkSide == false then
             ambient = 1
         elseif gameState == GamePlay and inMasmorra == true then
             ambient = 6 
-            source2:setVolume(0.5)
         elseif gameState == GamePlay and inDarkSide == true then
             ambient = 7
         elseif gameState == DeadMenu then
@@ -146,6 +186,14 @@ function UpdateSounds(dt)
 
         if ambient == 1 then
             source2:setVolume(0)
+        end
+
+        if ambient == 6 then
+            source2:setVolume(0.5)
+        end
+
+        if ambient == 10 then
+            source2:setVolume(0.1)
         end
 
         love.audio.play(source2)
