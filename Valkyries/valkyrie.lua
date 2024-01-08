@@ -105,7 +105,9 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
 
       if valkyries[i].patroling == true then
         --If not in Sight, Patrol
-        StopSound(#sourceEffect)
+        if sourceEffect[#sourceEffect]:isPlaying() then
+          StopSound(#sourceEffect)
+        end
         valkyries[i].valkyriex_patrolling = valkyries[i].body:getX()
         if valkyries[i].valkyriex_patrolling >= posicoes[i + quantity].x then
           valkyries[i].is_forward_backwards = -1
@@ -138,7 +140,9 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
           valkyries[i].lastPposition = playerPosition
 
           if valkyries[i].isMeleeing == true then
-            StopSound(#sourceEffect)
+            if sourceEffect[#sourceEffect]:isPlaying() then
+              StopSound(#sourceEffect)
+            end
             local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
             playerDiretion = vector2.norm(playerDiretion)
             local force = vector2.mult(playerDiretion, 200)
