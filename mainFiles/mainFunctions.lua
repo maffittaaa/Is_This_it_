@@ -27,7 +27,7 @@ function KeyPressed(e)
     if e == 'r' then
         drawOpenDiary = not drawOpenDiary
     end
-    
+
     if e == '1' then
         currentPage = 1 -- page 1 and 2 of the diary
     end
@@ -172,7 +172,7 @@ function DrawMain()
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
 
-    if collectible_key.counter == 1 then
+    if collectible_key.counter == 1 and collectiblePages.counter == 4 then
         gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
         for i = 1, #bigDoorMas, 1 do
@@ -230,6 +230,7 @@ function DrawMain()
     end
 
     if drawOpenDiary == true then
+        print(currentPage)
         DrawFirstPage()
         DrawSecondPage()
         DrawThirdPage()
@@ -241,6 +242,8 @@ function DrawMain()
         DrawPageNine()
         DrawPageTen()
     end
+
+    DrawInventory()
 
     if gary.health <= 0 then
         gameState = DeadMenu

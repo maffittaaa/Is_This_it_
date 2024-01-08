@@ -9,5 +9,5 @@ function LoadSprites()
     sprites.life = love.graphics.newImage("Sprites/life.png")
     sprites.arrow = love.graphics.newImage("Sprites/Arrow.png")
     sprites.inventory = love.graphics.newImage("Sprites/inventory.png")
-    sprites.diary = love.graphics.newImage("Sprites/diary.png")
+    sprites.missingPages = love.graphics.newImage("Sprites/missing_pages.png")
 end

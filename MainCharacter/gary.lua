@@ -78,7 +78,6 @@ function UpdateGary(dt)
                 return
             elseif inCabin == false and trigger_door == true then
                 gary.body:setPosition(doors[2].body:getX() + 100, doors[2].body:getY())
-                print(inCabin)
                 inCabin = true
                 trigger_door = false
                 return

@@ -19,6 +19,7 @@ require "Death/chargeAttack"
 require "MainCharacter/message"
 require "UI/lives"
 require "UI/diary"
+require "UI/inventory"
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
 profile = require("Companion/profile")
@@ -66,7 +67,6 @@ function love.load()
     LoadDeadMenu()
     LoadWinMenu()
     LoadSounds()
-
 end
 
 function love.update(dt)

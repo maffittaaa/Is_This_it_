@@ -10,6 +10,7 @@ function DrawDiary()
 end
 
 function DrawFirstPage()
+    currentPage = 1
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
     love.graphics.setColor(0, 0, 0)
@@ -23,7 +24,6 @@ function DrawFirstPage()
         camera.y + 30)
     love.graphics.print("Page 1", camera.x - 445, camera.y + 210)
     love.graphics.setColor(1, 1, 1)
-    currentPage = 1
 end
 
 function DrawSecondPage()
@@ -41,21 +41,45 @@ function DrawSecondPage()
 end
 
 function DrawThirdPage()
+    currentPage = 3
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
     love.graphics.setColor(0, 0, 0)
     love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
     love.graphics.setColor(1, 1, 1)
-    currentPage = 3
+    if collectiblePages.counter == 1 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(18))
+        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
+        love.graphics.print("I found out that there is another world called earth \nbeyond this one", camera.x - 445,
+            camera.y - 105)
+        love.graphics.print("At the moment we are in afterlife, but there is a way out!", camera.x - 445, camera.y - 35)
+        love.graphics.print("I need to go, but I'll \ntell you more later", camera.x - 445, camera.y + 30)
+        love.graphics.print("Page 3", camera.x - 445, camera.y + 210)
+        love.graphics.setColor(1, 1, 1)
+    end
 end
 
 function DrawForthPage()
     love.graphics.setColor(0, 0, 0)
     love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
     love.graphics.setColor(1, 1, 1)
+    if collectiblePages.counter == 2 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(18))
+        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
+        love.graphics.print("The way out of this world is \ninside a castle hidden in a basement", camera.x + 50,
+            camera.y - 105)
+        love.graphics.print("I'm passing the bridge to the dark \nforest but our friends seem strange...", camera.x + 50,
+            camera.y - 10)
+        love.graphics.print("I hope I can find the castle", camera.x + 50, camera.y + 60)
+        love.graphics.print("Page 4", camera.x + 400, camera.y + 210)
+        love.graphics.setColor(1, 1, 1)
+    end
 end
 
 function DrawFifthPage()
+    currentPage = 5
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
     love.graphics.setColor(0, 0, 0)
@@ -67,7 +91,6 @@ function DrawFifthPage()
     love.graphics.print("But I escaped, and now I'm hiding in \nthe dark forest", camera.x - 445, camera.y + 30)
     love.graphics.print("Page 5", camera.x - 445, camera.y + 210)
     love.graphics.setColor(1, 1, 1)
-    currentPage = 5
 end
 
 function DrawSixthPage()
@@ -83,21 +106,44 @@ function DrawSixthPage()
 end
 
 function DrawSeventhPage()
+    currentPage = 7
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
     love.graphics.setColor(0, 0, 0)
     love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
     love.graphics.setColor(1, 1, 1)
-    currentPage = 7
+    if collectiblePages.counter == 3 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(18))
+        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
+        love.graphics.print("The key that I discovered earlier \nis for the basement of the castle", camera.x - 445,
+            camera.y - 105)
+        love.graphics.print("I'm preparing everything to \ngo out again and explore", camera.x - 445, camera.y - 35)
+        love.graphics.print("We need to get to earth, they say it's so pretty...", camera.x - 445, camera.y + 30)
+        love.graphics.print("Page 7", camera.x - 445, camera.y + 210)
+        love.graphics.setColor(1, 1, 1)
+    end
 end
 
 function DrawPageEight()
     love.graphics.setColor(0, 0, 0)
     love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
     love.graphics.setColor(1, 1, 1)
+    if collectiblePages.counter == 4 then
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.setFont(love.graphics.newFont(18))
+        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
+        love.graphics.print("Everything is ready for me to go out", camera.x + 50, camera.y - 105)
+        love.graphics.print("I'm passing that bridge again, but \nthis time I'm prepared for them!", camera.x + 50,
+            camera.y - 10)
+        love.graphics.print("See you soon!", camera.x + 50, camera.y + 60)
+        love.graphics.print("Page 8", camera.x + 400, camera.y + 210)
+        love.graphics.setColor(1, 1, 1)
+    end
 end
 
 function DrawPageNine()
+    currentPage = 9
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
     love.graphics.setColor(0, 0, 0)
@@ -109,7 +155,6 @@ function DrawPageNine()
     love.graphics.print("I'll see you soon", camera.x - 445, camera.y + 70)
     love.graphics.print("Page 9", camera.x - 445, camera.y + 210)
     love.graphics.setColor(1, 1, 1)
-    currentPage = 9
 end
 
 function DrawPageTen()

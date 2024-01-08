@@ -13,23 +13,16 @@ function LoadSounds()
     source = love.audio.newSource(ambientSounds[ambient], "stream")
     source:setVolume(0.3)
     love.audio.play(source)
-    
+
     CheckGS[1] = gameState
     CheckGS[2] = inDarkSide
     CheckGS[3] = inMasmorra
     CheckGS[4] = inCabin
 end
 
-
 function UpdateSounds(dt)
-    print("StartingOver")
-    print("Before: "..  CheckGS[1])
-    print("Real: ", inCabin)
-    print("Ambient: ".. ambient)
-    print("Cheked")
-    
     if CheckGS[1] ~= gameState or CheckGS[2] ~= inDarkSide or CheckGS[3] ~= inMasmorra or CheckGS[4] ~= inCabin then
-		love.audio.pause()
+        love.audio.pause()
 
         if gameState == MainMenu then
             ambient = 1
@@ -44,14 +37,14 @@ function UpdateSounds(dt)
         elseif gameState == DeadMenu then
 
         elseif gameState == WinMenu then
-    
+
         end
 
-        print("Ambient: ".. ambient)
-        
+        print("Ambient: " .. ambient)
+
         source = love.audio.newSource(ambientSounds[ambient], "stream")
         source:setVolume(0.3)
-		love.audio.play(source)
+        love.audio.play(source)
     end
 
     CheckGS[1] = gameState
@@ -59,7 +52,7 @@ function UpdateSounds(dt)
     CheckGS[3] = inMasmorra
     CheckGS[4] = inCabin
 
-    if not source:isPlaying( ) then
+    if not source:isPlaying() then
         if gameState == MainMenu then
             ambient = 1
         elseif gameState == GamePlay and inCabin == true then
@@ -73,11 +66,11 @@ function UpdateSounds(dt)
         elseif gameState == DeadMenu then
 
         elseif gameState == WinMenu then
-    
+
         end
 
         source = love.audio.newSource(ambientSounds[ambient], "stream")
         source:setVolume(0.3)
-		love.audio.play(source)
-	end
+        love.audio.play(source)
+    end
 end
