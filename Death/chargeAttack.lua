@@ -6,7 +6,6 @@ local isCharging = false
 local chargeTime = 2 -- time that death needs to lock player position to charge to that point
 local charge = false
 local facingRight = true
-local facingLeft = false
 
 function UpdateChargeAttack(dt)
     death.position = vector2.new(death.body:getPosition())
@@ -44,8 +43,6 @@ function UpdateChargeAttack(dt)
         local deathPosition = vector2.new(death.body:getPosition())
         local deathRange = vector2.mag(vector2.sub(deathPosition, lastPlayerPosition))
         facingRight = RightSide(lastPlayerPosition.x, deathPosition.x)
-        facingLeft = LeftSide(-(lastPlayerPosition.x), -(deathPosition.x))
-        facingLeft = true
 
         if deathRange < 1 then
             charge = false
@@ -58,16 +55,15 @@ function RightSide(playerPositionX, enemyPositionX)
     return playerPositionX > enemyPositionX
 end
 
-function LeftSide(playerPositionX, enemyPositionX)
-    return playerPositionX < enemyPositionX
-end
-
 function DrawChargeAttack()
     if charge then
+        print("Charging")
         deathSprites = death.idle[death.animation_frame]
     elseif facingRight then
+        print("facingRight")
         deathSprites = death.right[death.animation_frame]
-    elseif facingLeft and not facingRight then
+    else
+        print("facingLeft")
         deathSprites = death.left[death.animation_frame]
     end
 

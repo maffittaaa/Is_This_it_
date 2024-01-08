@@ -50,11 +50,3 @@ function UpdateDeath(dt)
         death.animation_timer = 0
     end
 end
-
-function DrawDeath()
-    if death.health > 0 then
-        love.graphics.draw(death.idle[death.animation_frame], death.body:getX(), death.body:getY(),
-            death.body:getAngle(), 1, 1, death.idle[death.animation_frame]:getWidth() / 2,
-            death.idle[death.animation_frame]:getHeight() / 2)
-    end
-end
