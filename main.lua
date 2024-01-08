@@ -1,5 +1,3 @@
--- love.window.setTitle("Is This It?")
-
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
 profile = require("Companion/profile")
@@ -33,8 +31,6 @@ require "Menus.inGameMenu"
 require "Menus.deadMenu"
 require "Menus.winMenu"
 require "MainFiles.soundManager"
---require "Ghosts.mapaGhostAi"
---require "Ghosts.ghostsAiScript"
 
 MainMenu = 1
 GamePlay = 2
