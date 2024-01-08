@@ -66,7 +66,7 @@ end
 
 function UpdateSounds(dt)
     if CheckGS[1] ~= gameState or CheckGS[2] ~= inDarkSide or CheckGS[3] ~= inMasmorra or CheckGS[4] ~= inCabin then
-        love.audio.pause()
+        love.audio.stop()
 
         if gameState == MainMenu then
             ambient = 1
