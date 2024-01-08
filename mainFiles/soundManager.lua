@@ -3,7 +3,7 @@ local ambientSounds = {
     "MainFiles/Sounds/Ambient/BrightSide.wav",
     "MainFiles/Sounds/Ambient/Dungeon.wav",
     "MainFiles/Sounds/Ambient/Cabin.wav",
-    "MainFiles/Sounds/Ambient/DarkSide.wav",
+    "MainFiles/Sounds/Ambient/Darkside.wav",
     "MainFiles/Sounds/Ambient/Dungeon2.wav",
     "MainFiles/Sounds/Ambient/Lights.wav",
     "MainFiles/Sounds/Ambient/GaryDead.wav",
@@ -66,7 +66,6 @@ end
 
 function UpdateSounds(dt)
 
-
     if CheckGS[1] ~= gameState or CheckGS[2] ~= inDarkSide or CheckGS[3] ~= inMasmorra or CheckGS[4] ~= inCabin then
         love.audio.stop(source)
         love.audio.stop(source2)
@@ -90,14 +89,10 @@ function UpdateSounds(dt)
         end
 
         source = love.audio.newSource(ambientSounds[ambient], "stream")
-
+        source:setVolume(0.2)
         if ambient == 3 then
             source:setVolume(0.2)
         end
-
-        source:setVolume(0.2)
-
-        source2:setVolume(0.2)
 
         if gameState == MainMenu then
             ambient = 4
@@ -118,12 +113,13 @@ function UpdateSounds(dt)
         end
 
         source2 = love.audio.newSource(ambientSounds[ambient], "stream")
+        source2:setVolume(0.2)
 
         if ambient == 1 then
             source2:setVolume(0)
         end
 
-        if gameState == InGameMenu then
+        if gameState == (InGameMenu or DeadMenu or WinMenu) then
             source:setVolume(0)
             source2:setVolume(0)
         end
@@ -216,10 +212,10 @@ function UpdateSounds(dt)
     end
 
     if ambient == 7 then
-        local b = a * 0.3
+        local b = 0
         
-        if flashing == false then
-            b = 0
+        if flashing == true then
+            b = a * 0.3
         end
         
         source2:setVolume(b)

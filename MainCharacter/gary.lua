@@ -189,7 +189,7 @@ function UpdateGary(dt)
         ChangeVol(vol, sound)
     elseif magDeathGary > distance then
         if sourceEffect[sound]:isPlaying() then
-            -- StopSound(sound)
+            StopSound(sound)
         end
     end
 
