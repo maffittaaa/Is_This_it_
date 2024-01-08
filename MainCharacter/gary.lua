@@ -63,9 +63,7 @@ function LoadGary(world, x, y)
     gary.fixture:setUserData(gary)
 end
 
-
 function UpdateGary(dt)
-    
     gary.position = vector2.new(gary.body:getPosition())
 
 
@@ -181,9 +179,9 @@ function UpdateGary(dt)
     local sound = 1
     if magDeathGary < distance then
         local vol
-        
+
         magDeathGary = distance - magDeathGary
-        vol = magDeathGary/distance
+        vol = magDeathGary / distance
 
         if not sourceEffect[sound]:isPlaying() then
             PlaySound(nil, vol, sound)
@@ -191,7 +189,7 @@ function UpdateGary(dt)
         ChangeVol(vol, sound)
     elseif magDeathGary > distance then
         if sourceEffect[sound]:isPlaying() then
-            StopSound(sound)
+            -- StopSound(sound)
         end
     end
 
@@ -203,10 +201,10 @@ function UpdateGary(dt)
 
         if magValkGary < distance then
             local vol
-            
+
             magValkGary = distance - magValkGary
-            vol = magValkGary/distance
-    
+            vol = magValkGary / distance
+
             if not sourceEffect[sound]:isPlaying() then
                 PlaySound(nil, vol, Voice1)
             end
@@ -228,10 +226,10 @@ function UpdateGary(dt)
         if inDarkSide == false then
             if magGhostGary < distance then
                 local vol
-    
+
                 magGhostGary = distance - magGhostGary
                 vol = magGhostGary / distance
-    
+
                 if not sourceEffect[Voice1]:isPlaying() then
                     PlaySound(nil, vol, Voice1)
                 end
@@ -241,15 +239,14 @@ function UpdateGary(dt)
                     StopSound(Voice1)
                 end
             end
-
         elseif inDarkSide == true then
             if magGhostGary < distance then
                 local vol
-    
+
                 magGhostGary = distance - magGhostGary
                 vol = magGhostGary / distance
-    
-                if  not sourceEffect[Voice2]:isPlaying() then
+
+                if not sourceEffect[Voice2]:isPlaying() then
                     PlaySound(nil, vol, Voice2)
                 end
                 ChangeVol(vol, Voice2)
@@ -259,7 +256,7 @@ function UpdateGary(dt)
                 end
             end
         end
-    end 
+    end
 end
 
 function DrawGary()

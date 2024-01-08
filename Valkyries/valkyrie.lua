@@ -87,7 +87,7 @@ function LoadValquiria(world, x, y, i)
   valkyrie.rangedAttack.parent = i
 
   valkyrie.trigger = CreateSword(world, valkyrie)
-  
+
   return valkyrie
 end
 
@@ -137,6 +137,7 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
           valkyries[i].lastPposition = playerPosition
 
           if valkyries[i].isMeleeing == true then
+            StopSound(1)
             local playerDiretion = vector2.sub(playerPosition, vector2.new(valkyries[i].body:getPosition()))
             playerDiretion = vector2.norm(playerDiretion)
             local force = vector2.mult(playerDiretion, 200)

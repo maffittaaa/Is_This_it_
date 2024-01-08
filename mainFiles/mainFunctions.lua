@@ -128,7 +128,7 @@ function LoadMain(world)
         PlaySound(4, 0, nil, 1)
     end
 
-    PlaySound(5, 0, nil, 1)
+    -- PlaySound(5, 0, nil, 1)
 
     --Loading Camera
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
@@ -149,7 +149,7 @@ end
 
 function UpdateMain(dt, world)
     camera:update(dt)
-    
+
     camera:follow(gary.body:getX(), gary.body:getY())
     camera:setFollowLerp(0.2)
     camera:setFollowLead(0)
