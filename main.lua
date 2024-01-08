@@ -14,6 +14,8 @@ require "MainCharacter/collectibles"
 require "Valkyries/valkyrie"
 require "Valkyries/arrow"
 require "Valkyries/melee_attack"
+require "Death/death"
+require "Death/chargeAttack"
 require "MainCharacter/message"
 require "UI/lives"
 require "UI/diary"
@@ -50,7 +52,7 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(BeginContact, EndContact, nil, nil)
 
-    -- love.window.setMode(1920, 1080)
+    -- -- love.window.setMode(1920, 1080)
     love.window.setFullscreen(true)
     height = love.graphics.getHeight()
     width = love.graphics.getWidth()
@@ -109,7 +111,7 @@ function love.keypressed(e)
     if e == "0" then
         gameState = WinMenu
     end
-    
+
     if gameState == MainMenu then
         --Keys MainMenu
     elseif gameState == InGameMenu then
@@ -129,9 +131,9 @@ function love.keypressed(e)
     end
 end
 
-function love.mousepressed( x, y, button )
+function love.mousepressed(x, y, button)
     if gameState == GamePlay then
-        MousePressed( x, y, button )
+        MousePressed(x, y, button)
     end
 end
 

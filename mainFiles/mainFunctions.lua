@@ -105,7 +105,6 @@ function LoadMain(world)
     gameMap = sti("Mapa/map.lua")
 
     --Call "load" function of every script
-
     LoadAllEnmenies(world)
     LoadSprites()
     LoadGary(world, 900, 1000)
@@ -113,6 +112,7 @@ function LoadMain(world)
     LoadHealthBars()
     LoadCollectibles(world)
     LoadCompanion(world)
+    LoadDeath(world)
     --LoadGhostsAi()
     LoadMainMap(world)
 
@@ -155,6 +155,8 @@ function UpdateMain(dt, world)
     UpdateValquiria(dt, GetPlayerPosition(), valkyriesPos, valkeries_quantity)
     UpdateValkyrieSword(world, dt)
     UpdateCollectibles(dt)
+    UpdateDeath(dt)
+    UpdateChargeAttack(dt)
 
     flashTimer = flashTimer + dt
 end
@@ -191,6 +193,8 @@ function DrawMain()
     DrawValquiria(valkeries_quantity)
     DrawValkyrieAttack()
     DrawValkyrieSword()
+    DrawDeath()
+    DrawChargeAttack()
     gameMap:drawLayer(gameMap.layers["Arvores"])
     gameMap:drawLayer(gameMap.layers["Lampadas"])
 

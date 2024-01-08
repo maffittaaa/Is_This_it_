@@ -218,7 +218,7 @@ function DrawGhost()
 
                 love.graphics.setColor(1, 1, 1)
                 --love.graphics.circle("line", ghosts[i].ghostRange.body:getX(), ghosts[i].ghostRange.body:getY(),
-                    --ghosts[i].ghostRange.shape:getRadius())
+                --ghosts[i].ghostRange.shape:getRadius())
             end
         end
     end
@@ -226,11 +226,10 @@ end
 
 function BeginContactGhost(fixtureA, fixtureB)
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "ghost" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        ghost = fixtureB:getUserData()
-        if ghost.isChasing == true and ghost.garyInSight == true then
-            ghost.timer = 1 -- cooldown time to chase again
+        if fixtureB:getUserData().isChasing == true and fixtureB:getUserData().garyInSight == true then
+            ghost.timer = 1                                                                                                             -- cooldown time to chase again
             gary.health = gary.health - 0.5
-            PushGaryBackGhosts(fixtureB:getUserData().id)
+            PushGaryBackGhosts(fixtureB:getUserData())
             if gary.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = true
@@ -238,18 +237,16 @@ function BeginContactGhost(fixtureA, fixtureB)
         end
     end
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        ghost = fixtureA:getUserData()
-        if ghost.isChasing == true and ghost.garyInSight == true then
-            ghost.timer = 1 -- cooldown tipe to chase again
+        if fixtureA:getUserData().isChasing == true and fixtureA:getUserData().garyInSight == true then
+            ghost.timer = 1                                                                                                             -- cooldown tipe to chase again
             gary.health = gary.health - 0.5
-            PushGaryBackGhosts(fixtureA:getUserData().id)
+            PushGaryBackGhosts(fixtureA:getUserData())
             if gary.health <= 0 then
                 ghost.isChasing = false
                 ghost.patroling = true
             end
         end
     end
-    -- print(fixtureA:getUserData().type, fixtureB:getUserData().type)
     if fixtureA:getUserData().type == "ghost" and fixtureB:getUserData().type == "melee weapon" then -- attack from player to ghost
         ghost = fixtureA:getUserData()
         if ghost.health <= 4 and ghost.health > 0 then
@@ -260,7 +257,7 @@ function BeginContactGhost(fixtureA, fixtureB)
                 ghost.patroling = false
             end
         end
-    if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
+        if fixtureA:getUserData().type == "melee weapon" and fixtureB:getUserData().type == "ghost" then -- attack from player to ghost
             ghost = fixtureB:getUserData()
             if ghost.health <= 4 and ghost.health > 0 then
                 ghost.health = ghost.health - 0.5

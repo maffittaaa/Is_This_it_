@@ -122,7 +122,7 @@ function UpdateGary(dt)
     if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         garyVelocity.x = garyVelocity.x - player_velocity
         gary.animation_timer = gary.animation_timer + dt
-        if gary.animation_timer > 0.1 then 
+        if gary.animation_timer > 0.1 then
             gary.animation_frame = gary.animation_frame + 1
             if gary.animation_frame > 4 then
                 gary.animation_frame = 1
@@ -214,8 +214,8 @@ function GaryKnock(dt)
     end
 end
 
-function PushGaryBackGhosts(i)
-    local garyDirection = vector2.sub(gary.position, vector2.new(ghosts[i].body:getPosition()))
+function PushGaryBackGhosts(ghost)
+    local garyDirection = vector2.sub(gary.position, vector2.new(ghost.body:getPosition()))
     garyDirection = vector2.norm(garyDirection)
 
     local force = vector2.mult(garyDirection, absolute_force)

@@ -22,8 +22,8 @@ function LoadAllEnmenies(world)
     ghostsPos[2] = { x = 40 * 32, y = 60 * 32 }
     ghostsPos[3] = { x = 33 * 32, y = 63 * 32 }
     ghostsPos[4] = { x = 36 * 32, y = 66 * 32 }
-    
-    ghostsPos[5] = {x = 113 * 32, y = 48 * 32}
+
+    ghostsPos[5] = { x = 113 * 32, y = 48 * 32 }
     ghostsPos[6] = { x = 112 * 32, y = 52 * 32 }
     ghostsPos[7] = { x = 110 * 32, y = 55 * 32 }
     ghostsPos[8] = { x = 105 * 32, y = 58 * 32 }
@@ -61,21 +61,21 @@ function LoadAllEnmenies(world)
 
     ghostsPos[31] = { x = 157 * 32, y = 86 * 32 }
 
-    -- Enemys Masmorra
-    ghostsPos[32] = {x = 43 * 32, y = 205 * 32 }
-    ghostsPos[33] = {x = 43 * 32, y = 223 * 32 }
-    ghostsPos[34] = {x = 33 * 32, y = 241 * 32 }
-    ghostsPos[35] = {x = 33 * 32, y = 259 * 32 }
+    -- Enemies Masmorra
+    ghostsPos[32] = { x = 43 * 32, y = 205 * 32 }
+    ghostsPos[33] = { x = 43 * 32, y = 223 * 32 }
+    ghostsPos[34] = { x = 33 * 32, y = 241 * 32 }
+    ghostsPos[35] = { x = 33 * 32, y = 259 * 32 }
 
     --ghosts final Patroling Position
 
     -- NPCs
-    ghostsPos[36] = { x = 58 * 32, y = 57 * 32}
-    ghostsPos[37] = { x = 58 * 32, y = 60 * 32}
-    ghostsPos[38] = { x = 56 * 32, y = 60 * 32}
-    ghostsPos[39] = { x = 52 * 32, y = 65 * 32}
-    
-    ghostsPos[40] = {x = 130 * 32, y = 48 * 32 }
+    ghostsPos[36] = { x = 58 * 32, y = 57 * 32 }
+    ghostsPos[37] = { x = 58 * 32, y = 60 * 32 }
+    ghostsPos[38] = { x = 56 * 32, y = 60 * 32 }
+    ghostsPos[39] = { x = 52 * 32, y = 65 * 32 }
+
+    ghostsPos[40] = { x = 130 * 32, y = 48 * 32 }
     ghostsPos[41] = { x = 130 * 32, y = 52 * 32 }
     ghostsPos[42] = { x = 130 * 32, y = 55 * 32 }
     ghostsPos[43] = { x = 130 * 32, y = 58 * 32 }
@@ -114,17 +114,17 @@ function LoadAllEnmenies(world)
     ghostsPos[66] = { x = 162 * 32, y = 86 * 32 }
 
     -- Enemys Masmorra
-    ghostsPos[67] = {x = 97 * 32, y = 205 * 32 }
-    ghostsPos[68] = {x = 97 * 32, y = 223 * 32 }
-    ghostsPos[69] = {x = 146 * 32, y = 241 * 32 }
-    ghostsPos[70] = {x = 77 * 32, y = 259 * 32 }
+    ghostsPos[67] = { x = 97 * 32, y = 205 * 32 }
+    ghostsPos[68] = { x = 97 * 32, y = 223 * 32 }
+    ghostsPos[69] = { x = 146 * 32, y = 241 * 32 }
+    ghostsPos[70] = { x = 77 * 32, y = 259 * 32 }
 
 
-    for i = 1, #ghostsPos/2, 1 do
+    for i = 1, #ghostsPos / 2, 1 do
         ghosts[i] = LoadGhost(world, ghostsPos[i].x, ghostsPos[i].y, i)
     end
 
-    for i = 1, #valkyriesPos/2, 1 do
+    for i = 1, #valkyriesPos / 2, 1 do
         valkyries[i] = LoadValquiria(world, valkyriesPos[i].x, valkyriesPos[i].y, i)
     end
     valkeries_quantity = #valkyries
