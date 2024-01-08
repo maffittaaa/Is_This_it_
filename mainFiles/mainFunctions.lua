@@ -22,6 +22,9 @@ function KeyPressed(e)
             gary_sword.body:setActive(false)
         else
             gary_sword.body:setActive(true)
+
+            ChangeVol(0.7, #sourceEffect)
+            PlaySound(nil, 0.7, #sourceEffect)
         end
     end
 
@@ -129,7 +132,9 @@ function LoadMain(world)
         PlaySound(4, 0, nil, 1)
     end
 
-    PlaySound(5, 1, nil, 1)
+    PlaySound(5, 0.5, nil, 1)
+    PlaySound(6, 0.5, nil, 1)
+
     --Loading Camera
     camera = Camera(gary.body:getX(), gary.body:getY(), width, height, 1.2)
 end

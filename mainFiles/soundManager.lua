@@ -16,7 +16,8 @@ local effectSounds = {
     "MainFiles/Sounds/Effects/GhostVoice1.wav",
     "MainFiles/Sounds/Effects/GhostVoice2.mp3",
     "MainFiles/Sounds/Effects/ValkyrieVoice.wav",
-    "MainFiles/Sounds/Effects/Arrow.mp3"
+    "MainFiles/Sounds/Effects/Arrow.mp3",
+    "MainFiles/Sounds/Effects/Shink.wav"
 }
 
 sourceEffect = {}

@@ -41,8 +41,27 @@ function UpdateValkyrieRangedAttack(world, dt)
     if cooldown_intervalo > cooldown_sec then -- verify if the cooldown is done so they can shoot again
         canShoot = true
         cooldown_intervalo = 0
-        PlaySound(nil, 0.7, #sourceEffect)
-        print("here")
+
+        for i = 1, #valkyries, 1 do
+            if valkyries[i].isRanging == true and valkyries[i].isMeleeing == false then
+                magValkGary = vector.magnitude(vector.sub(gary.position, valkyries[i].position))
+                local distance = 500
+                local Voice1 = #sourceEffect - 1
+
+                if magValkGary < distance then
+                    local vol
+                    magValkGary = distance - magValkGary
+                    vol = magValkGary/distance
+                    ChangeVol(vol, Voice1)
+                    PlaySound(nil, 0.2, Voice1)
+
+                elseif magValkGary > distance then
+                    if sourceEffect[Voice1]:isPlaying() then
+                        StopSound(Voice1)
+                    end
+                end
+            end
+        end
     else
         canShoot = false
     end
