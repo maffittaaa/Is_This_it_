@@ -174,40 +174,6 @@ function UpdateGhost(dt, posicoes)
                 table.remove(posicoes, i + #ghosts)
             end
         end
-
-        --Sound Ghosts
-
-        local magGhostGary = vector.magnitude(vector.sub(gary.position, ghosts[i].position))
-        local distance = 700
-
-        if magGhostGary < distance then
-            local vol
-
-            magGhostGary = distance - magGhostGary
-            vol = magGhostGary / distance
-
-            if not sourceEffect[2]:isPlaying() or not sourceEffect[3]:isPlaying() then
-                if inDarkSide == true then
-
-                elseif inDarkSide == false then
-
-                end
-            end
-
-            if inDarkSide == true then
-                ChangeVol(vol, 2)
-            elseif inDarkSide == false then
-                ChangeVol(vol, 3)
-            end
-        elseif magGhostGary > distance then
-            if sourceEffect[2]:isPlaying() or sourceEffect[3]:isPlaying() then
-                if inDarkSide == true then
-
-                elseif inDarkSide == false then
-
-                end
-            end
-        end
     end
 end
 
