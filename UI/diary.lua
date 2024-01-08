@@ -48,10 +48,10 @@ function DrawThirdPage()
     if collectiblePages.counter >= 1 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
-        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
-        love.graphics.print("I found out that there is another world called earth \nbeyond this one", camera.x - 445,
+        love.graphics.print("Dear Diary, ", camera.x - 445, camera.y - 170)
+        love.graphics.print("I found out that there is another world \ncalled earth beyond this one", camera.x - 445,
             camera.y - 105)
-        love.graphics.print("At the moment we are in afterlife, but there is a way out!", camera.x - 445, camera.y - 35)
+        love.graphics.print("At the moment we are in afterlife, \nbut there is a way out!", camera.x - 445, camera.y - 35)
         love.graphics.print("I need to go, but I'll \ntell you more later", camera.x - 445, camera.y + 30)
         love.graphics.print("Page 3", camera.x - 445, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
@@ -118,11 +118,11 @@ function DrawSeventhPage()
     if collectiblePages.counter >= 3 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
-        love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
+        love.graphics.print("Dear Diary, ", camera.x - 445, camera.y - 170)
         love.graphics.print("The key that I discovered earlier \nis for the basement of the castle", camera.x - 445,
             camera.y - 105)
         love.graphics.print("I'm preparing everything to \ngo out again and explore", camera.x - 445, camera.y - 35)
-        love.graphics.print("We need to get to earth, they say it's so pretty...", camera.x - 445, camera.y + 30)
+        love.graphics.print("We need to get to earth, \nthey say it's so pretty...", camera.x - 445, camera.y + 30)
         love.graphics.print("Page 7", camera.x - 445, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
         return
@@ -138,10 +138,11 @@ function DrawPageEight()
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
         love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
-        love.graphics.print("Everything is ready for me to go out", camera.x + 50, camera.y - 105)
+        love.graphics.print("Everything is ready for me to go out \n and face the darkness of this place", camera.x + 50,
+            camera.y - 105)
         love.graphics.print("I'm passing that bridge again, but \nthis time I'm prepared for them!", camera.x + 50,
-            camera.y - 10)
-        love.graphics.print("See you soon!", camera.x + 50, camera.y + 60)
+            camera.y - 35)
+        love.graphics.print("See you soon!", camera.x + 50, camera.y + 30)
         love.graphics.print("Page 8", camera.x + 400, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
         return
