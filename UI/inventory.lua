@@ -28,7 +28,7 @@ function UpdateInventory()
         inventorySprites[1] = inventoryWithPages_3
         inventorySprites[2] = inventoryWithKey
     elseif collectible_key.counter == 1 and collectiblePages.counter == 4 then
-        inventorySprites[1] = inventoryWithPages_3
+        inventorySprites[1] = inventoryWithPages_4
         inventorySprites[2] = inventoryWithKey
     end
 end

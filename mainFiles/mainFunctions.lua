@@ -167,7 +167,7 @@ function UpdateMain(dt, world)
     UpdateGaryAttack(dt)
     UpdateGhost(dt, ghostsPos)
     UpdateValkyrieRangedAttack(world, dt)
-    UpdateValquiria(dt, GetPlayerPosition(), valkyriesPos, valkeries_quantity)
+    UpdateValquiria(dt, GetPlayerPosition(), valkyriesPos, valkeries_quantity, world)
     UpdateValkyrieSword(world, dt)
     UpdateCollectibles(dt)
     UpdateDeath(dt)
@@ -251,16 +251,23 @@ function DrawMain()
     end
 
     if drawOpenDiary == true then
-        DrawFirstPage()
-        DrawSecondPage()
-        DrawThirdPage()
-        DrawForthPage()
-        DrawFifthPage()
-        DrawSixthPage()
-        DrawSeventhPage()
-        DrawPageEight()
-        DrawPageNine()
-        DrawPageTen()
+        -- Onde está a condição que diz quais é que são renderizados.
+        if currentPage == 1 then
+            DrawFirstPage()
+            DrawSecondPage()
+        elseif currentPage == 3 then
+            DrawThirdPage()
+            DrawForthPage()
+        elseif currentPage == 5 then
+            DrawFifthPage()
+            DrawSixthPage()
+        elseif currentPage == 7 then
+            DrawSeventhPage()
+            DrawPageEight()
+        elseif currentPage == 9 then
+            DrawPageNine()
+            DrawPageTen()
+        end
     end
 
     DrawInventory()

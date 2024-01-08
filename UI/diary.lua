@@ -44,10 +44,8 @@ function DrawThirdPage()
     currentPage = 3
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
-    love.graphics.setColor(1, 1, 1)
-    if collectiblePages.counter == 1 then
+
+    if collectiblePages.counter >= 1 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
         love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
@@ -57,14 +55,16 @@ function DrawThirdPage()
         love.graphics.print("I need to go, but I'll \ntell you more later", camera.x - 445, camera.y + 30)
         love.graphics.print("Page 3", camera.x - 445, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
+        return
     end
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 function DrawForthPage()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
-    love.graphics.setColor(1, 1, 1)
-    if collectiblePages.counter == 2 then
+    if collectiblePages.counter >= 2 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
         love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
@@ -75,7 +75,12 @@ function DrawForthPage()
         love.graphics.print("I hope I can find the castle", camera.x + 50, camera.y + 60)
         love.graphics.print("Page 4", camera.x + 400, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
+        return
     end
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 function DrawFifthPage()
@@ -109,10 +114,8 @@ function DrawSeventhPage()
     currentPage = 7
     diarySprite = love.graphics.newImage("Sprites/diary_opened.png")
     love.graphics.draw(diarySprite, camera.x - 510, camera.y - 250)
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
-    love.graphics.setColor(1, 1, 1)
-    if collectiblePages.counter == 3 then
+
+    if collectiblePages.counter >= 3 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
         love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
@@ -122,14 +125,16 @@ function DrawSeventhPage()
         love.graphics.print("We need to get to earth, they say it's so pretty...", camera.x - 445, camera.y + 30)
         love.graphics.print("Page 7", camera.x - 445, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
+        return
     end
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print("PAGE MISSING", camera.x - 325, camera.y - 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 function DrawPageEight()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
-    love.graphics.setColor(1, 1, 1)
-    if collectiblePages.counter == 4 then
+    if collectiblePages.counter >= 4 then
         love.graphics.setColor(0, 0, 0)
         love.graphics.setFont(love.graphics.newFont(18))
         love.graphics.print("Dear Diary, ", camera.x + 50, camera.y - 170)
@@ -139,7 +144,11 @@ function DrawPageEight()
         love.graphics.print("See you soon!", camera.x + 50, camera.y + 60)
         love.graphics.print("Page 8", camera.x + 400, camera.y + 210)
         love.graphics.setColor(1, 1, 1)
+        return
     end
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print("PAGE MISSING", camera.x + 185, camera.y - 25)
+    love.graphics.setColor(1, 1, 1)
 end
 
 function DrawPageNine()

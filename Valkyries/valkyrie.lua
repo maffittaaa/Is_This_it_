@@ -91,7 +91,7 @@ function LoadValquiria(world, x, y, i)
   return valkyrie
 end
 
-function UpdateValquiria(dt, playerPosition, posicoes, quantity)
+function UpdateValquiria(dt, playerPosition, posicoes, quantity, world)
   for i = 1, quantity, 1 do
     if valkyries[i] ~= nil then
       UpdateAnimations(dt, quantity, i)
@@ -173,9 +173,10 @@ function UpdateValquiria(dt, playerPosition, posicoes, quantity)
       if valkyries[i].health <= 0 then
         valkyries[i].fixture:destroy()
         valkyries[i].trigger.fixture:destroy()
+        world:DestroyBody(valkyries[i].body)
         valkyries[i].body:destroy()
         valkyries[i].trigger.body:destroy()
-        table.remove(valkyries, valkyries[i].id)
+        table.remove(valkyries, i)
         table.remove(posicoes, i)
         table.remove(posicoes, i + quantity)
       end

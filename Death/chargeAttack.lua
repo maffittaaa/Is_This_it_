@@ -1,56 +1,72 @@
-local chargeTime = 2   -- time that death needs to lock player position to charge to that point
 local rechargeTime = 3 -- time that death needs to charge again
-local isCharging = false
-local canCharge = false
 local chargeTimer = 0
 local lastPlayerPosition
+
+local isCharging = false
+local chargeTime = 2 -- time that death needs to lock player position to charge to that point
+local charge = false
+local facingRight = true
 
 function UpdateChargeAttack(dt)
     death.position = vector2.new(death.body:getPosition())
     death.range = vector2.mag(vector2.sub(death.position, gary.position))
-    lastPlayerPosition = gary.position
 
-    if death.range < 300 then
-        death.garyInSight = true
-    else
-        death.garyInSight = false
+    -- À procura do jogador
+    if isCharging == false and charge == false then
+        print("DeathRange: ", death.range);
+        if death.range < 300 then
+            death.garyInSight = true
+            isCharging = true
+            return
+        end
     end
 
-    if death.garyInSight then
-        if isCharging == false then
-            chargeTimer = 0
-            isCharging = true
-            canCharge = false
-        else
-            chargeTimer = chargeTimer + dt
-            if chargeTimer < chargeTime then
-                local playerDirection = vector2.sub(gary.position, vector2.new(death.body:getPosition()))
-                playerDirection = vector2.norm(playerDirection)
-                death.body:setLinearVelocity(0, 0)
-                death.body:setAngle(math.atan2(playerDirection.y, playerDirection.x))
-            else
-                local playerDirection = vector2.sub(lastPlayerPosition, vector2.new(death.body:getPosition()))
-                playerDirection = vector2.norm(playerDirection)
-                local force = vector2.mult(playerDirection, 200)
+    -- Jogador entrou em range, portanto vamos carregar o ataque  💩
+    if isCharging == true and chargeTime > 0 then
+        print("Loading Charge (seconds to attack): ", chargeTime)
+        chargeTime = chargeTime - dt
+        if chargeTime <= 0 then
+            chargeTime = 2
+            charge = true
+            isCharging = false
+            lastPlayerPosition = gary.position
+            return
+        end
+    end
+    if charge == true then
+        local playerDirection = vector2.sub(lastPlayerPosition, vector2.new(death.body:getPosition()))
+        playerDirection = vector2.norm(playerDirection)
 
-                local lastPlayerSeen = vector2.mag(vector2.sub(death.position, lastPlayerPosition))
-                if lastPlayerSeen > 100 then
-                    death.body:setAngle(math.atan2(force.y, force.x))
-                    death.body:setLinearVelocity(force.x, force.y)
-                else
-                    isCharging = false
-                    canCharge = true
-                end
-            end
+
+
+        local force = vector2.mult(playerDirection, 200)
+        death.body:setLinearVelocity(force.x, force.y)
+
+        local deathPosition = vector2.new(death.body:getPosition())
+        local deathRange = vector2.mag(vector2.sub(deathPosition, lastPlayerPosition))
+        facingRight = RightSide(lastPlayerPosition.x, deathPosition.x)
+
+        print("Charging! Range to destination: ", deathRange)
+
+        if deathRange < 1 then
+            charge = false
+            -- stop attack (1 threshold for stop charge)
+            death.body:setLinearVelocity(0, 0)
         end
     end
 end
 
+function RightSide(playerPositionX, enemyPositionX)
+    return playerPositionX > enemyPositionX
+end
+
 function DrawChargeAttack()
-    if canCharge then
+    if charge then
         deathSprites = death.idle[death.animation_frame]
-    else
+    elseif facingRight then
         deathSprites = death.right[death.animation_frame]
+    else
+        deathSprites = death.left[death.animation_frame]
     end
 
     love.graphics.draw(deathSprites, death.body:getX(), death.body:getY(), death.body:getAngle(), 1, 1,
