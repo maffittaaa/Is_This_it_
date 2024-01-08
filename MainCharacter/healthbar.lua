@@ -16,7 +16,7 @@ end
 
 function UpdateHealthBars()
     for i = 1, #ghosts, 1 do
-        if healthbar.ghost[i].health > 0 then
+        if ghosts[i].health > 0 then
             healthbar.ghost[i] = vector2.new(ghosts[i].body:getX() - 35, ghosts[i].body:getY() - 60)
         end
     end
