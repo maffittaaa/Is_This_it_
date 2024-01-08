@@ -203,8 +203,8 @@ function UpdateGary(dt)
             local vol
 
             magValkGary = distance - magValkGary
-            vol = magValkGary / distance
-
+            vol = magValkGary/distance
+            
             if not sourceEffect[sound]:isPlaying() then
                 PlaySound(nil, vol, Voice1)
             end
