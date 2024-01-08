@@ -37,7 +37,6 @@ function DrawInventory()
     local posX = 0.85 - (4 * 0.08)
 
     for i = 1, #inventorySprites, 1 do
-        print(inventorySprites[i])
         love.graphics.draw(inventorySprites[i], camera.x + (width / 2 * posX), camera.y + (height / 2 * 0.65))
         posX = posX + 0.08
     end

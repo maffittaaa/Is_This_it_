@@ -14,6 +14,7 @@ player_velocity = 200
 inDarkSide = false
 
 local magGhostGary = 1
+local magValkGary = 1
 
 function LoadGary(world, x, y)
     inDarkSide = false
@@ -60,15 +61,6 @@ function LoadGary(world, x, y)
     gary.knockY = 0
     gary.type = "player"
     gary.fixture:setUserData(gary)
-
-
-    PlaySound(1, 0, nil, 1)
-    for i = 1, #ghosts, 1 do
-        PlaySound(2, 0, nil, 1)
-    end
-    for i = 1, #ghosts, 1 do
-        PlaySound(3, 0, nil, 1)
-    end
 end
 
 
@@ -203,11 +195,35 @@ function UpdateGary(dt)
         end
     end
 
+    --Sound Valkyries
+    for i = 1, #valkyries, 1 do
+        magValkGary = vector.magnitude(vector.sub(gary.position, valkyries[i].position))
+        local distance = 500
+        local Voice1 = (#sourceEffect - #valkyries) + i
+
+        if magValkGary < distance then
+            local vol
+            
+            magValkGary = distance - magValkGary
+            vol = magValkGary/distance
+    
+            if not sourceEffect[sound]:isPlaying() then
+                PlaySound(nil, vol, Voice1)
+            end
+            ChangeVol(vol, sound)
+        elseif magValkGary > distance then
+            if sourceEffect[Voice1]:isPlaying() then
+                StopSound(Voice1)
+            end
+        end
+    end
+
+    --Sound Ghosts
     for i = 1, #ghosts, 1 do
         magGhostGary = vector.magnitude(vector.sub(gary.position, ghosts[i].position))
-        local distance = 500
-        local Voice1 = 1 + i
-        local Voice2 = 1 + #ghosts + i
+        local distance = 300
+        local Voice1 = (#sourceEffect - #sourceEffect + 1) + i
+        local Voice2 = (#sourceEffect - (#sourceEffect - 1 - #ghosts)) + i
 
         if inDarkSide == false then
             if magGhostGary < distance then
@@ -243,8 +259,7 @@ function UpdateGary(dt)
                 end
             end
         end
-        
-    end
+    end 
 end
 
 function DrawGary()
@@ -263,10 +278,6 @@ function DrawGary()
         love.graphics.draw(garySprites, gary.body:getX(), gary.body:getY(), gary.body:getAngle(),
             1, 1, garySprites:getWidth() / 2, garySprites:getHeight() / 2)
     end
-
-
-    love.graphics.circle("line", ghosts[1].body:getX(), ghosts[1].body:getY(), magGhostGary)
-
 end
 
 function GaryKnock(dt)

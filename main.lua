@@ -1,4 +1,4 @@
-love.window.setTitle("Is This It?")
+-- love.window.setTitle("Is This It?")
 
 Camera = require "Camera/Camera"
 Vector = require("Companion/vector")
