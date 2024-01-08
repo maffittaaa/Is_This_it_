@@ -118,6 +118,7 @@ function LoadMain(world)
     LoadMainMap(world)
 
     PlaySound(1, 0, nil, 1)
+
     for i = 1, #ghosts, 1 do
         PlaySound(2, 0, nil, 1)
     end

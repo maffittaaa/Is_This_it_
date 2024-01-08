@@ -41,6 +41,8 @@ function UpdateValkyrieRangedAttack(world, dt)
     if cooldown_intervalo > cooldown_sec then -- verify if the cooldown is done so they can shoot again
         canShoot = true
         cooldown_intervalo = 0
+        PlaySound(nil, 0.7, #sourceEffect)
+        print("here")
     else
         canShoot = false
     end
