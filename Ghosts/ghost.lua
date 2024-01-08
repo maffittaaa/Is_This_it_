@@ -5,6 +5,7 @@ local lastPposition
 local time = 0
 local i
 
+
 function LoadGhost(world, x, y, i)
     local ghost = {}
     ghost.body = love.physics.newBody(world, x, y, "dynamic")
@@ -151,6 +152,7 @@ function UpdateGhost(dt, posicoes)
                     garyDiretion = vector2.norm(garyDiretion)
                     local force = vector2.mult(garyDiretion, 200)
                     ghosts[i].body:setLinearVelocity(force.x, force.y)
+
                 end
             end
 
@@ -171,6 +173,44 @@ function UpdateGhost(dt, posicoes)
                 table.remove(ghosts, ghosts[i].id)
                 table.remove(posicoes, i)
                 table.remove(posicoes, i + #ghosts)
+            end
+        end
+
+        --Sound Ghosts
+
+        local magGhostGary = vector.magnitude(vector.sub(gary.position, ghosts[i].position))
+        local distance = 700
+
+        if magGhostGary < distance then
+            local vol
+            
+            magGhostGary = distance - magGhostGary
+            vol = magGhostGary/distance
+
+            if not sourceEffect[2]:isPlaying() or not sourceEffect[3]:isPlaying() then
+                if inDarkSide == true then
+
+                elseif inDarkSide == false then 
+
+                end
+            end
+
+            if inDarkSide == true then
+                ChangeVol(vol, 2)
+            elseif inDarkSide == false then 
+                ChangeVol(vol, 3)
+            end
+
+            print(vol)
+            
+        elseif magGhostGary > distance then
+            if sourceEffect[2]:isPlaying() or sourceEffect[3]:isPlaying() then
+
+                if inDarkSide == true then
+
+                elseif inDarkSide == false then 
+
+                end
             end
         end
     end

@@ -58,9 +58,12 @@ function LoadGary(world, x, y)
     gary.knockY = 0
     gary.type = "player"
     gary.fixture:setUserData(gary)
+
+    PlaySound(1, 0, nil, 1)
 end
 
 function UpdateGary(dt)
+    
     gary.position = vector2.new(gary.body:getPosition())
 
     if invencible then
@@ -162,6 +165,31 @@ function UpdateGary(dt)
             destroy_gary_fixture = true
         end
         gary.body:setLinearVelocity(0, 0)
+    end
+
+
+    --Sound Death
+    local deathPos = {}
+    deathPos.x = death.body:getX()
+    deathPos.y = death.body:getY()
+
+    local magDeathGary = vector.magnitude(vector.sub(gary.position, deathPos))
+    local distance = 700
+
+    if magDeathGary < distance then
+        local vol
+        
+        magDeathGary = distance - magDeathGary
+        vol = magDeathGary/distance
+
+        if not sourceEffect[1]:isPlaying() then
+            PlaySound(1, vol, 1)
+        end
+        ChangeVol(vol,1)
+    elseif magDeathGary > distance then
+        if sourceEffect[1]:isPlaying() then
+            StopSound(1)
+        end
     end
 end
 

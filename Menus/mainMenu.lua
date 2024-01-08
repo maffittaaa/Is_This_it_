@@ -19,10 +19,6 @@ function LoadMainMenu()
         function()
             love.event.quit(0)
         end))
-
-    src1 = love.audio.newSource("MainFiles/Sounds/Ambient/MainMenu.wav", "stream")
-    src1:setVolume(0.9) -- 90% of ordinary volume
-    src1:play()
 end
 
 function RestartingGame(world)
