@@ -59,7 +59,10 @@ function LoadGary(world, x, y)
     gary.type = "player"
     gary.fixture:setUserData(gary)
 
+
     PlaySound(1, 0, nil, 1)
+    PlaySound(2, 0, nil, 1)
+    PlaySound(3, 0, nil, 1)
 end
 
 function UpdateGary(dt)
@@ -175,20 +178,21 @@ function UpdateGary(dt)
 
     local magDeathGary = vector.magnitude(vector.sub(gary.position, deathPos))
     local distance = 700
-
+    local sound = 1
     if magDeathGary < distance then
         local vol
         
         magDeathGary = distance - magDeathGary
         vol = magDeathGary/distance
 
-        if not sourceEffect[1]:isPlaying() then
-            PlaySound(1, vol, 1)
+        
+        if not sourceEffect[sound]:isPlaying() then
+            PlaySound(nil, vol, sound)
         end
-        ChangeVol(vol,1)
+        ChangeVol(vol, sound)
     elseif magDeathGary > distance then
-        if sourceEffect[1]:isPlaying() then
-            StopSound(1)
+        if sourceEffect[sound]:isPlaying() then
+            StopSound(sound)
         end
     end
 end

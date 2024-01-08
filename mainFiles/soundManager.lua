@@ -56,8 +56,7 @@ function LoadSounds()
     love.audio.play(source)
     love.audio.play(source2)
 
-    PlaySound(2, 0, 2, 1)
-    PlaySound(3, 0, 3, 1)
+
 
     CheckGS[1] = gameState
     CheckGS[2] = inDarkSide

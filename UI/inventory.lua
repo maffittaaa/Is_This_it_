@@ -1,10 +1,9 @@
 function DrawInventory()
-    inventorySprites = {}
-    local posX = camera.x + 580
+    local inventorySprite = love.graphics.newImage("Sprites/inventoryRectangle.png")
+    local posX = 0.6 - (4 * 0.08)
+
     for i = 1, 5, 1 do
-        local inventorySprite = love.graphics.newImage("Sprites/inventoryRectangle.png")
-        inventorySprites[i] = inventorySprite
-        love.graphics.draw(inventorySprites[i], camera.x + 580, camera.y + 350)
-        posX = posX - 50
+        love.graphics.draw(inventorySprite, camera.x + (width/2 * posX), camera.y + (height/2 * 0.65))
+        posX = posX + 0.08
     end
 end

@@ -172,15 +172,19 @@ function DrawMain()
 
     gameMap:drawLayer(gameMap.layers["WoodenCabinShadow"])
 
-    if collectible_key.counter == 1 and collectiblePages.counter == 4 then
-        gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
+    if collectible_key.counter == 1 then
         gameMap:drawLayer(gameMap.layers["WoodenCabinOpen"])
+    else
+        gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
+    end
+
+    if collectible_key.counter == 1 and collectiblePages.counter >= 4 then
+        gameMap:drawLayer(gameMap.layers["MasmorraOpen"])
         for i = 1, #bigDoorMas, 1 do
             bigDoorMas[i].fixture:setSensor(true)
         end
     else
         gameMap:drawLayer(gameMap.layers["MasmorraClosed"])
-        gameMap:drawLayer(gameMap.layers["WoodenCabinClosed"])
     end
 
     DrawCollectibles()
