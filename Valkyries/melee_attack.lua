@@ -21,10 +21,10 @@ function UpdateValkyrieSword(world, dt)
             local valkyriePosition = vector2.new(valkyrie.body:getPosition())
             valkyrie.trigger.body:setPosition(valkyriePosition.x - 30, valkyriePosition.y)
             if valkyrie.animation_frame_a == 3 then
-                    valkyrie.trigger.body:setActive(true) -- set the trigger active in the last frame
-                else
-                    valkyrie.trigger.body:setActive(false)
-                end
+                valkyrie.trigger.body:setActive(true)     -- set the trigger active in the last frame
+            else
+                valkyrie.trigger.body:setActive(false)
+            end
         elseif not valkyrie.isMeleeing then
             valkyrie.trigger.body:setActive(false)
         end
@@ -40,8 +40,8 @@ function DrawValkyrieSword()
 end
 
 function ProcessSwordOnPlayer(gary, trigger)
-        gary.health = gary.health - 0.5
-        PushGaryBackValkyries(trigger.valkyrie)
+    gary.health = gary.health - 0.5
+    PushGaryBackValkyries(trigger.valkyrie)
 end
 
 function BeginContactValkyrieSword(fixtureA, fixtureB)

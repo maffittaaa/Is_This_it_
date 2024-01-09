@@ -71,12 +71,13 @@ function KeyPressed(e)
         strategicPositions[2] = { x = 2497, y = 2791 }
         strategicPositions[3] = { x = 6482, y = 4538 }
         strategicPositions[4] = { x = 900, y = 1000 }
+        strategicPositions[5] = { x = 100 * 32, y = 263 * 32 }
 
         gary.body:setPosition(strategicPositions[k].x, strategicPositions[k].y)
 
         k = k + 1
 
-        if k > 4 then
+        if k > #strategicPositions then
             k = 1
         end
     end
@@ -113,10 +114,10 @@ function LoadMain(world)
     LoadSprites()
     LoadGary(world, 900, 1000)
     LoadGaryAttack(world)
+    LoadDeath(world)
     LoadHealthBars()
     LoadCollectibles(world)
     LoadCompanion(world)
-    LoadDeath(world)
     --LoadGhostsAi()
     LoadMainMap(world)
 
@@ -146,6 +147,8 @@ function BeginContactMain(fixtureA, fixtureB)
     BeginContactGhost(fixtureA, fixtureB)
     BeginContactCollectibles(fixtureA, fixtureB)
     BeginContactArrows(fixtureA, fixtureB)
+    BeginContactDeath(fixtureA, fixtureB)
+    BeginContactChargeAttack(fixtureA, fixtureB)
 end
 
 function EndContactMain(fixtureA, fixtureB)

@@ -1,5 +1,3 @@
-local rechargeTime = 3 -- time that death needs to charge again
-local chargeTimer = 0
 local lastPlayerPosition
 
 local isCharging = false
@@ -31,6 +29,13 @@ function UpdateChargeAttack(dt)
             return
         end
     end
+
+    if charge == false and death.animation_frame == 3 then
+        death.trigger.body:setActive(true) -- set the trigger active in the last frame
+    else
+        death.trigger.body:setActive(false)
+    end
+
     if charge == true then
         local playerDirection = vector2.sub(lastPlayerPosition, vector2.new(death.body:getPosition()))
         playerDirection = vector2.norm(playerDirection)
@@ -43,8 +48,11 @@ function UpdateChargeAttack(dt)
         local deathPosition = vector2.new(death.body:getPosition())
         local deathRange = vector2.mag(vector2.sub(deathPosition, lastPlayerPosition))
         facingRight = RightSide(lastPlayerPosition.x, deathPosition.x)
+        death.facingRight = facingRight
 
-        if deathRange < 1 then
+
+        local distanceToPlayer = 70
+        if deathRange < distanceToPlayer then
             charge = false
             death.body:setLinearVelocity(0, 0)
         end
@@ -57,27 +65,30 @@ end
 
 function DrawChargeAttack()
     if charge then
-        print("Charging")
         deathSprites = death.idle[death.animation_frame]
     elseif facingRight then
-        print("facingRight")
         deathSprites = death.right[death.animation_frame]
     else
-        print("facingLeft")
         deathSprites = death.left[death.animation_frame]
     end
 
     love.graphics.draw(deathSprites, death.body:getX(), death.body:getY(), death.body:getAngle(), 1, 1,
         deathSprites:getWidth() / 2, deathSprites:getHeight() / 2)
+
+    if death.trigger.body:isActive() then
+        if death.facingRight == true then
+            love.graphics.rectangle("line", death.body:getX() + 50, death.body:getY() - 20, 40, 70)
+        else
+            love.graphics.rectangle("line", death.body:getX() - 100, death.body:getY() - 20, 40, 70)
+        end
+    end
 end
 
 function BeginContactChargeAttack(fixtureA, fixtureB)
-    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "death attack" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player                                                                                                           -- cooldown time to chase again
-        gary.health = gary.health - 0.5
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "death attack" and gary.health <= 5 and gary.health > 0 then -- attack from death to player                                                                                                           -- cooldown time to chase again
+        gary.health = gary.health - 1
     end
-    if fixtureA:getUserData().type == "death attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from ghost to player
-        if fixtureA:getUserData().isChasing == true and fixtureA:getUserData().garyInSight == true then                                        -- cooldown tipe to chase again
-            gary.health = gary.health - 0.5
-        end
+    if fixtureA:getUserData().type == "death attack" and fixtureB:getUserData().type == "player" and gary.health <= 5 and gary.health > 0 then -- attack from death to player
+        gary.health = gary.health - 1
     end
 end

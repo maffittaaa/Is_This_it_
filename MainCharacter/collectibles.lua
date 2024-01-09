@@ -1,11 +1,12 @@
 collectible_key = {}
-collectible_lifes = { life1 = {} }
+collectible_lifes = { life1 = {}, life2 = {}, life3 = {} }
 collectiblePages = { page1 = {}, page2 = {}, page3 = {}, page4 = {} }
 local message
 
 function LoadCollectibles(world)
     collectible_lifes.counter = 0
 
+    --key
     collectible_key.body = love.physics.newBody(world, 3650, 1740, "static") -- KEY
     collectible_key.shape = love.physics.newRectangleShape(sprites.key:getWidth(), sprites.key:getHeight())
     collectible_key.fixture = love.physics.newFixture(collectible_key.body, collectible_key.shape, 1)
@@ -14,13 +15,35 @@ function LoadCollectibles(world)
     collectible_key.type = "key"
     collectible_key.fixture:setUserData(collectible_key)
 
-    collectible_lifes.life1.body = love.physics.newBody(world, 1600, 1300, "static")
+    --Life1
+    collectible_lifes.life1.body = love.physics.newBody(world, 231 * 32, 33 * 32, "static")
     collectible_lifes.life1.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
     collectible_lifes.life1.fixture = love.physics.newFixture(collectible_lifes.life1.body, collectible_lifes.life1
         .shape, 2)
+    collectible_lifes.life1.collected = false
     collectible_lifes.life1.fixture:setSensor(true)
     collectible_lifes.life1.type = "life1"
     collectible_lifes.life1.fixture:setUserData(collectible_lifes.life1)
+
+    --Life2
+    collectible_lifes.life2.body = love.physics.newBody(world, 155 * 32, 101 * 32, "static")
+    collectible_lifes.life2.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
+    collectible_lifes.life2.fixture = love.physics.newFixture(collectible_lifes.life2.body,
+        collectible_lifes.life2.shape, 2)
+    collectible_lifes.life2.collected = false
+    collectible_lifes.life2.fixture:setSensor(true)
+    collectible_lifes.life2.type = "life2"
+    collectible_lifes.life2.fixture:setUserData(collectible_lifes.life2)
+
+    --Life3
+    collectible_lifes.life3.body = love.physics.newBody(world, 64 * 32, 156 * 32, "static")
+    collectible_lifes.life3.shape = love.physics.newRectangleShape(sprites.life:getWidth(), sprites.life:getHeight())
+    collectible_lifes.life3.fixture = love.physics.newFixture(collectible_lifes.life3.body, collectible_lifes.life3
+        .shape, 2)
+    collectible_lifes.life3.collected = false
+    collectible_lifes.life3.fixture:setSensor(true)
+    collectible_lifes.life3.type = "life3"
+    collectible_lifes.life3.fixture:setUserData(collectible_lifes.life3)
 
     -- Missing Pages
     collectiblePages.counter = 0
@@ -80,10 +103,30 @@ function DrawCollectibles()
         love.graphics.draw(sprites.key, collectible_key.body:getX(), collectible_key.body:getY(),
             collectible_key.body:getAngle(), 1, 1, sprites.key:getWidth() / 2, sprites.key:getHeight() / 2)
     end
-    if collectible_lifes.counter == 0 and collectible_lifes.counter <= 3 then
+
+    -- LivesDrawing
+    if collectible_lifes.counter == 0 then
         love.graphics.draw(sprites.life, collectible_lifes.life1.body:getX(), collectible_lifes.life1.body:getY(),
-            collectible_lifes.life1.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2)
+            collectible_lifes.life1.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 1
+        love.graphics.draw(sprites.life, collectible_lifes.life2.body:getX(), collectible_lifes.life2.body:getY(),
+            collectible_lifes.life2.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 2
+        love.graphics.draw(sprites.life, collectible_lifes.life3.body:getX(), collectible_lifes.life3.body:getY(),
+            collectible_lifes.life3.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 3
     end
+
+    if collectible_lifes.counter == 1 then
+        love.graphics.draw(sprites.life, collectible_lifes.life2.body:getX(), collectible_lifes.life2.body:getY(),
+            collectible_lifes.life2.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 2
+        love.graphics.draw(sprites.life, collectible_lifes.life3.body:getX(), collectible_lifes.life3.body:getY(),
+            collectible_lifes.life3.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 3
+    end
+
+    if collectible_lifes.counter == 2 then
+        love.graphics.draw(sprites.life, collectible_lifes.life3.body:getX(), collectible_lifes.life3.body:getY(),
+            collectible_lifes.life3.body:getAngle(), 1, 1, sprites.life:getWidth() / 2, sprites.life:getHeight() / 2) -- 3
+    end
+
+    --PagesDrawing
     if collectiblePages.counter == 0 then -- if no page collected, draw all 4
         love.graphics.draw(sprites.missingPages, collectiblePages.page1.body:getX(), collectiblePages.page1.body:getY(),
             collectiblePages.page1.body:getAngle(), 1, 1, sprites.missingPages:getWidth() / 2,
@@ -149,20 +192,82 @@ function BeginContactCollectibles(fixtureA, fixtureB)
         if gary.health == 5 then
             message = CreateMessage("Full Health")
             collectible_lifes.counter = collectible_lifes.counter
-        elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
-            message = CreateMessage("1 life")
-            collectible_lifes.counter = collectible_lifes.counter + 1
-            gary.health = gary.health + 1
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureA:getUserData().collected == false then
+                fixtureA:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
         end
     end
     if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "life1" then -- colision for collectibles(lives)
         if gary.health == 5 then
-            message = CreateMessage("Can't pick up. Full Health")
+            message = CreateMessage("Full Health")
             collectible_lifes.counter = collectible_lifes.counter
-        elseif gary.health < 5 and gary.health >= 0 and collectible_lifes.counter <= 3 then
-            message = CreateMessage("1 life")
-            collectible_lifes.counter = collectible_lifes.counter + 1
-            gary.health = gary.health + 1
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureB:getUserData().collected == false then
+                fixtureB:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
+        end
+    end
+
+    if fixtureA:getUserData().type == "life2" and fixtureB:getUserData().type == "player" then -- colision for collectibles(lives)
+        if gary.health == 5 then
+            message = CreateMessage("Full Health")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureA:getUserData().collected == false then
+                fixtureA:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
+        end
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "life2" then -- colision for collectibles(lives)
+        if gary.health == 5 then
+            message = CreateMessage("Full Health")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureB:getUserData().collected == false then
+                fixtureB:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
+        end
+    end
+
+    if fixtureA:getUserData().type == "life3" and fixtureB:getUserData().type == "player" then -- colision for collectibles(lives)
+        if gary.health == 5 then
+            message = CreateMessage("Full Health")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureA:getUserData().collected == false then
+                fixtureA:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
+        end
+    end
+
+    if fixtureA:getUserData().type == "player" and fixtureB:getUserData().type == "life3" then -- colision for collectibles(lives)
+        if gary.health == 5 then
+            message = CreateMessage("Full Health")
+            collectible_lifes.counter = collectible_lifes.counter
+        elseif gary.health < 5 and gary.health >= 0 then
+            if fixtureB:getUserData().collected == false then
+                fixtureB:getUserData().collected = true
+                collectible_lifes.counter = collectible_lifes.counter + 1
+                message = CreateMessage("+ 1 HP")
+                gary.health = gary.health + 1
+            end
         end
     end
 
@@ -173,10 +278,6 @@ function BeginContactCollectibles(fixtureA, fixtureB)
             collectiblePages.counter = collectiblePages.counter + 1
             message = CreateMessage("inventory: 1 \nmissing page")
         end
-        -- if collectiblePages.counter >= 0 and collectiblePages.counter <= 4 then
-        --     message = CreateMessage("inventory: 1 \nmissing page")
-        --     collectiblePages.counter = collectiblePages.counter + 1
-        -- end
     end
 
     if fixtureA:getUserData().type == "page1" and fixtureB:getUserData().type == "player" then

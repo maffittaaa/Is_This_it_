@@ -12,6 +12,8 @@ function LoadHealthBars()
     for i = 1, #valkyries, 1 do
         healthbar.valkyrie[i] = vector2.new(valkyries[i].body:getX(), valkyries[i].body:getY() + 60)
     end
+
+    healthbar.death = vector2.new(death.body:getX(), death.body:getY() + 60)
 end
 
 function UpdateHealthBars()
@@ -46,16 +48,17 @@ function UpdateHealthBars()
             table.remove(healthbar, i)
         end
     end
+
+    healthbar.death = vector2.new(death.body:getX(), death.body:getY() + 60)
+    for i = #healthbar, 1, -1 do
+        local num = healthbar[i]
+        if num == 1 and num == 2 then
+            table.remove(healthbar, i)
+        end
+    end
 end
 
 function DrawHealthBars()
-    if gary.health > 0 then
-        love.graphics.setColor(1, 1, 1)
-        --love.graphics.rectangle("fill", healthbar.gary.x, healthbar.gary.y, 70, 10)
-        love.graphics.setColor(1, 0, 0)
-        --love.graphics.rectangle("fill", healthbar.gary.x, healthbar.gary.y, 14 * gary.health, 5)
-    end
-
     for i = 1, #ghosts, 1 do
         if inDarkSide == true then
             if ghosts[i].health <= 4 and ghosts[i].health > 0 then
@@ -76,7 +79,7 @@ function DrawHealthBars()
         if valkyries[i].health <= 7 and ghosts[i].health > 0 then
             love.graphics.setColor(1, 0, 0)
             love.graphics.rectangle("fill", healthbar.valkyrie[i].x, healthbar.valkyrie[i].y, 17.5 * valkyries[i].health,
-                4)
+                7)
         else
             for i = #healthbar, 1, -1 do
                 local num = healthbar[i]
@@ -85,6 +88,11 @@ function DrawHealthBars()
                 end
             end
         end
+    end
+
+    if death.health > 0 then
+        love.graphics.setColor(1, 0, 0)
+        love.graphics.rectangle("fill", healthbar.death.x - 100, healthbar.death.y - 170, 14 * death.health, 10)
     end
 
     love.graphics.setColor(1, 1, 1)
